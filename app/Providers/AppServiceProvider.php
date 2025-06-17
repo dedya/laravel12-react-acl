@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Auth;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -29,12 +30,12 @@ class AppServiceProvider extends ServiceProvider
             },
             'alertTimer' => config('app.alert_timer'),
             'permissions' => function () {
-                if (!auth()->check()) {
+                if (!Auth::check()) {
                     return [];
                 }
 
                 /** @var \App\Models\User $user */
-                $user = auth()->user();
+                $user = Auth::user();
                 return $user->getAllPermissions()->pluck('name');
             }
             // 'permissions' => fn () => auth()->check()
