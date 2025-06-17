@@ -1,6 +1,6 @@
 ## Laravel React ACL
 
-This application is a basic laravel 10, react ACL, which contains : 
+This application is a basic laravel 12, react ACL, which contains : 
 - Login Page
 - User Administration
 - Role Administration with permission
