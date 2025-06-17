@@ -7,7 +7,8 @@ This application is a basic laravel 10, react ACL, which contains :
 
 To setup : 
 - Clone the source 
-- Run 'composer update' 
+- Run 'composer update'
+- Run 'npm install'
 - run 'php artisan migrate' to apply db changes
 - run 'php artisan db:seed --class=RolesAndPermissionsSeeder' to input role data
 - run 'php artisan db:seed --class=AdminRolesAndPermissionsSeeder' to input admin user
