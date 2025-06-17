@@ -14,16 +14,11 @@ use Illuminate\Support\Facades\Storage;
 use App\Jobs\UpdateUser;
 use App\Jobs\DeleteUser;
 
-use Illuminate\Routing\Controller as BaseController;
+//use Illuminate\Routing\Controller as BaseController;
+use App\Abstracts\Http\Controller as BaseController;
 
 class UserController extends BaseController
 {
-    public function __construct() {
-        $this->middleware('permission:create-user')->only('create', 'store', 'enable','disable');
-        $this->middleware('permission:read-user')->only('index','edit');
-        $this->middleware('permission:update-user')->only('update','enable','disable');
-        $this->middleware('permission:delete-user')->only('destroy');
-    }
 
     public function index(Request $request)
     {

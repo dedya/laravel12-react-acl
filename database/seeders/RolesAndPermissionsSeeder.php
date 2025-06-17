@@ -16,14 +16,14 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create permissions
         $permissions = [
-            'read-user',
-            'create-user',
-            'update-user',
-            'delete-user',
-            'read-role',
-            'create-role',
-            'update-role',
-            'delete-role',
+            'read-users',
+            'create-users',
+            'update-users',
+            'delete-users',
+            'read-roles',
+            'create-roles',
+            'update-roles',
+            'delete-roles',
         ];
 
         foreach ($permissions as $permission) {
