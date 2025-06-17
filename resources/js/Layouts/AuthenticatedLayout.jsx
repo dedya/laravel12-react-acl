@@ -5,11 +5,52 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
+import Swal from 'sweetalert2';
+import { swalSuccessDefaults, swalErrorDefaults} from '@/utils/swalDefaults';
+import { useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
+    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    const { flash, alertTimer,errors } = usePage().props;
+
+    useEffect(() => {
+    // Show validation errors
+    if (errors && Object.keys(errors).length > 0) {
+      Object.values(errors).forEach((msg) => {
+        toast.error(msg, {
+          position: "top-right",
+          autoClose: alertTimer || 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      });
+    }
+
+    console.log('flash.success:', flash?.success);
+    if (flash?.success) {
+        Swal.fire({
+        title: flash.success,
+        timer: alertTimer || 4000,         
+            ...swalSuccessDefaults,
+        });
+    }else
+    if (flash?.error) { 
+        Swal.fire({
+        title: flash.error,
+        timer: alertTimer || 4000,         
+            ...swalErrorDefaults,
+        });
+    }
+    }, [flash?.success, flash?.error, errors, alertTimer]);
 
     return (
         <div className="min-h-screen bg-gray-100">
@@ -30,6 +71,14 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
+
+                                 <NavLink href={route('users.index')} active={route().current('users.index')}>
+                                    User
+                                </NavLink>
+                                 <NavLink href={route('roles.index')} active={route().current('roles.index')}>
+                                    Roles
+                                </NavLink>
+
                             </div>
                         </div>
 
@@ -171,6 +220,7 @@ export default function AuthenticatedLayout({ header, children }) {
             )}
 
             <main>{children}</main>
+            <ToastContainer />            
         </div>
     );
 }
