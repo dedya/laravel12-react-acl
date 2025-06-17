@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        //added after installation of inertia
          $middleware->alias([
             'inertia' => HandleInertiaRequests::class,
         ]);
