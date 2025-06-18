@@ -11,14 +11,18 @@ use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+ 
+class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
     use HasRoles, HasPermissions;
     use SoftDeletes;
+    use InteractsWithMedia;
 
-    /**
     /**
      * The attributes that are mass assignable.
      *
@@ -60,5 +64,16 @@ class User extends Authenticatable
     public function userGroup()
     {
         return $this->belongsTo(UserGroup::class);
+    }
+
+    public function userPhoto()
+    {
+        return $this->morphOne(Media::class, 'model')
+            ->where('collection_name', 'photos');
+    }
+
+    public function getPhotoUrlAttribute()
+    {
+        return $this->userPhoto?->getFullUrl() ?? null;
     }
 }

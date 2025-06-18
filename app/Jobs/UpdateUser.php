@@ -15,21 +15,17 @@ class UpdateUser implements ShouldQueue
 
     protected $validated;
     protected $user;
+    protected $file;
 
-    public function __construct(array $validated, ?User $user = null)
+    public function __construct(array $validated, ?User $user = null, $file = null)
     {
         $this->validated = $validated;
         $this->user = $user;
+        $this->file = $file;
     }
 
     public function handle()
     {
-        // Handle photo removal
-        if (!empty($this->validated['remove_photo']) && $this->user && $this->user->photo) {
-            Storage::disk('public')->delete($this->user->photo);
-            $this->user->photo = null;
-        }
-
         // Handle password
         if (!empty($this->validated['password'])) {
             $this->validated['password'] = Hash::make($this->validated['password']);
@@ -39,8 +35,9 @@ class UpdateUser implements ShouldQueue
 
         //update user
         if ($this->user) {
-            $this->user->update($this->validated);
-            $this->user->syncRoles([$this->validated['role']]);
+            $user = $this->user;
+            $user->update($this->validated);
+            $user->syncRoles([$this->validated['role']]);
         } else {
             // create new user
             $user = User::create($this->validated);

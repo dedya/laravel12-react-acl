@@ -28,6 +28,8 @@ export default function Form({ user, roles, groups, auth }) {
   const [removePhoto, setRemovePhoto] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
 
+  const canUpdateOrCreate = can('update-users') || can('create-users');
+
   const { data, setData, post, put, processing } = useForm({
     name: user?.name || '',
     email: user?.email || '',
@@ -42,11 +44,11 @@ export default function Form({ user, roles, groups, auth }) {
   // Handle file change
   const handlePhotoChange = (e) => {
       const file = e.target.files[0];
-      setData('photo', file);
-      setRemovePhoto(true);
-      setData('remove_photo', true);
+      //setRemovePhoto(true);
+      //setData('remove_photo', true);
 
       if (file) {
+        setData('photo', file);
         setPhotoPreview(URL.createObjectURL(file));
       } else {
         setPhotoPreview(null);
@@ -143,15 +145,15 @@ export default function Form({ user, roles, groups, auth }) {
                   className="border rounded px-3 py-2 w-full"
                 />
                 
-                {(photoPreview || (user?.photo && !removePhoto)) && (
+                {(photoPreview || (user?.photo_url && !removePhoto)) && (
                   <div className="mt-2 relative inline-block">
                     <img
-                      src={photoPreview ? photoPreview : `/storage/${user.photo}`}
+                      src={photoPreview ? photoPreview : user.photo_url}
                       alt="Preview"
                       className="h-32 w-32 object-cover rounded-full"
                     />
                     {
-                      (can('update-users') || can('create-users')) &&
+                       canUpdateOrCreate &&
 
                       <button
                         type="button"
@@ -210,7 +212,7 @@ export default function Form({ user, roles, groups, auth }) {
                 {general?.cancel}
               </Link>              
               {
-                (can('update-users') || can('create-users')) &&
+                canUpdateOrCreate &&
                 <button
                   type="submit"
                   disabled={processing}

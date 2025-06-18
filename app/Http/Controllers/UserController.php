@@ -25,7 +25,7 @@ class UserController extends BaseController
     {
         Log::info('USER LIST');
 
-         $query = User::with('roles:id,name')->select('id', 'name', 'email','is_active','photo');
+         $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
@@ -34,7 +34,10 @@ class UserController extends BaseController
             $query->where('email', 'like', '%' . $request->email . '%');
         }
         
-        $users = $query->paginate(10)->withQueryString();
+        $users = $query->paginate(10)->withQueryString()->through(function ($user) {
+            $user->photo_url = $user->userPhoto?->photo_url; 
+            return $user;
+        });
         $filters = $request->only(['name', 'email']);
         return Inertia::render('Users/Index', compact('users', 'filters'));
     }
@@ -55,6 +58,7 @@ class UserController extends BaseController
         $groups = Group::all(); // Fetch groups
         if ($user && $user->exists) { 
             $user->load(['roles','userGroup']); // Load roles and group relationships
+            $user->photo_url = $user->userPhoto?->photo_url; 
         } else {
             $user = null;
         }
@@ -81,14 +85,32 @@ class UserController extends BaseController
     private function saveUser(UserRequest $request, ?User $user = null)
     {
         $validated = $request->validated();
-
-        // Handle photo upload
-        if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->store('photos', 'public');
-        }
+        $file = $request->file('photo');
 
         try {
-            (new UpdateUser($validated, $user))->handle();
+            (new UpdateUser($validated, $user, $file))->handle();
+
+            if($user){
+                // Handle photo removal
+                if (!empty($this->validated['remove_photo'])) {
+                    $media = $user->getFirstMedia('photos');
+                    if ($media) {
+                        $media->delete();
+                    }
+                }
+            }
+            
+            // Handle file upload with Spatie Media Library
+            if ($file) {
+                try{
+                    $user->addMedia($file)->toMediaCollection('photos');               
+                } catch (\Exception $e) {
+                    // Log the error or handle it as needed
+                    $message = $e->getMessage();
+                    return redirect()->route('users.index')->with('error', $message);
+                }
+            }
+            
             $messageKey = $user ? 'data_is_updated' : 'data_is_created';
             $name = $user ? $user->name : $validated['name'];
             $message = __('general.' . $messageKey, ['name' => $name]);

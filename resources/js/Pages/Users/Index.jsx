@@ -146,9 +146,9 @@ export default function Index({ auth }) {
                   <td className="px-4 py-2">{user.id}</td>
                   <td className="px-4 py-2">
                       <div className="flex items-center gap-3">
-                        {user?.photo && (
+                        {user?.photo_url && (
                           <img
-                            src={`/storage/${user.photo}`}
+                            src={user?.photo_url}
                             alt="Profile"
                             className="h-16 w-16 object-cover rounded-full"
                           />
