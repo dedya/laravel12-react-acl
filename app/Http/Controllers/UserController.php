@@ -86,18 +86,19 @@ class UserController extends BaseController
     {
         $validated = $request->validated();
         $file = $request->file('photo');
+        $removePhoto = $request->boolean('remove_photo');
 
         try {
-            (new UpdateUser($validated, $user, $file))->handle();
+            (new UpdateUser($validated, $user, $file, $removePhoto))->handle();
 
             if($user){
                 // Handle photo removal
-                if (!empty($this->validated['remove_photo'])) {
+               /* if (!empty($this->validated['remove_photo'])) {
                     $media = $user->getFirstMedia('photos');
                     if ($media) {
                         $media->delete();
                     }
-                }
+                }*/
             }           
             
             $messageKey = $user ? 'data_is_updated' : 'data_is_created';
