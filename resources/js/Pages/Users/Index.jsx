@@ -174,7 +174,7 @@ export default function Index({ auth }) {
                                   replace: true,
                                 })
                               }
-                              className="text-green-600 hover:underline"
+                              className="text-green-600 hover:underline cursor-pointer"
                               title={general?.enable || "Enable"} 
                             >
                               <FaToggleOn size={24} />
@@ -187,7 +187,7 @@ export default function Index({ auth }) {
                                   replace: true,
                                 })
                               }
-                              className="text-yellow-600 hover:underline"
+                              className="text-yellow-600 hover:underline cursor-pointer"
                               title={general?.disable || "Disable"}
                             >
                               <FaToggleOff size={24} />

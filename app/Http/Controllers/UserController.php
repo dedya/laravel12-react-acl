@@ -34,10 +34,9 @@ class UserController extends BaseController
             $query->where('email', 'like', '%' . $request->email . '%');
         }
         
-        return Inertia::render('Users/Index', [
-            'users' => $query->paginate(10)->withQueryString(),
-            'filters' => $request->only(['name', 'email'])        
-         ]);
+        $users = $query->paginate(10)->withQueryString();
+        $filters = $request->only(['name', 'email']);
+        return Inertia::render('Users/Index', compact('users', 'filters'));
     }
 
     public function create()
@@ -59,11 +58,8 @@ class UserController extends BaseController
         } else {
             $user = null;
         }
-        return Inertia::render('Users/Form', [
-            'user' => $user,
-            'roles' => $roles,
-            'groups' => $groups
-        ]);
+
+        return Inertia::render('Users/Form', compact('user', 'roles', 'groups'));
     }
 
     /**
