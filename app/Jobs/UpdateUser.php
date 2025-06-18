@@ -43,5 +43,15 @@ class UpdateUser implements ShouldQueue
             $user = User::create($this->validated);
             $user->assignRole($this->validated['role']);
         }
+
+         // Handle file upload with Spatie Media Library
+        if ($this->file) {
+            try{
+                $user->clearMediaCollection('photos');
+                $user->addMedia($this->file)->toMediaCollection('photos');               
+            } catch (\Exception $e) {
+                return redirect()->route('users.index')->with('error', $e->getMessage());
+            }
+        }
     }
 }

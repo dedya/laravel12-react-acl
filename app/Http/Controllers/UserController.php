@@ -98,18 +98,7 @@ class UserController extends BaseController
                         $media->delete();
                     }
                 }
-            }
-            
-            // Handle file upload with Spatie Media Library
-            if ($file) {
-                try{
-                    $user->addMedia($file)->toMediaCollection('photos');               
-                } catch (\Exception $e) {
-                    // Log the error or handle it as needed
-                    $message = $e->getMessage();
-                    return redirect()->route('users.index')->with('error', $message);
-                }
-            }
+            }           
             
             $messageKey = $user ? 'data_is_updated' : 'data_is_created';
             $name = $user ? $user->name : $validated['name'];
