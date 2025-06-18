@@ -14,17 +14,13 @@ use Illuminate\Support\Facades\Storage;
 use App\Jobs\UpdateUser;
 use App\Jobs\DeleteUser;
 
-use Illuminate\Routing\Controller as BaseController;
+//use Illuminate\Routing\Controller as BaseController;
+use App\Abstracts\Http\Controller as BaseController;
 
 class UserController extends BaseController
 {
-    public function __construct() {
-        $this->middleware('permission:create-user')->only('create', 'store', 'enable','disable');
-        $this->middleware('permission:read-user')->only('index','edit');
-        $this->middleware('permission:update-user')->only('update','enable','disable');
-        $this->middleware('permission:delete-user')->only('destroy');
-    }
 
+    //permission checking for the controller is done in BaseController
     public function index(Request $request)
     {
         Log::info('USER LIST');
@@ -38,10 +34,9 @@ class UserController extends BaseController
             $query->where('email', 'like', '%' . $request->email . '%');
         }
         
-        return Inertia::render('Users/Index', [
-            'users' => $query->paginate(10)->withQueryString(),
-            'filters' => $request->only(['name', 'email'])        
-         ]);
+        $users = $query->paginate(10)->withQueryString();
+        $filters = $request->only(['name', 'email']);
+        return Inertia::render('Users/Index', compact('users', 'filters'));
     }
 
     public function create()
@@ -63,11 +58,8 @@ class UserController extends BaseController
         } else {
             $user = null;
         }
-        return Inertia::render('Users/Form', [
-            'user' => $user,
-            'roles' => $roles,
-            'groups' => $groups
-        ]);
+
+        return Inertia::render('Users/Form', compact('user', 'roles', 'groups'));
     }
 
     /**
@@ -92,11 +84,11 @@ class UserController extends BaseController
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->getClientOriginalName()->store('photos', 'public');
+            $validated['photo'] = $request->file('photo')->store('photos', 'public');
         }
 
         try {
-            dispatch(new UpdateUser($validated, $user));
+            (new UpdateUser($validated, $user))->handle();
             $messageKey = $user ? 'data_is_updated' : 'data_is_created';
             $name = $user ? $user->name : $validated['name'];
             $message = __('general.' . $messageKey, ['name' => $name]);
@@ -110,7 +102,7 @@ class UserController extends BaseController
 
     public function destroy(User $user)
     {
-        dispatch(new DeleteUser($user, auth()->id()));
+        (new DeleteUser($user, auth()->id()))->handle();
         $message = __('general.data_is_deleted', ['name' => $user->name]);
         return redirect()->route('users.index')->with('success', $message);
     }

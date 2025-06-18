@@ -151,7 +151,7 @@ export default function Form({ user, roles, groups, auth }) {
                       className="h-32 w-32 object-cover rounded-full"
                     />
                     {
-                      (can('update-user') || can('create-user')) &&
+                      (can('update-users') || can('create-users')) &&
 
                       <button
                         type="button"
@@ -210,11 +210,11 @@ export default function Form({ user, roles, groups, auth }) {
                 {general?.cancel}
               </Link>              
               {
-                (can('update-user') || can('create-user')) &&
+                (can('update-users') || can('create-users')) &&
                 <button
                   type="submit"
                   disabled={processing}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow disabled:opacity-50"
+                  className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow disabled:opacity-50"
                 >
                   {general?.submit}
                 </button>

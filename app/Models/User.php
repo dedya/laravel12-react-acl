@@ -9,11 +9,14 @@ use Illuminate\Notifications\Notifiable;
 
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Traits\HasPermissions;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
     use HasRoles, HasPermissions;
+    use SoftDeletes;
 
     /**
     /**
@@ -25,7 +28,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-         'password',
+        //'password',
         'user_group_id',
         'is_active',
         'photo'
