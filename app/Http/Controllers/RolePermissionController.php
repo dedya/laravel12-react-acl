@@ -14,6 +14,10 @@ class RolePermissionController extends BaseController
 {
 
     function __construct() {
+        //this permission checking for the controller, normally is done in BaseController
+        //This is added also here, because the role name is different from the controller name
+        //and the middleware is not able to match the controller name with the permission name
+        //This is a workaround, but it works
         $this->middleware('permission:create-roles')->only('create', 'store', 'enable','disable');
         $this->middleware('permission:read-roles')->only('index','edit');
         $this->middleware('permission:update-roles')->only('update','enable','disable');

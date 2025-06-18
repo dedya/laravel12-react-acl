@@ -20,6 +20,7 @@ use App\Abstracts\Http\Controller as BaseController;
 class UserController extends BaseController
 {
 
+    //permission checking for the controller is done in BaseController
     public function index(Request $request)
     {
         Log::info('USER LIST');
