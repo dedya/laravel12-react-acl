@@ -11,6 +11,9 @@ import {
 export default function PermissionMatrix({ auth, role, all_permissions }) {
     // Define the actions and pages you want to show
     const actions = ['create', 'read', 'update', 'delete'];
+    
+    const canUpdateOrCreate = can('update-roles') || can('create-roles');
+    
     const pages = Array.from(
     new Set(
         all_permissions
@@ -177,7 +180,7 @@ return (
                             {general?.cancel}
                         </Link>
                         
-                    {(can('update-roles') || can('create-roles')) && (                       
+                    { canUpdateOrCreate && (                       
                         <button
                             type="submit"
                             disabled={processing}

@@ -12,8 +12,12 @@ import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa';
 
 export default function Index({ auth }) {
   const { users, general, filters, alertTimer} = usePage().props;
+ 
+  const canCreate = can('create-users');
+  const canUpdate = can('update-users');
+  const canDelete = can('delete-users');
 
-   // State for filter form
+  // State for filter form
   const [filter, setFilter] = useState({
     name: filters.name || '',
     email: filters.email || '',
@@ -73,7 +77,7 @@ export default function Index({ auth }) {
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-4">
           <div></div>
-          {can('create-users') && (
+          { canCreate && (
             <Link
               href={route('users.create')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow ml-auto"
@@ -164,7 +168,7 @@ export default function Index({ auth }) {
                   </td>
                   <td className="px-4 py-2 space-x-2">
                     
-                       {can('update-users') && 
+                       {canUpdate && 
                       (
                           user.is_active ? (
                             <button
@@ -195,9 +199,9 @@ export default function Index({ auth }) {
                           )
                         )}
 
-                    {['update-users', 'read-users', 'delete-users'].some(can) && (
+                    {canUpdate && (
                       <Link
-                        title="Edit"
+                        title={general.edit}
                         href={route('users.edit', user.id)}
                         className="inline-block text-blue-600 hover:underline"
                       >
@@ -205,9 +209,9 @@ export default function Index({ auth }) {
                       </Link>
                     )}
 
-                    {can('delete-users') && 
+                    {canDelete && 
                       <button
-                        title="Delete"
+                        title={general.delete}
                         type="button"
                         onClick={e => handleDelete(e, user.id, user.name)}
                         className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"

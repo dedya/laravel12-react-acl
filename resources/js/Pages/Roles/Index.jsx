@@ -11,6 +11,10 @@ import { can } from '@/utils/can';
 export default function RoleIndex({ auth }) {
   const { roles, general } = usePage().props;
 
+  const canCreate = can('create-roles');
+  const canUpdate = can('update-roles');
+  const canDelete = can('delete-roles');
+  
     // Handler for delete confirmation using SweetAlert2
     const handleDelete = (e, roleId, roleName) => {
       e.preventDefault();
@@ -63,7 +67,7 @@ export default function RoleIndex({ auth }) {
       <div className="max-w-4xl mx-auto py-8">
         <div className="flex justify-between items-center mb-4">
           <div></div>
-          {can('create-roles') && (
+          {canCreate && (
             <Link
               href={route('roles.create')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
@@ -95,9 +99,9 @@ export default function RoleIndex({ auth }) {
                   <td className="px-4 py-2">{role.id}</td>
                   <td className="px-4 py-2">{role.name}</td>
                   <td className="px-4 py-2 space-x-2">
-                    {['update-roles', 'read-roles', 'delete-roles'].some(can) && (                      
+                    {canUpdate && (                      
                       <Link
-                        title="Edit"
+                        title={general?.edit || 'Edit'}
                         href={route('roles.edit', role.id)}
                         className="inline-block text-blue-600 hover:underline"
                       >
@@ -105,10 +109,10 @@ export default function RoleIndex({ auth }) {
                       </Link>
                     )}
                       
-                  {can('delete-roles') && 
+                  {canDelete && 
                       
                     <button
-                        title="Delete"
+                        title={general?.delete || 'Delete'}
                         type="button"
                         onClick={e => handleDelete(e, role.id, role.name)}
                         className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"
