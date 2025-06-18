@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
-use Spatie\Permission\Models\Role;
+use App\Models\Role;
 use App\Models\UserGroup as Group; 
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use App\Jobs\UpdateUser;
 use App\Jobs\DeleteUser;
 
@@ -54,7 +52,7 @@ class UserController extends BaseController
 
     public function form(?User $user = null)
     {
-        $roles = Role::all(); // Fetch all roles using Spatie
+        $roles = Role::withoutTrashed()->get(); // Fetch all roles using Spatie
         $groups = Group::all(); // Fetch groups
         if ($user && $user->exists) { 
             $user->load(['roles','userGroup']); // Load roles and group relationships
@@ -91,16 +89,6 @@ class UserController extends BaseController
         try {
             (new UpdateUser($validated, $user, $file, $removePhoto))->handle();
 
-            if($user){
-                // Handle photo removal
-               /* if (!empty($this->validated['remove_photo'])) {
-                    $media = $user->getFirstMedia('photos');
-                    if ($media) {
-                        $media->delete();
-                    }
-                }*/
-            }           
-            
             $messageKey = $user ? 'data_is_updated' : 'data_is_created';
             $name = $user ? $user->name : $validated['name'];
             $message = __('general.' . $messageKey, ['name' => $name]);
