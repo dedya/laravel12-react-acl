@@ -63,7 +63,7 @@ export default function RoleIndex({ auth }) {
       <div className="max-w-4xl mx-auto py-8">
         <div className="flex justify-between items-center mb-4">
           <div></div>
-          {can('create-role') && (
+          {can('create-roles') && (
             <Link
               href={route('roles.create')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
@@ -95,7 +95,7 @@ export default function RoleIndex({ auth }) {
                   <td className="px-4 py-2">{role.id}</td>
                   <td className="px-4 py-2">{role.name}</td>
                   <td className="px-4 py-2 space-x-2">
-                    {['update-role', 'read-role', 'delete-role'].some(can) && (                      
+                    {['update-roles', 'read-roles', 'delete-roles'].some(can) && (                      
                       <Link
                         title="Edit"
                         href={route('roles.edit', role.id)}
@@ -105,7 +105,7 @@ export default function RoleIndex({ auth }) {
                       </Link>
                     )}
                       
-                  {can('delete-role') && 
+                  {can('delete-roles') && 
                       
                     <button
                         title="Delete"

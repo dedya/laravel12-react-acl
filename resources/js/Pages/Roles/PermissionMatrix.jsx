@@ -177,7 +177,7 @@ return (
                             {general?.cancel}
                         </Link>
                         
-                    {(can('update-role') || can('create-role')) && (                       
+                    {(can('update-roles') || can('create-roles')) && (                       
                         <button
                             type="submit"
                             disabled={processing}

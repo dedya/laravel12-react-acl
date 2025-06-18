@@ -73,7 +73,7 @@ export default function Index({ auth }) {
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-4">
           <div></div>
-          {can('create-user') && (
+          {can('create-users') && (
             <Link
               href={route('users.create')}
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow ml-auto"
@@ -164,7 +164,7 @@ export default function Index({ auth }) {
                   </td>
                   <td className="px-4 py-2 space-x-2">
                     
-                       {can('update-user') && 
+                       {can('update-users') && 
                       (
                           user.is_active ? (
                             <button
@@ -195,7 +195,7 @@ export default function Index({ auth }) {
                           )
                         )}
 
-                    {['update-user', 'read-user', 'delete-user'].some(can) && (
+                    {['update-users', 'read-users', 'delete-users'].some(can) && (
                       <Link
                         title="Edit"
                         href={route('users.edit', user.id)}
@@ -205,7 +205,7 @@ export default function Index({ auth }) {
                       </Link>
                     )}
 
-                    {can('delete-user') && 
+                    {can('delete-users') && 
                       <button
                         title="Delete"
                         type="button"
