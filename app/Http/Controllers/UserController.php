@@ -88,11 +88,11 @@ class UserController extends BaseController
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->getClientOriginalName()->store('photos', 'public');
+            $validated['photo'] = $request->file('photo')->store('photos', 'public');
         }
 
         try {
-            dispatch(new UpdateUser($validated, $user));
+            (new UpdateUser($validated, $user))->handle();
             $messageKey = $user ? 'data_is_updated' : 'data_is_created';
             $name = $user ? $user->name : $validated['name'];
             $message = __('general.' . $messageKey, ['name' => $name]);
@@ -106,7 +106,7 @@ class UserController extends BaseController
 
     public function destroy(User $user)
     {
-        dispatch(new DeleteUser($user, auth()->id()));
+        (new DeleteUser($user, auth()->id()))->handle();
         $message = __('general.data_is_deleted', ['name' => $user->name]);
         return redirect()->route('users.index')->with('success', $message);
     }
