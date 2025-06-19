@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class UserGroupRequest extends FormRequest
 {
@@ -30,11 +31,22 @@ class UserGroupRequest extends FormRequest
 
         if ($this->isMethod('post')) {
             // Store
-            $rules['name'] = 'required|string|unique:user_groups';
+            $rules['name'] = [
+                'required',
+                'string',
+                Rule::unique('user_groups')->whereNull('deleted_at')
+            ];
+
         } else {
             // Update
-            $userGroupId = $this->route('usergroups') ? $this->route('usergroups')->id : null;
-            $rules['name'] = 'required|string|unique:user_groups,name,' . $userGroupId;
+            $userGroupId = $this->route('usergroup') ? $this->route('usergroup')->id : null;
+            $rules['name'] = [
+                'required',
+                'string',
+                Rule::unique('user_groups','name')
+                ->ignore($userGroupId, 'id') 
+                ->whereNull('deleted_at')
+            ];
         }
               
         return $rules;
