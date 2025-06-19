@@ -21,7 +21,7 @@ export default function AuthenticatedLayout({ header, children }) {
     
     const canReadUser = can('read-users');
     const canReadRole = can('read-roles');
-    const canReadUserGroup = can('read-usergroups');
+    const canReadUserGroup = can('read-user-groups');
     
     useEffect(() => {
     // Show validation errors

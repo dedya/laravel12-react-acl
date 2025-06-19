@@ -44,4 +44,6 @@ return [
     'roles_page_title' => 'Roles',
     'enable' => 'Enable',
     'disable' => 'Disable',
+    'user_group_list_title' => 'User Groups',
+    'user_groups_page_title' => 'User Groups',
 ];

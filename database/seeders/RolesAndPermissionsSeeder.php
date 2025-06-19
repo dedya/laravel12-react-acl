@@ -24,6 +24,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'create-roles',
             'update-roles',
             'delete-roles',
+            'read-usergroups',
+            'create-usergroups',
+            'update-usergroups',
+            'delete-usergroups',
         ];
 
         foreach ($permissions as $permission) {
@@ -36,8 +40,8 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $manager = Role::firstOrCreate(['name' => 'manager']);
         $manager->syncPermissions([
-            'read-user',
-            'update-user',
+            'read-users',
+            'update-users',
         ]);
 
         Role::firstOrCreate(['name' => 'user']); // No permissions by default

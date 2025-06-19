@@ -17,7 +17,7 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
     const pages = Array.from(
     new Set(
         all_permissions
-        .map(p => p.name.split('-')[1])
+        .map(p => p.name.split('-').slice(1).join('-')) 
         .filter(Boolean)
     )
     );
@@ -153,7 +153,7 @@ return (
                                 <tbody>
                                     {pages.map(page => (
                                         <tr key={page}>
-                                            <td className="px-3 py-2 border text-center capitalize">{page}</td>
+                                            <td className="px-3 py-2 border text-center capitalize"> {page.replace(/-/g, ' ')}</td>
                                             {actions.map(action => {
                                                 const permName = `${action}-${page}`;
                                                 return (
