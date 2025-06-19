@@ -15,6 +15,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
  
+use App\Traits\LogsModelActivity;
+
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -22,6 +24,7 @@ class User extends Authenticatable implements HasMedia
     use HasRoles, HasPermissions;
     use SoftDeletes;
     use InteractsWithMedia;
+    use LogsModelActivity;
 
     /**
      * The attributes that are mass assignable.
