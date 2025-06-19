@@ -7,9 +7,8 @@ use App\Abstracts\Http\Controller as BaseController;
 use App\Models\UserGroup as Group; 
 use App\Jobs\UpdateUserGroup;
 use App\Jobs\DeleteUserGroup;
-use App\Models\UserGroup;
 use Inertia\Inertia;
-
+use App\Http\Requests\UserGroupRequest;
 
 class UserGroupController extends BaseController
 {
@@ -22,20 +21,50 @@ class UserGroupController extends BaseController
         return Inertia::render('UserGroups/Index', compact('groups'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+     public function create()
     {
-        //
+        return $this->form(); // Call form method to render the form with roles and groups
+    }
+
+    public function edit(Group $usergroup)
+    {
+        return $this->form($usergroup);
+    }
+
+    public function form(?Group $usergroup = null)
+    {
+        return Inertia::render('UserGroups/Form', compact('usergroup'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   public function store(UserGroupRequest $request)
     {
-        //
+        return $this->saveUserGroup($request);
+    }
+
+    public function update(UserGroupRequest $request, Group $usergroup)
+    {
+        return $this->saveUserGroup($request, $usergroup);
+    }
+ 
+    private function saveUserGroup($request, ?Group $usergroup = null)
+    {
+        $validated = $request->validated();
+    
+        try {
+            (new UpdateUserGroup($validated, $usergroup))->handle();
+
+            $messageKey = $usergroup ? 'data_is_updated' : 'data_is_created';
+            $name = $usergroup ? $usergroup->name : $validated['name'];
+            $message = __('general.' . $messageKey, ['name' => $name]);
+        } catch (\Exception $e) {
+            $message = $e->getMessage();
+            return redirect()->route('usergroups.index')->with('error', $message);
+        }
+
+        return redirect()->route('usergroups.index')->with('success', $message);
     }
 
     /**
@@ -47,37 +76,21 @@ class UserGroupController extends BaseController
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(UserGroup $usergroup)
+    public function destroy(Group $usergroup)
     {
         (new DeleteUserGroup($usergroup, auth()->id()))->handle();
         $message = __('general.data_is_deleted', ['name' => $usergroup->name]);
         return redirect()->route('usergroups.index')->with('success', $message);
     }
 
-    public function enable(Request $request, UserGroup $usergroup)
+    public function enable(Request $request, Group $usergroup)
     {
         return $this->setActive($request, $usergroup, true);
     }
     
-    public function disable(Request $request, UserGroup $usergroup)
+    public function disable(Request $request, Group $usergroup)
     {
         return $this->setActive($request, $usergroup, false);
     }
