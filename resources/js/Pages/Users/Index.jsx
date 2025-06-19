@@ -11,7 +11,7 @@ import { swalSuccessDefaults, swalConfirmDeleteDefaults} from '@/utils/swalDefau
 import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa'; 
 
 export default function Index({ auth }) {
-  const { users, general, filters, alertTimer} = usePage().props;
+  const { users, general, filters, alertTimer} = usePage().props; 
  
   const canCreate = can('create-users');
   const canUpdate = can('update-users');

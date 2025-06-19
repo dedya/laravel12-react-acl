@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr'; // Import the plugin svg
 import tailwindcss from '@tailwindcss/vite'; // Import the Tailwind CSS Vite plugin
 
 export default defineConfig({
@@ -11,5 +12,6 @@ export default defineConfig({
             refresh: true,
         }),
         react(),
+        svgr(),
     ],
 });

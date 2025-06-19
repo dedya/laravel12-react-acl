@@ -1,7 +1,15 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import AppLayout  from '@/Layouts/AppLayout';   
+
 import { Head } from '@inertiajs/react';
 
 export default function Dashboard() {
+    return (
+        <AppLayout>
+
+        </AppLayout>
+    );
+    
     return (
         <AuthenticatedLayout
             header={
