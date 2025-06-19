@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Requests\RoleRequest;
 //use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Routing\Controller as BaseController;
+use App\Abstracts\Http\Controller as BaseController;
 use App\Models\Role;
 
 class RoleController extends BaseController
