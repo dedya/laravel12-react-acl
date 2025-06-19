@@ -61,51 +61,51 @@ Route::prefix('tailadmin')->name('tailadmin.')->group(function() {
     })->name('form');
 
     Route::get('/table', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/Table');
     })->name('table');
 
     Route::get('/blank', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/Blank');
     })->name('blank');
 
     Route::get('/404', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/404');
     })->name('404');
 
     Route::get('/chart/line', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/Chart/Line');
     })->name('chart.line');
 
     Route::get('/chart/bar', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/Chart/Bar');
     })->name('chart.bar');
 
     Route::get('/ui/alert', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/UI/Alert');
     })->name('ui.alert');
 
     Route::get('/ui/avatars', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/UI/Avatars');
     })->name('ui.avatars');
 
     Route::get('/ui/badge', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/UI/Badge');
     })->name('ui.badge');
 
     Route::get('/ui/buttons', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/UI/buttons');
     })->name('ui.buttons');
 
     Route::get('/ui/images', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/UI/Images');
     })->name('ui.images');
 
     Route::get('/ui/videos', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/UI/Videos');
     })->name('ui.videos');
 
     Route::get('/signup', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/Auth/Signup');
     })->name('signup');
 
     Route::get('/signin', function () {
