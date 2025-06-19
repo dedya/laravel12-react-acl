@@ -9,6 +9,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+/**
+ * @deprecated This job was used for synchronous create/update logic and is now replaced by UserGroupService.
+ *             Kept for reference only.
+ */
 class UpdateUserGroup implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;

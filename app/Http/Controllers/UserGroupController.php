@@ -5,13 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Abstracts\Http\Controller as BaseController;
 use App\Models\UserGroup as Group; 
-use App\Jobs\UpdateUserGroup;
-use App\Jobs\DeleteUserGroup;
 use Inertia\Inertia;
 use App\Http\Requests\UserGroupRequest;
+use App\Services\UserGroupService;
 
 class UserGroupController extends BaseController
 {
+    private UserGroupService $userGroupService;
+
+    public function __construct(UserGroupService $userGroupService)
+    {
+        $this->userGroupService = $userGroupService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -54,17 +60,17 @@ class UserGroupController extends BaseController
         $validated = $request->validated();
     
         try {
-            (new UpdateUserGroup($validated, $usergroup))->handle();
+            $savedGroup = $this->userGroupService->save($validated, $usergroup);
 
             $messageKey = $usergroup ? 'data_is_updated' : 'data_is_created';
-            $name = $usergroup ? $usergroup->name : $validated['name'];
+            $name = $savedGroup->name;
             $message = __('general.' . $messageKey, ['name' => $name]);
-        } catch (\Exception $e) {
-            $message = $e->getMessage();
-            return redirect()->route('usergroups.index')->with('error', $message);
-        }
+            
+            return redirect()->route('usergroups.index')->with('success', $message);
 
-        return redirect()->route('usergroups.index')->with('success', $message);
+        } catch (\Exception $e) {
+            return redirect()->route('usergroups.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -80,9 +86,15 @@ class UserGroupController extends BaseController
      */
     public function destroy(Group $usergroup)
     {
-        (new DeleteUserGroup($usergroup, auth()->id()))->handle();
-        $message = __('general.data_is_deleted', ['name' => $usergroup->name]);
-        return redirect()->route('usergroups.index')->with('success', $message);
+         try {
+            $this->userGroupService->delete($usergroup, auth()->id());
+                
+            $message =  __('general.data_is_deleted', ['name' => $usergroup->name]);
+
+            return redirect()->route('usergroups.index')->with('success',$message);
+        } catch (\Exception $e) {
+            return redirect()->route('usergroups.index')->with('error', $e->getMessage());
+        }
     }
 
     public function enable(Request $request, Group $usergroup)
@@ -97,17 +109,21 @@ class UserGroupController extends BaseController
 
     private function setActive($request,$usergroup, $active)
     {
-        $usergroup->is_active = $active;
-        $usergroup->save();
+        try {
+            $this->userGroupService->setActive($usergroup, $active);
 
-        // get filter and page from requst, then redirect it with query string
-        $query = $request->only(['name', 'email', 'page']);
+            // get page from requst, then redirect it with query string
+            $query = $request->only(['page']);
 
-        if($active)
-            $message = __('general.set_enabled', ['name' => $usergroup->name]);
-        else
-            $message = __('general.set_disabled', ['name' => $usergroup->name]);
+            if($active)
+                $message = __('general.set_enabled', ['name' => $usergroup->name]);
+            else
+                $message = __('general.set_disabled', ['name' => $usergroup->name]);
 
-        return redirect()->route('usergroups.index', $query)->with('success',$message);
+            return redirect()->route('usergroups.index', $query)->with('success',$message);
+
+        } catch (\Exception $e) {
+            return redirect()->route('usergroups.index')->with('error', $e->getMessage());
+        }
     }
 }
