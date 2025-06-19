@@ -6,25 +6,15 @@ use Inertia\Inertia;
 //use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
-use App\Http\Requests\RolePermissionRequest;
+use App\Http\Requests\RoleRequest;
 //use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Routing\Controller as BaseController;
 use App\Models\Role;
 
-class RolePermissionController extends BaseController
+class RoleController extends BaseController
 {
 
-    function __construct() {
-        //this permission checking for the controller, normally is done in BaseController
-        //This is added also here, because the role name is different from the controller name
-        //and the middleware is not able to match the controller name with the permission name
-        //This is a workaround, but it works
-        $this->middleware('permission:create-roles')->only('create', 'store', 'enable','disable');
-        $this->middleware('permission:read-roles')->only('index','edit');
-        $this->middleware('permission:update-roles')->only('update','enable','disable');
-        $this->middleware('permission:delete-roles')->only('destroy');
-    }
-
+    //permission checking for the controller is done in BaseController
     public function index()
     {
         $roles = Role::with('permissions')->get();
@@ -50,11 +40,11 @@ class RolePermissionController extends BaseController
  
         $all_permissions = Permission::all();
 
-        return Inertia::render('Roles/PermissionMatrix', compact('role', 'all_permissions'));
+        return Inertia::render('Roles/Form', compact('role', 'all_permissions'));
     }
 
     //create a new record
-    public function store(RolePermissionRequest $request)
+    public function store(RoleRequest $request)
     {
          $validated = $request->validated();
 
@@ -65,7 +55,7 @@ class RolePermissionController extends BaseController
     }
 
     //edit record
-    public function update(RolePermissionRequest $request, Role $role)
+    public function update(RoleRequest $request, Role $role)
     {
         $validated = $request->validated();
 
