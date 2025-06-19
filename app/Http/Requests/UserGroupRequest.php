@@ -25,29 +25,24 @@ class UserGroupRequest extends FormRequest
     public function rules(): array
     {
 
+        $userGroupId = $this->route('usergroup')?->id;
+        
+        $nameRule = Rule::unique('user_groups', 'name')->whereNull('deleted_at');
+        
+        // Update
+        if ($userGroupId) {
+            $nameRule->ignore($userGroupId, 'id');
+        };
+
         $rules = [
-            'name' => 'required|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                $nameRule
+            ],
+            'is_active' => 'nullable|boolean',
         ];
-
-        if ($this->isMethod('post')) {
-            // Store
-            $rules['name'] = [
-                'required',
-                'string',
-                Rule::unique('user_groups')->whereNull('deleted_at')
-            ];
-
-        } else {
-            // Update
-            $userGroupId = $this->route('usergroup') ? $this->route('usergroup')->id : null;
-            $rules['name'] = [
-                'required',
-                'string',
-                Rule::unique('user_groups','name')
-                ->ignore($userGroupId, 'id') 
-                ->whereNull('deleted_at')
-            ];
-        }
               
         return $rules;
     }
