@@ -32,10 +32,7 @@ class UserController extends BaseController
             $query->where('email', 'like', '%' . $request->email . '%');
         }
         
-        $users = $query->paginate(10)->withQueryString()->through(function ($user) {
-            $user->photo_url = $user->userPhoto?->photo_url; 
-            return $user;
-        });
+        $users = $query->paginate(10)->withQueryString();
         $filters = $request->only(['name', 'email']);
         return Inertia::render('Users/Index', compact('users', 'filters'));
     }
