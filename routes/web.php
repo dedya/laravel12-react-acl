@@ -49,7 +49,7 @@ Route::prefix('tailadmin')->name('tailadmin.')->group(function() {
     })->name('dashboard');
 
     Route::get('/profile', function () {
-        return Inertia::render('TailAdmin/Dashboard');
+        return Inertia::render('TailAdmin/Profile');
     })->name('profile');
 
     Route::get('/calendar', function () {
@@ -69,7 +69,7 @@ Route::prefix('tailadmin')->name('tailadmin.')->group(function() {
     })->name('blank');
 
     Route::get('/404', function () {
-        return Inertia::render('TailAdmin/404');
+        return Inertia::render('TailAdmin/Error/Error404');
     })->name('404');
 
     Route::get('/chart/line', function () {
@@ -93,7 +93,7 @@ Route::prefix('tailadmin')->name('tailadmin.')->group(function() {
     })->name('ui.badge');
 
     Route::get('/ui/buttons', function () {
-        return Inertia::render('TailAdmin/UI/buttons');
+        return Inertia::render('TailAdmin/UI/Buttons');
     })->name('ui.buttons');
 
     Route::get('/ui/images', function () {

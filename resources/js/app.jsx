@@ -9,6 +9,7 @@ import { ThemeProvider } from './utils/context/ThemeContext';
 import { StrictMode } from "react";
 import AppLayout  from '@/Layouts/AppLayout'; 
 import AuthLayout from '@/Layouts/AuthLayout';  
+import ErrorLayout from '@/Layouts/ErrorLayout';  
 import { HelmetProvider } from 'react-helmet-async';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -39,6 +40,13 @@ createInertiaApp({
                 // The `pageComponent` here is the actual React component for the page (e.g., Dashboard).
                 // It will be rendered as children of AppLayout.
                 <AuthLayout>{pageComponent}</AuthLayout> // Use AuthLayout for auth pages
+                
+            ));
+        } else if (name.startsWith('TailAdmin/Error/')) { // : If page is in 'Auth/' directory
+            page.default.layout = page.default.layout || (pageComponent => (
+                // The `pageComponent` here is the actual React component for the page (e.g., Dashboard).
+                // It will be rendered as children of AppLayout.
+                <ErrorLayout>{pageComponent}</ErrorLayout> // Use AuthLayout for auth pages
                 
             ));
         } else {

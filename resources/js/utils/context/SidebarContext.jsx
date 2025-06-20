@@ -13,12 +13,12 @@ export const SidebarProvider = ({ children }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null); // Assuming it's a string key
 
 	useEffect(() => {
-		console.log('use sidebar context :');
+		//console.log('use sidebar context :');
 
 		//handle resize
 		const handleResize = () => {
 			const mobile = window.innerWidth < 768;
-			console.log('mobile size:',mobile);
+			//console.log('mobile size:',mobile);
 
 			setIsMobile(mobile);
 

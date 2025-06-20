@@ -25,7 +25,7 @@ export default function DefaultInputs() {
 	 * @param {string} value - The selected value from the dropdown.
 	 */
 	const handleSelectChange = (value) => { // Removed type annotation
-		console.log("Selected value:", value);
+		//console.log("Selected value:", value);
 	};
 
 	return (

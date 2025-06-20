@@ -5,7 +5,7 @@ import { SidebarProvider, useSidebar } from "../utils/context/SidebarContext";
 import { Outlet } from "react-router";
 
 const LayoutContent = ({children}) => {
-	console.log('children',children);
+	//console.log('children',children);
 	const { isExpanded, isHovered, isMobileOpen } = useSidebar();
 
 	return (
