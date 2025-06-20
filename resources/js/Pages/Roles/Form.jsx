@@ -43,15 +43,23 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
 
     // Get all permission names for visible matrix
     const allMatrixPermissions = all_permissions
-        .filter(p => actions.includes(p.name.split('-')[0]) && pages.includes(p.name.split('-')[1]))
+        .filter(
+            p =>
+                actions.includes(p.name.split('-')[0]) &&
+                pages.includes(p.name.split('-').slice(1).join('-'))
+        )
         .map(p => p.name);
 
     // Get all permission names for a column (action)
-    const getColumnPermissions = (action) =>
-        all_permissions
-            .filter(p => p.name.startsWith(action + '-') && pages.includes(p.name.split('-')[1]))
-            .map(p => p.name);
-
+   const getColumnPermissions = (action) =>
+    all_permissions
+        .filter(
+            p =>
+                p.name.startsWith(action + '-') &&
+                pages.includes(p.name.split('-').slice(1).join('-'))
+        )
+        .map(p => p.name);
+        
     // Check if all permissions are checked
     const isAllChecked = allMatrixPermissions.length > 0 && allMatrixPermissions.every(p => data.permissions.includes(p));
 

@@ -24,37 +24,38 @@ export default function AuthenticatedLayout({ header, children }) {
     const canReadUserGroup = can('read-user-groups');
     
     useEffect(() => {
-    // Show validation errors
-    if (errors && Object.keys(errors).length > 0) {
-      Object.values(errors).forEach((msg) => {
-        toast.error(msg, {
-          position: "top-right",
-          autoClose: alertTimer || 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      });
-    }
+        const duration = alertTimer || 4000;
 
-    console.log('flash.success:', flash?.success);
-    if (flash?.success) {
-        Swal.fire({
-        title: flash.success,
-        timer: alertTimer || 4000,         
-            ...swalSuccessDefaults,
+        // Show validation errors
+        if (errors && Object.keys(errors).length > 0) {
+        Object.values(errors).forEach((msg) => {
+            toast.error(msg, {
+            position: "top-right",
+            autoClose: alertTimer || 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
         });
-    }else
-    if (flash?.error) { 
-        Swal.fire({
-        title: flash.error,
-        timer: alertTimer || 4000,         
-            ...swalErrorDefaults,
-        });
-    }
+        }
+
+        //Show flash success or error using SweetAlert
+        const showFlashAlert = (message, defaults) => {
+            Swal.fire({
+                title: message,
+                timer: duration,
+                ...defaults,
+            });
+        };
+        
+        if (flash?.success) {
+            showFlashAlert(flash.success, swalSuccessDefaults);
+        } else if (flash?.error) {
+            showFlashAlert(flash.error, swalErrorDefaults);
+        }
     }, [flash?.success, flash?.error, errors, alertTimer]);
 
     return (
