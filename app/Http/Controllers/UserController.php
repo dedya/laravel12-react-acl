@@ -52,8 +52,8 @@ class UserController extends BaseController
 
     public function form(?User $user = null)
     {
-        $roles = Role::withoutTrashed()->get(); // Fetch all roles using Spatie
-        $groups = Group::all(); // Fetch groups
+        $roles = Role::get(); // Fetch all roles using Spatie, exclude deleted roles
+        $groups = Group::get(); // Fetch groups
         if ($user && $user->exists) { 
             $user->load(['roles','userGroup']); // Load roles and group relationships
             $user->photo_url = $user->userPhoto?->photo_url; 
