@@ -22,6 +22,13 @@ class UserGroupService
 
     public function delete(UserGroup $userGroup, $deletedBy = null): void
     {
+     
+        // Check if the user group is still used by any users
+        if ($userGroup->users()->exists()) {
+            // Throw generic exception with message
+            throw new \Exception(__('general.data_is_still_used', ['name' => $userGroup->name]));
+        }
+
         DB::transaction(function () use ($userGroup, $deletedBy) {
             $userGroup->deleted_by = $deletedBy;
             $userGroup->save();
