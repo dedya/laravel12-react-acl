@@ -1,5 +1,5 @@
 import React, { useRef, useEffect,useState } from 'react';
-import { useForm, usePage, Link, Head } from '@inertiajs/react';
+import { useForm, usePage, Head, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { can } from '@/utils/can';
 import Swal from 'sweetalert2';
@@ -207,7 +207,7 @@ export default function Form({ user, roles, groups, auth }) {
             <div className="flex items-center gap-4 mt-6">
               <Link
                 href={route('users.index')}
-                className="text-gray-600 hover:underline"
+                   className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
               >
                 {general?.cancel}
               </Link>              

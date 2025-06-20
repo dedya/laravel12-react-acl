@@ -7,7 +7,7 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\RoleController;
 
 Route::get('/', function () {
     /*return Inertia::render('Welcome', [
@@ -34,7 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/users/{user}/enable', [UserController::class, 'enable'])->name('users.enable');
     Route::patch('/users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
 
-    Route::resource('roles', RolePermissionController::class);
+    Route::resource('roles', RoleController::class);
 });
 
 

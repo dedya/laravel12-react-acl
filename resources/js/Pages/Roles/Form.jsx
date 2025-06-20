@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useForm, usePage, Link, Head } from '@inertiajs/react';
+import { useForm, usePage, Head, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { can } from '@/utils/can';
 
@@ -176,19 +176,21 @@ return (
                         {errors.permissions && <div className="text-red-500 text-sm mt-1">{errors.permissions}</div>}
                     </div>
                     <div className="flex items-center gap-4 mt-6">
-                        <Link href={route('roles.index')} className="text-gray-600 hover:underline">
-                            {general?.cancel}
-                        </Link>
-                        
-                    { canUpdateOrCreate && (                       
-                        <button
-                            type="submit"
-                            disabled={processing}
-                            className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow disabled:opacity-50"
+                         <Link
+                            href={route('roles.index')}
+                            className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
                         >
-                            {general?.submit}
-                        </button>
-                    )}
+                            {general?.cancel}
+                        </Link>   
+                        { canUpdateOrCreate && (                       
+                            <button
+                                type="submit"
+                                disabled={processing}
+                                className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow disabled:opacity-50"
+                            >
+                                {general?.submit}
+                            </button>
+                        )}
                         
                     </div>
                 </form>
