@@ -101,7 +101,7 @@ class UserController extends BaseController
     {
         (new DeleteUser($user, auth()->id()))->handle();
         $message = __('general.data_is_deleted', ['name' => $user->name]);
-        return redirect()->route('users.index')->with('success', $message);
+        return back()->with('success', $message);
     }
 
     public function enable(Request $request, User $user)
@@ -128,6 +128,6 @@ class UserController extends BaseController
             $message = __('general.set_disabled', ['name' => $user->name]);
 
         Log::info('ENABLE USER', ['id' => $user->id, 'query' => $query]);
-        return redirect()->route('users.index', $query)->with('success',$message);
+        return back()->with('success',$message);
     }
 }

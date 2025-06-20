@@ -47,6 +47,6 @@ return [
     'user_groups_page_title' => 'User Groups',
     'edit_group' => 'Edit User Group',
     'create_group' => 'Create User Group',
-    'data_is_still_used' => 'Cannot delete ":name" because it is still used in another table.',
+    'data_is_still_used' => 'Cannot delete ":name" because it is used in another table.',
 
 ];

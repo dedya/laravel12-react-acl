@@ -86,14 +86,14 @@ class UserGroupController extends BaseController
      */
     public function destroy(Group $usergroup)
     {
-         try {
+        try {
             $this->userGroupService->delete($usergroup, auth()->id());
                 
             $message =  __('general.data_is_deleted', ['name' => $usergroup->name]);
 
-            return redirect()->route('usergroups.index')->with('success',$message);
+            return back()->with('success',$message);
         } catch (\Exception $e) {
-            return redirect()->route('usergroups.index')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
     }
 
@@ -123,7 +123,7 @@ class UserGroupController extends BaseController
             return redirect()->route('usergroups.index', $query)->with('success',$message);
 
         } catch (\Exception $e) {
-            return redirect()->route('usergroups.index')->with('error', $e->getMessage());
+            return back()->with('error', $e->getMessage());
         }
     }
 }

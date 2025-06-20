@@ -10,14 +10,23 @@ use App\Http\Requests\RoleRequest;
 //use Illuminate\Routing\Controller as BaseController;
 use App\Abstracts\Http\Controller as BaseController;
 use App\Models\Role;
+use App\Services\RoleService;
 
 class RoleController extends BaseController
 {
+
+    private RoleService $roleService;
+
+    public function __construct(RoleService $roleService)
+    {
+        $this->roleService = $roleService;
+    }
 
     //permission checking for the controller is done in BaseController
     public function index()
     {
         $roles = Role::with('permissions')->get();
+        
         return Inertia::render('Roles/Index', compact('roles'));
     }
 
@@ -43,37 +52,48 @@ class RoleController extends BaseController
         return Inertia::render('Roles/Form', compact('role', 'all_permissions'));
     }
 
-    //create a new record
-    public function store(RoleRequest $request)
+     /**
+     * Store a newly created resource in storage.
+     */
+   public function store(RoleRequest $request)
     {
-         $validated = $request->validated();
-
-        $role = Role::create(['name' => $validated['name']]);
-        $role->syncPermissions($request->permissions ?? []);
-
-        return redirect()->route('roles.index')->with('success', __('general.data_is_created', ['name' => $validated['name']]));
+        return $this->saveRole($request);
     }
 
-    //edit record
     public function update(RoleRequest $request, Role $role)
     {
+        return $this->saveRole($request, $role);
+    }
+ 
+    private function saveRole($request, ?Role $role = null)
+    {
         $validated = $request->validated();
+    
+        try {
+            $savedRole = $this->roleService->save($validated, $role);
+            $savedRole->syncPermissions($request->permissions ?? []);
 
-        if (isset($validated['name'])) {
-            $role->name = $validated['name'];
-            $role->save();
+            $messageKey = $role ? 'data_is_updated' : 'data_is_created';
+            $name = $savedRole->name;
+            $message = __('general.' . $messageKey, ['name' => $name]);
+            
+            return redirect()->route('roles.index')->with('success', $message);
+
+        } catch (\Exception $e) {
+            return redirect()->route('roles.index')->with('error', $e->getMessage());
         }
-        $role->syncPermissions($request->permissions ?? []);
-        return redirect()->route('roles.index')->with('success', __('general.data_is_updated', ['name' => $validated['name']]));   
     }
 
     public function destroy(Role $role)
     {
-        $role->deleted_by = auth()->id();
-        $role->save();
-        $role->delete();
-        return redirect()->route('roles.index')->with('success', __('general.data_is_deleted', ['name' => $role->name]));   
-    }    
+        try {
+            $this->roleService->delete($role, auth()->id());
+                
+            $message =  __('general.data_is_deleted', ['name' => $role->name]);
 
-    
+            return back()->with('success',$message);
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
 }
