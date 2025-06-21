@@ -40,7 +40,7 @@ class UserRequest extends FormRequest
             //$userId = is_numeric($this->user) ? $this->user : $this->user->getAttribute('id');
             $userId = $this->route('user') ? $this->route('user')->id : null;
             $rules['email'] = 'required|email|unique:users,email,' . $userId;
-            $rules['password'] = 'nullable|string|min:6';
+            $rules['password'] = $this->request->get('change_password') ? 'required|string|min:6' : 'nullable';
         }
               
         return $rules;
