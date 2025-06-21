@@ -14,7 +14,6 @@ return [
     'delete_confirm_title' => 'Are you sure?',
     'delete_confirm_text' => 'This data will be deleted!',
     'delete_confirm_yes' => 'Yes, delete it!',
-    'delete_success' => ':name is deleted successfully!',
     'image_will_removed_after_save' => 'Image will be removed after saving',
     'leave_blank'   => "Leave blank to keep current",
     'password' => 'Password',
@@ -44,4 +43,10 @@ return [
     'roles_page_title' => 'Roles',
     'enable' => 'Enable',
     'disable' => 'Disable',
+    'user_group_list_title' => 'User Groups',
+    'user_groups_page_title' => 'User Groups',
+    'edit_group' => 'Edit User Group',
+    'create_group' => 'Create User Group',
+    'data_is_still_used' => 'Cannot delete ":name" because it is used in another table.',
+
 ];

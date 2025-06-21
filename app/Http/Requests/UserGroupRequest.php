@@ -4,9 +4,10 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
-class RoleRequest extends FormRequest
+class UserGroupRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,15 +24,16 @@ class RoleRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('role') ?->id;
 
-        $nameRule = Rule::unique('roles', 'name')->whereNull('deleted_at');
+        $userGroupId = $this->route('usergroup')?->id;
         
-        if($id){
-            // If the role is being updated, we need to ignore the current role's ID for unique validation
-            $nameRule->ignore($id, 'id');
-        }
+        $nameRule = Rule::unique('user_groups', 'name')->whereNull('deleted_at');
         
+        // Update
+        if ($userGroupId) {
+            $nameRule->ignore($userGroupId, 'id');
+        };
+
         $rules = [
             'name' => [
                 'required',
@@ -39,12 +41,9 @@ class RoleRequest extends FormRequest
                 'max:255',
                 $nameRule
             ],
-            'permissions' => [
-                'array'
-            ],
-            'permissions.*' => [Rule::exists('permissions', 'name')],
+            'is_active' => 'nullable|boolean',
         ];
-
+              
         return $rules;
     }
 }

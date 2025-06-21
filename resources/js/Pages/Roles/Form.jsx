@@ -17,7 +17,7 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
     const pages = Array.from(
     new Set(
         all_permissions
-        .map(p => p.name.split('-')[1])
+        .map(p => p.name.split('-').slice(1).join('-')) 
         .filter(Boolean)
     )
     );
@@ -43,15 +43,23 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
 
     // Get all permission names for visible matrix
     const allMatrixPermissions = all_permissions
-        .filter(p => actions.includes(p.name.split('-')[0]) && pages.includes(p.name.split('-')[1]))
+        .filter(
+            p =>
+                actions.includes(p.name.split('-')[0]) &&
+                pages.includes(p.name.split('-').slice(1).join('-'))
+        )
         .map(p => p.name);
 
     // Get all permission names for a column (action)
-    const getColumnPermissions = (action) =>
-        all_permissions
-            .filter(p => p.name.startsWith(action + '-') && pages.includes(p.name.split('-')[1]))
-            .map(p => p.name);
-
+   const getColumnPermissions = (action) =>
+    all_permissions
+        .filter(
+            p =>
+                p.name.startsWith(action + '-') &&
+                pages.includes(p.name.split('-').slice(1).join('-'))
+        )
+        .map(p => p.name);
+        
     // Check if all permissions are checked
     const isAllChecked = allMatrixPermissions.length > 0 && allMatrixPermissions.every(p => data.permissions.includes(p));
 
@@ -153,7 +161,7 @@ return (
                                 <tbody>
                                     {pages.map(page => (
                                         <tr key={page}>
-                                            <td className="px-3 py-2 border text-center capitalize">{page}</td>
+                                            <td className="px-3 py-2 border text-center capitalize"> {page.replace(/-/g, ' ')}</td>
                                             {actions.map(action => {
                                                 const permName = `${action}-${page}`;
                                                 return (

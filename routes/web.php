@@ -1,13 +1,15 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserGroupController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     /*return Inertia::render('Welcome', [
@@ -35,6 +37,33 @@ Route::middleware('auth')->group(function () {
     Route::patch('/users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
 
     Route::resource('roles', RoleController::class);
+    Route::resource('usergroups', UserGroupController::class);
+     Route::patch('/usergroups/{usergroup}/enable', [UserGroupController::class, 'enable'])->name('usergroups.enable');
+    Route::patch('/usergroups/{usergroup}/disable', [UserGroupController::class, 'disable'])->name('usergroups.disable');
+
+    //artisan commands
+    Route::get('/artisan/{command}', function ($command) {
+        try {
+            $allowed = [
+                'cache:clear',
+                'config:clear',
+                'route:clear',
+                'view:clear',
+                'migrate',
+                'optimize',
+            ];
+
+            if (!in_array($command, $allowed)) {
+                abort(403, 'Command not allowed');
+            }
+            Artisan::call($command);
+            return Artisan::output();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    })->name('artisan.command');
+
+        
 });
 
 
