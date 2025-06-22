@@ -48,5 +48,13 @@ return [
     'edit_group' => 'Edit User Group',
     'create_group' => 'Create User Group',
     'data_is_still_used' => 'Cannot delete ":name" because it is used in another table.',
-
+    'sign_in' => 'Sign In',
+    'sign_up' => 'Sign Up',
+    'sign_in_with_google' => 'Sign in with Google',
+    'sign_in_with_x' => 'Sign in with X',
+    'or' => 'Or',
+    'enter_password' => 'Enter your password',
+    'keep_me_logged_in' => 'Keep me logged in',
+    'forgot_password' => 'Forgot password?',
+    'dont_have_account' => "Don't have an account?",
 ];
