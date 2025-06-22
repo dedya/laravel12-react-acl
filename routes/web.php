@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('roles', RoleController::class);
     Route::resource('usergroups', UserGroupController::class);
-     Route::patch('/usergroups/{usergroup}/enable', [UserGroupController::class, 'enable'])->name('usergroups.enable');
+    Route::patch('/usergroups/{usergroup}/enable', [UserGroupController::class, 'enable'])->name('usergroups.enable');
     Route::patch('/usergroups/{usergroup}/disable', [UserGroupController::class, 'disable'])->name('usergroups.disable');
 
     //artisan commands

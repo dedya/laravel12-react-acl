@@ -35,7 +35,7 @@ createInertiaApp({
         // We're checking if the page's default export already has a 'layout' property.
         // If not, we assign a function that wraps the page component with AppLayout.
         // This ensures every page gets AppLayout by default unless it specifies otherwise.
-        if (name.startsWith('TailAdmin/Auth/')) { // : If page is in 'Auth/' directory
+        if (name.startsWith('TailAdmin/Auth/') || name.startsWith('Auth/')) { // : If page is in 'Auth/' directory
             page.default.layout = page.default.layout || (pageComponent => (
                 // The `pageComponent` here is the actual React component for the page (e.g., Dashboard).
                 // It will be rendered as children of AppLayout.
