@@ -15,7 +15,10 @@ class UserGroup extends Model
 
     protected $fillable = [
         'name',
-        'is_active'
+        'is_active',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     public function users()

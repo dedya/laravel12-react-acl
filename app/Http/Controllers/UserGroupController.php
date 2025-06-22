@@ -87,7 +87,7 @@ class UserGroupController extends BaseController
     public function destroy(Group $usergroup)
     {
         try {
-            $this->userGroupService->delete($usergroup, auth()->id());
+            $this->userGroupService->delete($usergroup);
                 
             $message =  __('general.data_is_deleted', ['name' => $usergroup->name]);
 
