@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\LogsModelActivity;
+use App\Traits\Blameable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserGroup extends Model
 {
+    use LogsModelActivity;
+    use Blameable;
     use SoftDeletes;
 
     protected $fillable = [
