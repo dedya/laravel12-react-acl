@@ -1,4 +1,4 @@
-import React, { useRef, useEffect,useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useForm, usePage, Head, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { can } from '@/utils/can';
@@ -23,7 +23,7 @@ export default function Form({ user, roles, groups, auth }) {
   }, []);
 
   const isEdit = !!user;
-  const { errors, general} = usePage().props;
+  const { errors, general } = usePage().props;
   const photoInput = useRef();
   const [removePhoto, setRemovePhoto] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
@@ -34,34 +34,37 @@ export default function Form({ user, roles, groups, auth }) {
     name: user?.name || '',
     email: user?.email || '',
     password: '',
+    change_password: false,
     role: user?.roles?.[0]?.name || '',
     user_group_id: user?.user_group_id || '',
     photo: null,
-    _method:isEdit?'PUT':'POST',
+    _method: isEdit ? 'PUT' : 'POST',
     remove_photo: false,
   });
 
   // Handle file change
   const handlePhotoChange = (e) => {
-      const file = e.target.files[0];
-      //setRemovePhoto(true);
-      //setData('remove_photo', true);
+    const file = e.target.files[0];
+    //setRemovePhoto(true);
+    //setData('remove_photo', true);
 
-      if (file) {
-        setData('photo', file);
-        setPhotoPreview(URL.createObjectURL(file));
-      } else {
-        setPhotoPreview(null);
-      }
-    };
+    if (file) {
+      setData('photo', file);
+      setPhotoPreview(URL.createObjectURL(file));
+    } else {
+      setPhotoPreview(null);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data); 
-     isEdit
-    ? post(route('users.update', user.id),{forceFormData:true})
-    : post(route('users.store'),{forceFormData:true});
+    console.log(data);
+    isEdit
+      ? post(route('users.update', user.id), { forceFormData: true })
+      : post(route('users.store'), { forceFormData: true });
   };
+
+  const [changePassword, setChangePassword] = useState(!isEdit);
 
   return (
     <AuthenticatedLayout
@@ -77,41 +80,73 @@ export default function Form({ user, roles, groups, auth }) {
         <div className="bg-white rounded shadow p-6">
           <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
             <TextInput
-                label= {general?.name}
-                name="name"
-                value={data.name}
-                onChange={e => setData('name', e.target.value)}
-                error={errors.name}
-                inputRef={firstInputRef} // Focus on this input 
-                required
+              label={general?.name}
+              name="name"
+              value={data.name}
+              onChange={e => setData('name', e.target.value)}
+              error={errors.name}
+              inputRef={firstInputRef} // Focus on this input 
+              required
             />
 
             <TextInput
-                label={general?.email}
-                name="email"
-                type="email"
-                value={data.email}
-                onChange={e => setData('email', e.target.value)}
-                error={errors.email}
-                required
+              label={general?.email}
+              name="email"
+              type="email"
+              value={data.email}
+              onChange={e => setData('email', e.target.value)}
+              error={errors.email}
+              required
             />
 
-            <TextInput
-              label={
-                <>
-                  {general?.password}
-                  {isEdit && (
-                    <span className="text-xs text-gray-400">({general?.leave_blank})</span>
-                  )}
-                </>
-              }
-              name="password"
-              type="password"
-              value={data.password}
-              onChange={e => setData('password', e.target.value)}
-              error={errors.password}
-              required={!isEdit}
-            />
+            {
+              isEdit && (
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="change_password"
+                    name="change_password"
+                    checked={changePassword}
+                    onChange={(e) => {
+                      setChangePassword(e.target.checked);
+                      // Clear password fields if checkbox is unchecked
+                      if (!e.target.checked) {
+                        setData('password', '');
+                        setData('change_password',false);
+                      } else {
+                        setData('change_password',e.target.checked);
+                      }
+                    }}
+                    className="rounded border-gray-300 text-purple-600 shadow-sm focus:ring-purple-500"
+                  />
+                  <label htmlFor="change_password" className="ml-2 block text-sm text-gray-900">
+                    {general?.change_password || 'Change Password'}
+                  </label>
+                </div>
+              )
+            }
+
+            {(changePassword || !isEdit) && (
+              <>
+                <TextInput
+                  label={
+                    <>
+                      {general?.password}
+                      {/*
+                      {isEdit && (
+                        <span className="text-xs text-gray-400">({general?.leave_blank})</span>
+                      )}*/}
+                    </>
+                  }
+                  name="password"
+                  type="password"
+                  value={data.password}
+                  onChange={e => setData('password', e.target.value)}
+                  error={errors.password}
+                  required={changePassword || !isEdit} 
+                />
+              </>
+            )}
 
             <SelectDropdown
               label={general?.role}
@@ -137,80 +172,80 @@ export default function Form({ user, roles, groups, auth }) {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {general.profile_image}
               </label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={photoInput}
-                  onChange={handlePhotoChange}
-                  className="border rounded px-3 py-2 w-full"
-                />
-                
-                {(photoPreview || (user?.photo_url && !removePhoto)) && (
-                  <div className="mt-2 relative inline-block">
-                    <img
-                      src={photoPreview ? photoPreview : user.photo_url}
-                      alt="Preview"
-                      className="h-32 w-32 object-cover rounded-full"
-                    />
-                    {
-                       canUpdateOrCreate &&
+              <input
+                type="file"
+                accept="image/*"
+                ref={photoInput}
+                onChange={handlePhotoChange}
+                className="border rounded px-3 py-2 w-full"
+              />
 
-                      <button
-                        type="button"
-                        className="absolute top-0 right-0 m-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 flex items-center justify-center opacity-70 hover:opacity-100"
-                        title="Remove photo"
-                        style={{ transform: 'translate(50%,-50%)' }}
-                        onClick={async () => {
-                          const result = await Swal.fire({
-                            title: general?.delete_confirm_title,
-                            text: general?.delete_image_confirm_text,
-                            icon: 'warning',
-                            confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
-                            cancelButtonText: general?.cancel,
-                            toast: false,
-                            ...swalConfirmDeleteDefaults,                            
+              {(photoPreview || (user?.photo_url && !removePhoto)) && (
+                <div className="mt-2 relative inline-block">
+                  <img
+                    src={photoPreview ? photoPreview : user.photo_url}
+                    alt="Preview"
+                    className="h-32 w-32 object-cover rounded-full"
+                  />
+                  {
+                    canUpdateOrCreate &&
+
+                    <button
+                      type="button"
+                      className="absolute top-0 right-0 m-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 flex items-center justify-center opacity-70 hover:opacity-100"
+                      title="Remove photo"
+                      style={{ transform: 'translate(50%,-50%)' }}
+                      onClick={async () => {
+                        const result = await Swal.fire({
+                          title: general?.delete_confirm_title,
+                          text: general?.delete_image_confirm_text,
+                          icon: 'warning',
+                          confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
+                          cancelButtonText: general?.cancel,
+                          toast: false,
+                          ...swalConfirmDeleteDefaults,
+                        });
+                        if (result.isConfirmed) {
+                          setRemovePhoto(true);
+                          setData('photo', null);
+                          setData('remove_photo', true);
+                          setPhotoPreview(null);
+                          if (photoInput.current) photoInput.current.value = '';
+                          Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: general?.image_will_removed_after_save,
+                            showConfirmButton: false,
+                            timer: 2000,
+                            background: '#f0fdf4',
+                            color: '#166534',
                           });
-                          if (result.isConfirmed) {
-                            setRemovePhoto(true);
-                            setData('photo', null);
-                            setData('remove_photo', true);
-                            setPhotoPreview(null);
-                            if (photoInput.current) photoInput.current.value = '';
-                            Swal.fire({
-                              toast: true,
-                              position: 'top-end',
-                              icon: 'success',
-                              title: general?.image_will_removed_after_save,
-                              showConfirmButton: false,
-                              timer: 2000,
-                              background: '#f0fdf4',
-                              color: '#166534',
-                            });
-                          }
-                        }}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    }
-                  </div>
-                )}
+                        }
+                      }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  }
+                </div>
+              )}
 
-                {removePhoto && !photoPreview && (
-                  <div className="text-sm text-gray-500 mt-2">{general?.image_will_removed_after_save}</div>
-                )}
-                {errors.photo && <div className="text-red-500 text-sm mt-1">{errors.photo}</div>}
-              </div>
+              {removePhoto && !photoPreview && (
+                <div className="text-sm text-gray-500 mt-2">{general?.image_will_removed_after_save}</div>
+              )}
+              {errors.photo && <div className="text-red-500 text-sm mt-1">{errors.photo}</div>}
+            </div>
 
 
             <div className="flex items-center gap-4 mt-6">
               <Link
                 href={route('users.index')}
-                   className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+                className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
               >
                 {general?.cancel}
-              </Link>              
+              </Link>
               {
                 canUpdateOrCreate &&
                 <button
@@ -222,7 +257,7 @@ export default function Form({ user, roles, groups, auth }) {
                 </button>
               }
 
-              
+
             </div>
           </form>
         </div>

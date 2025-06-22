@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Traits\Blameable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -15,6 +17,8 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
  
+use App\Traits\LogsModelActivity;
+
 class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -22,6 +26,8 @@ class User extends Authenticatable implements HasMedia
     use HasRoles, HasPermissions;
     use SoftDeletes;
     use InteractsWithMedia;
+    use LogsModelActivity;
+    use Blameable;
 
     /**
      * The attributes that are mass assignable.
@@ -35,7 +41,10 @@ class User extends Authenticatable implements HasMedia
         //'password',
         'user_group_id',
         'is_active',
-        'photo'
+        'photo',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     /**
