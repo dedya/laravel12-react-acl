@@ -20,7 +20,7 @@ class RoleService
         });
     }
 
-    public function delete(Role $role, $deletedBy = null): void
+    public function delete(Role $role): void
     {
      
         // Check if the user group is still used by any users
@@ -29,9 +29,7 @@ class RoleService
             throw new \Exception(__('general.data_is_still_used', ['name' => $role->name]));
         }
 
-        DB::transaction(function () use ($role, $deletedBy) {
-            $role->deleted_by = $deletedBy;
-            $role->save();
+        DB::transaction(function () use ($role) {
             $role->delete(); // soft delete
         });
     }
