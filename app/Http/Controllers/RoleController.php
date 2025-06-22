@@ -87,7 +87,7 @@ class RoleController extends BaseController
     public function destroy(Role $role)
     {
         try {
-            $this->roleService->delete($role, auth()->id());
+            $this->roleService->delete($role);
                 
             $message =  __('general.data_is_deleted', ['name' => $role->name]);
 
