@@ -5,6 +5,13 @@ This application is a basic laravel 12, react ACL, which contains :
 - User Administration
 - Role Administration with permission
 
+Using these libraries : 
+- Spatie Laravel permissions (https://spatie.be/docs/laravel-permission/v6/introduction)
+- Spatie Laravel activitylog (https://spatie.be/docs/laravel-activitylog/v4/introduction)
+- Spatie Laravel media library (https://spatie.be/docs/laravel-medialibrary/v11/introduction)
+- Laravel React i18n (https://github.com/EugeneMeles/laravel-react-i18n)
+
+
 To setup : 
 - Clone the source 
 - Run 'composer update'
