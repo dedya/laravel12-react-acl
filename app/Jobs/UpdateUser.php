@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
+use Illuminate\Foundation\Bus\Dispatchable;
 class UpdateUser implements ShouldQueue
 {
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels, Dispatchable;
 
     protected $validated;
     protected $user;

@@ -87,8 +87,10 @@ class UserController extends BaseController
         $removePhoto = $request->boolean('remove_photo');
 
         try {
-            (new UpdateUser($validated, $user, $file, $removePhoto))->handle();
-
+            
+            //(new UpdateUser($validated, $user, $file, $removePhoto))->handle();        
+            // Dispatch the job, this runs immediately if QUEUE=sync
+            UpdateUser::dispatch($validated, $user, $file, $removePhoto); 
             $messageKey = $user ? 'data_is_updated' : 'data_is_created';
             $name = $user ? $user->name : $validated['name'];
             $message = __('general.' . $messageKey, ['name' => $name]);
@@ -102,7 +104,9 @@ class UserController extends BaseController
 
     public function destroy(User $user)
     {
-        (new DeleteUser($user, auth()->id()))->handle();
+        //(new DeleteUser($user, auth()->id()))->handle();
+        DeleteUser::dispatch($user); 
+
         $message = __('general.data_is_deleted', ['name' => $user->name]);
         return redirect()->route('users.index')->with('success', $message);
     }
