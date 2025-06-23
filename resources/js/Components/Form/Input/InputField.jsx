@@ -42,7 +42,7 @@ const Input = ({
 	success = false,
 	error = false,
 	hint,
-},ref,) => {
+}) => {
 	let inputClasses = `h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 ${className}`;
 
 	if (disabled) {
@@ -55,8 +55,9 @@ const Input = ({
 		inputClasses += ` bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90 dark:focus:border-brand-800`;
 	}
 
-	const localRef = useRef(null);
+	//const localRef = useRef(null);
 
+	/*
 	useImperativeHandle(ref, () => ({
         focus: () => localRef.current?.focus(),
     }));
@@ -65,14 +66,13 @@ const Input = ({
         if (isFocused) {
             localRef.current?.focus();
         }
-    }, [isFocused]);
+    }, [isFocused]);*/
 
 	return (
 		<div className="relative">
 			<input
 				type={type}
 				id={id}
-				ref={localRef}
 				name={name}
 				placeholder={placeholder}
 				value={value}
@@ -120,4 +120,4 @@ Input.propTypes = {
 
 // No need for Input.defaultProps if using default parameters in destructuring
 
-export default forwardRef( Input );
+export default Input;

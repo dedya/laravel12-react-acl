@@ -16,7 +16,7 @@ import PropTypes from 'prop-types'; // Import PropTypes for validation
 const Checkbox = ({
 	label,
 	checked,
-	id,
+	name,
 	onChange,
 	className = "", // JavaScript default parameter
 	disabled = false, // JavaScript default parameter
@@ -28,12 +28,13 @@ const Checkbox = ({
 		>
 			<div className="relative w-5 h-5">
 				<input
-					id={id}
+					id={name}
+					name={name}
 					type="checkbox"
 					className={`w-5 h-5 appearance-none cursor-pointer dark:border-gray-700 border border-gray-300 checked:border-transparent rounded-md checked:bg-brand-500 disabled:opacity-60 
           ${className}`}
 					checked={checked}
-					onChange={(e) => onChange(e.target.checked)}
+					onChange={onChange}
 					disabled={disabled}
 				/>
 				{/* Checkmark icon for when the checkbox is checked and not disabled */}
