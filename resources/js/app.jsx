@@ -11,6 +11,7 @@ import AppLayout  from '@/Layouts/AppLayout';
 import AuthLayout from '@/Layouts/AuthLayout';  
 import ErrorLayout from '@/Layouts/ErrorLayout';  
 import { HelmetProvider } from 'react-helmet-async';
+import { LaravelReactI18nProvider } from 'laravel-react-i18n';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -67,7 +68,13 @@ createInertiaApp({
             <HelmetProvider>
                 <StrictMode>
                     <ThemeProvider>
-                        <App {...props} />
+                        <LaravelReactI18nProvider 
+                            locale={'en'}
+                            fallbackLocale={'en'}
+                            files={import.meta.glob('/lang/*.json')}
+                            >
+                            <App {...props} />
+                        </LaravelReactI18nProvider>
                     </ThemeProvider>
                 </StrictMode>
             </HelmetProvider>

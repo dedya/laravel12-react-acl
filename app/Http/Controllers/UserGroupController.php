@@ -24,7 +24,11 @@ class UserGroupController extends BaseController
     public function index()
     {
         $groups = Group::paginate(10)->withQueryString();
-        return Inertia::render('UserGroups/Index', compact('groups'));
+        
+        // Create pluralized user group count text
+        $groupCountText = trans_choice('general.user_group', $groups->total());
+        
+        return Inertia::render('UserGroups/Index', compact('groups', 'groupCountText'));
     }
 
      public function create()

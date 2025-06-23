@@ -4,13 +4,16 @@ import { Modal } from "../UI/Modal";
 import Button from "../UI/Button/Button";
 import Input from "../Form/Input/InputField";
 import Label from "../Form/Label";
+import { Link, useForm, usePage } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import InputError from '@/Components/InputError';
 /**
  * UserMetaCard functional component.
  * Displays the user's profile picture, name, role, location, and social media links.
  * It also includes an "Edit" button that opens a modal for updating personal and social information.
  * This component is self-contained with mock implementations of its dependencies for demonstration purposes.
  */
-export default function UserMetaCard() {
+export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) {
 	// Destructuring the modal state and control functions from the useModal hook
 	const { isOpen, openModal, closeModal } = useModal();
 
@@ -26,6 +29,22 @@ export default function UserMetaCard() {
 		console.log("Saving changes...");
 		closeModal(); // Close the modal after saving
 	};
+
+	const user = usePage().props.auth.user;
+	const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
+
+	const submit = (e) => {
+		e.preventDefault();
+		console.log('submit');
+
+		patch(route('profile.update'));
+	};
+
+	const { data, setData, patch, errors, processing, recentlySuccessful } =
+		useForm({
+			name: user.name,
+			email: user.email,
+		});
 
 	return (
 		// React Fragment to return multiple elements without adding an extra DOM node to the DOM tree
@@ -47,7 +66,7 @@ export default function UserMetaCard() {
                   In a real app, this would be a dynamic path (e.g., from an API response). */}
 							<img
 								src="https://placehold.co/80x80/cccccc/333333?text=User"
-								alt="user profile"
+								alt={user.name}
 								className="w-full h-full object-cover" // Ensure image covers the area
 								onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/80x80/cccccc/333333?text=Error"; }} // Fallback on error
 							/>
@@ -56,24 +75,22 @@ export default function UserMetaCard() {
                 Order changes on larger screens (xl:order-2 moves it before social links). */}
 						<div className="order-3 xl:order-2">
 							<h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-								Musharof Chowdhury
+								{user.name}
 							</h4>
 							<div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
 								<p className="text-sm text-gray-500 dark:text-gray-400">
-									Team Manager
+									-
 								</p>
 								{/* Vertical separator line, hidden on smaller screens and visible on extra-large screens */}
 								<div className="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
 								<p className="text-sm text-gray-500 dark:text-gray-400">
-									Arizona, United States
+									-
 								</p>
 							</div>
 						</div>
-						{/* Social media links section.
-                Occupies available space (grow) and aligns to the end on extra-large screens. */}
+						{/* Social media links section.Occupies available space (grow) and aligns to the end on extra-large screens. */}
 						<div className="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
-							{/* Individual social media link components (Facebook, X.com, LinkedIn, Instagram).
-                  Each uses a common styling for consistent appearance. */}
+							{/* Individual social media link components (Facebook, X.com, LinkedIn, Instagram). Each uses a common styling for consistent appearance. */}
 							{/* Facebook Link */}
 							<a
 								href="https://www.facebook.com/PimjoHQ"
@@ -198,36 +215,33 @@ export default function UserMetaCard() {
 				</div>
 			</div>
 
-			{/* Modal for editing personal information.
-          Conditionally rendered based on `isOpen` state from `useModal` hook. */}
+			{/* Modal for editing personal information.Conditionally rendered based on `isOpen` state from `useModal` hook. */}
 			<Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
 				{/* Modal content container with custom scrollbar, responsive padding, and dark mode styling. */}
 				<div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-11">
 					{/* Modal header with title and introductory text */}
 					<div className="px-2 pr-14">
 						<h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90">
-							Edit Personal Information
+							{t('general.personal_information')}
 						</h4>
 						<p className="mb-6 text-sm text-gray-500 dark:text-gray-400 lg:mb-7">
-							Update your details to keep your profile up-to-date.
+							{t('message.update_personal_information')}
 						</p>
 					</div>
-					{/* Form for editing user data.
-              Flex column layout for form elements. */}
-					<form className="flex flex-col">
+					{/* Form for editing user data. Flex column layout for form elements. */}
+					<form className="flex flex-col" onSubmit={submit}>
 						{/* Scrollable area for form fields to handle long forms. */}
 						<div className="custom-scrollbar h-[450px] overflow-y-auto px-2 pb-3">
-							{/* Social Links section */}
+							{/* Social Links section 
 							<div>
 								<h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
 									Social Links
 								</h5>
 
-								{/* Grid layout for social link input fields.
-                    Single column on small screens, two columns on large screens. */}
+								{/* Grid layout for social link input fields.Single column on small screens, two columns on large screens.
 								<div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
 									<div>
-										<Label htmlFor="facebook">Facebook</Label> {/* Added htmlFor for accessibility */}
+										<Label htmlFor="facebook">Facebook</Label> {/* Added htmlFor for accessibility 
 										<Input
 											id="facebook" // Added id for accessibility
 											type="text"
@@ -264,70 +278,75 @@ export default function UserMetaCard() {
 										/>
 									</div>
 								</div>
-							</div>
+							</div>*/}
 							{/* Personal Information section */}
 							<div className="mt-7">
 								<h5 className="mb-5 text-lg font-medium text-gray-800 dark:text-white/90 lg:mb-6">
-									Personal Information
+									{ }
 								</h5>
 
 								{/* Grid layout for personal info input fields */}
 								<div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-2">
 									<div className="col-span-2 lg:col-span-1">
-										<Label htmlFor="firstName">First Name</Label>
+										<Label htmlFor="name">{t('general.name')}</Label>
 										<Input
-											id="firstName"
-											type="text"
-											value="Musharof"
+											id="name"
+											value={data.name}
+											onChange={(e) => setData('name', e.target.value)}
+											autoComplete="name"
 										/>
+										<InputError className="mt-2" message={errors.name} />
 									</div>
 
-									<div className="col-span-2 lg:col-span-1">
-										<Label htmlFor="lastName">Last Name</Label>
-										<Input
-											id="lastName"
-											type="text"
-											value="Chowdhury"
-										/>
-									</div>
 
 									<div className="col-span-2 lg:col-span-1">
-										<Label htmlFor="email">Email Address</Label>
+										<Label htmlFor="email">{t('general.email')}</Label>
 										<Input
 											id="email"
 											type="text"
-											value="randomuser@pimjo.com"
+											value={data.email}
+											onChange={(e) => setData('email', e.target.value)}
+											autoComplete="email"
 										/>
+										<InputError className="mt-2" message={errors.email} />
 									</div>
 
 									<div className="col-span-2 lg:col-span-1">
-										<Label htmlFor="phone">Phone</Label>
-										<Input
-											id="phone"
-											type="text"
-											value="+09 363 398 46"
-										/>
+										{mustVerifyEmail && user.email_verified_at === null && (
+											<div>
+												<p className="mt-2 text-sm text-gray-800">
+													Your email address is unverified.
+													<Link
+														href={route('verification.send')}
+														method="post"
+														as="button"
+														className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+													>
+														Click here to re-send the verification email.
+													</Link>
+												</p>
+
+												{status === 'verification-link-sent' && (
+													<div className="mt-2 text-sm font-medium text-green-600">
+														A new verification link has been sent to your
+														email address.
+													</div>
+												)}
+											</div>
+										)}
 									</div>
 
-									<div className="col-span-2">
-										<Label htmlFor="bio">Bio</Label>
-										<Input
-											id="bio"
-											type="text"
-											value="Team Manager"
-										/>
-									</div>
+
 								</div>
 							</div>
 						</div>
-						{/* Modal action buttons: Close and Save Changes.
-                Aligned to the end on large screens. */}
+						{/* Modal action buttons: Close and Save Changes.Aligned to the end on large screens. */}
 						<div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-							<Button size="sm" variant="outline" onClick={closeModal}>
+							<Button size="sm" variant="outline" disabled={processing}>
 								Close
 							</Button>
-							<Button size="sm" onClick={handleSave}>
-								Save Changes
+							<Button size="sm" disabled={processing}>
+								{tChoice('general.save_changes',2)}
 							</Button>
 						</div>
 					</form>

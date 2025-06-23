@@ -1,4 +1,4 @@
-import React, { useRef, useEffect,useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useForm, usePage, Head, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { can } from '@/utils/can';
@@ -10,8 +10,17 @@ import { swalConfirmDeleteDefaults } from '@/utils/swalDefaults';
 import {
   TextInput
 } from '@/Components/Form';
+import PageMeta from "@/Components/Common/PageMeta";
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import PageBreadcrumb from "@/Components/Common/PageBreadCrumb";
+import ComponentCard from "@/Components/Common/ComponentCard";
+import Button from "@/Components/UI/Button/Button";
+import Input from "@/Components/Form/Input/InputField";
+import Label from "@/Components/Form/Label";
+import InputError from '@/Components/InputError';
 
 export default function Form({ usergroup, auth }) {
+  const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
 
   const firstInputRef = useRef(null);
 
@@ -22,72 +31,80 @@ export default function Form({ usergroup, auth }) {
   }, []);
 
   const isEdit = !!usergroup;
-  const { errors, general} = usePage().props;
+  const { errors, general } = usePage().props;
   const photoInput = useRef();
 
   const canUpdateOrCreate = can('update-user-groups') || can('create-user-groups');
 
   const { data, setData, post, put, processing } = useForm({
     name: usergroup?.name || '',
-    _method:isEdit?'PUT':'POST',
+    _method: isEdit ? 'PUT' : 'POST',
   });
 
   const handleSubmit = (e) => {
-        e.preventDefault();
-        if (isEdit) {
-            put(route('usergroups.update', usergroup.id), { preserveScroll: true });
-        } else {
-            post(route('usergroups.store'), { preserveScroll: true });
-        }
-    };
+    e.preventDefault();
+    if (isEdit) {
+      put(route('usergroups.update', usergroup.id), { preserveScroll: true });
+    } else {
+      post(route('usergroups.store'), { preserveScroll: true });
+    }
+  };
 
   return (
-    <AuthenticatedLayout
-      user={auth?.user}
-      header={
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          {isEdit ? general.edit_group : general.create_group}
-        </h2>
-      }
-    >
-      <Head title={isEdit ? general.edit_group : general.create_group} />
-      <div className="max-w-xl mx-auto py-8">
-        <div className="bg-white rounded shadow p-6">
+    <>
+      {/*<Head title={isEdit ? general.edit_group : general.create_group} />*/}
+
+      <PageMeta
+        title={isEdit ? general.edit_group : general.create_group}
+        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+      />
+
+      <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />
+      
+
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
+        <div className="space-y-6">
           <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
-            <TextInput
-                label= {general?.name}
+            <div className="col-span-2 lg:col-span-1">
+              <Label htmlFor="name">{t('general.name')}</Label>
+              <Input
+                label={general?.name}
                 name="name"
                 value={data.name}
                 onChange={e => setData('name', e.target.value)}
                 error={errors.name}
                 inputRef={firstInputRef} // Focus on this input 
                 required
-            />
+              />
+              <InputError className="mt-2" message={errors.name} />
+            </div>
+            
 
 
             <div className="flex items-center gap-4 mt-6">
               <Link
                 href={route('usergroups.index')}
-                   className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+                className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
               >
                 {general?.cancel}
-              </Link>              
+              </Link>
               {
                 canUpdateOrCreate &&
-                <button
+                <Button
                   type="submit"
                   disabled={processing}
                   className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow disabled:opacity-50"
                 >
                   {general?.submit}
-                </button>
+                </Button>
               }
 
-              
+
             </div>
           </form>
         </div>
       </div>
-    </AuthenticatedLayout>
+
+    </>
   );
 }

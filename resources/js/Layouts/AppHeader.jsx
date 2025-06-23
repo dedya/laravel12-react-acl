@@ -27,7 +27,7 @@ const AppHeader = () => {
 	useEffect(() => {
     const handleKeyDown = (event) => {
       if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-        event.preventDefault();
+        event.preventDefault(); 
         inputRef.current?.focus();
       }
     };

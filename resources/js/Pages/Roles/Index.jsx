@@ -7,126 +7,139 @@ import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa'; // Add this line
 import { can } from '@/utils/can';
+import PageMeta from "@/Components/Common/PageMeta";
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import PageBreadcrumb from "@/Components/Common/PageBreadCrumb";
+import ComponentCard from "@/Components/Common/ComponentCard";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/Components/UI/Table";
+import Button from "@/Components/UI/Button/Button";
 
 export default function RoleIndex({ auth }) {
+  const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
   const { roles, general } = usePage().props;
 
   const canCreate = can('create-roles');
   const canUpdate = can('update-roles');
   const canDelete = can('delete-roles');
-  
-    // Handler for delete confirmation using SweetAlert2
-    const handleDelete = (e, roleId, roleName) => {
-      e.preventDefault();
-      Swal.fire({
-        title: general?.delete_confirm_title || 'Are you sure?',
-        text: general?.delete_confirm_text || 'This role will be deleted permanently!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
-        reverseButtons: true,
-      }).then((result) => {
+
+  // Handler for delete confirmation using SweetAlert2
+  const handleDelete = (e, roleId, roleName) => {
+    e.preventDefault();
+    Swal.fire({
+      title: general?.delete_confirm_title || 'Are you sure?',
+      text: general?.delete_confirm_text || 'This role will be deleted permanently!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
         if (result.isConfirmed) {
-          if (result.isConfirmed) {
-              router.delete(route('roles.destroy', roleId),{
-                onSuccess: () => {
-                Swal.fire({
-                  toast: true,
-                  position: 'top-end',
-                  icon: 'success',
-                  title:
-                    (general?.data_is_deleted
+          router.delete(route('roles.destroy', roleId), {
+            onSuccess: () => {
+              Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title:
+                  (general?.data_is_deleted
                     ? general.data_is_deleted.replace(':name', roleName)
                     : `Role "${roleName}" is deleted successfully!`),
-                  showConfirmButton: false,
-                  timer: 2000,
-                  timerProgressBar: true,
-                  background: '#d1fae5',
-                  color: '#166534',
-                });
-              },
-            });
-          }
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                background: '#d1fae5',
+                color: '#166534',
+              });
+            },
+          });
         }
-      });
-    };
+      }
+    });
+  };
 
   return (
-    <AuthenticatedLayout
-      user={auth?.user}
-      header={
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          {general?.role_list_title || 'Roles'}
-        </h2>
-      }
-    >
-      <Head title={general?.role_page_title || 'Roles'}/>
+    <>
+      <PageMeta
+        title={tChoice('general.roles', 2)}
+        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+      />
 
-      <div className="max-w-4xl mx-auto py-8">
-        <div className="flex justify-between items-center mb-4">
-          <div></div>
-          {canCreate && (
-            <Link
-              href={route('roles.create')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
-            >
-              {general?.add_button || '+ Add'}
-            </Link>
-      )}
-        </div>
+      <PageBreadcrumb pageTitle={tChoice('general.roles', 2)} />
 
-        <div className="overflow-x-auto bg-white rounded shadow">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{general?.id}</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{general?.name}</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{general?.actions}</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
-              {roles.length === 0 && (
-                <tr>
-                  <td colSpan={3} className="px-4 py-4 text-center text-gray-400">
-                    {general?.no_data_found}
-                  </td>
-                </tr>
-              )}
-              {roles.map(role => (
-                <tr key={role.id}>
-                  <td className="px-4 py-2">{role.id}</td>
-                  <td className="px-4 py-2">{role.name}</td>
-                  <td className="px-4 py-2 space-x-2">
-                    {canUpdate && (                      
-                      <Link
-                        title={general?.edit || 'Edit'}
-                        href={route('roles.edit', role.id)}
-                        className="inline-block text-blue-600 hover:underline"
-                      >
-                      <FaEdit size={18} />                    
-                      </Link>
-                    )}
-                      
-                  {canDelete && 
-                      
-                    <button
-                        title={general?.delete || 'Delete'}
-                        type="button"
-                        onClick={e => handleDelete(e, role.id, role.name)}
-                        className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"
-                    >
-                      <FaTrashAlt size={18} />
-                    </button>
-                  }
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      <div className="space-y-6">
+        <ComponentCard title="">
+          <div className="overflow-hidden rounded-xl flex justify-end p-4">
+            
+            {canCreate && (
+              <Link
+                href={route('roles.create')}
+                className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded shadow"
+              >
+                {t('general.buttons.create')}
+              </Link>
+            )}
+          </div>
+
+          <div className="max-w-full overflow-x-auto">
+            <Table>
+              <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                <TableRow>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.id}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.name}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.actions}</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                {roles.length === 0 && (
+                  <TableRow key={group.id}>
+                    <TableCell className="px-5 py-4 sm:px-6 text-start" coslpan="3">
+                      {general?.no_data_found}
+                    </TableCell>
+                  </TableRow>
+                )}
+                {roles.map(role => (
+                  <TableRow key={role.id}>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{role.id}</TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{role.name}</TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      {canUpdate && (
+                        <Link
+                          title={general?.edit || 'Edit'}
+                          href={route('roles.edit', role.id)}
+                          className="inline-block text-blue-600 hover:underline"
+                        >
+                          <FaEdit size={18} />
+                        </Link>
+                      )}
+
+                      {canDelete &&
+
+                        <button
+                          title={general?.delete || 'Delete'}
+                          type="button"
+                          onClick={e => handleDelete(e, role.id, role.name)}
+                          className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"
+                        >
+                          <FaTrashAlt size={18} />
+                        </button>
+                      }
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </ComponentCard>
       </div>
-    </AuthenticatedLayout>
+    </>
   );
 }

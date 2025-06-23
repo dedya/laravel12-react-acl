@@ -90,11 +90,12 @@ const TableCell = ({
   children,
   isHeader = false, // JavaScript default parameter
   className,
+  colspan = ""
 }) => {
   const CellTag = isHeader ? "th" : "td";
   // The extra space at the beginning of className in your original code is fine
   // but can be cleaner by just ensuring an empty string if className is undefined.
-  return <CellTag className={`${className || ''}`}>{children}</CellTag>;
+  return <CellTag colSpan={colspan}  className={`${className || ''}`}>{children}</CellTag>;
 };
 
 // PropTypes for TableCell

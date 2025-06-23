@@ -17,48 +17,15 @@ import {
 } from './../utils/icons';
 import { useSidebar } from "../utils/context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { can } from '@/utils/can';
 
-
-const navItems = [
-	{
-		icon: <GridIcon />,
-		name: "Dashboard",
-		subItems: [{ name: "Ecommerce", path: route('tailadmin.dashboard'), pro: false }],
-	},
-	{
-		icon: <CalenderIcon />,
-		name: "Calendar",
-		path: route('tailadmin.calendar'),
-	},
-	{
-		icon: <UserCircleIcon />,
-		name: "User Profile",
-		path: route('tailadmin.profile'),
-	},
-	{
-		name: "Forms",
-		icon: <ListIcon />,
-		subItems: [{ name: "Form Elements", path: route('tailadmin.form'), pro: false }],
-	},
-	{
-		name: "Tables",
-		icon: <TableIcon />,
-		subItems: [{ name: "Basic Tables", path: route('tailadmin.table'), pro: false }],
-	},
-	{
-		name: "Pages",
-		icon: <PageIcon />,
-		subItems: [
-			{ name: "Blank Page", path: route('tailadmin.blank'), pro: false },
-			{ name: "404 Error", path: route('tailadmin.404'), pro: false },
-		],
-	},
-];
 
 const othersItems = [
 	{
 		icon: <PieChartIcon />,
 		name: "Charts",
+    visible: false,
 		subItems: [
 			{ name: "Line Chart", path: route('tailadmin.chart.line'), pro: false },
 			{ name: "Bar Chart", path: route('tailadmin.chart.bar'), pro: false },
@@ -67,6 +34,7 @@ const othersItems = [
 	{
 		icon: <BoxCubeIcon />,
 		name: "UI Elements",
+    visible: false,
 		subItems: [
 			{ name: "Alerts", path: route('tailadmin.ui.alert'), pro: false },
 			{ name: "Avatar", path: route('tailadmin.ui.avatars'), pro: false },
@@ -87,6 +55,7 @@ const othersItems = [
 ];
 function AppSidebar() {
 	const { general } = usePage().props;
+  	const { t, tChoice, currentLocale, setLocale, getLocales, isLocale  } = useLaravelReactI18n();
 	const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
 	//const location = useLocation();
 	const page = usePage();
@@ -235,12 +204,72 @@ function AppSidebar() {
 		});
 	};
 
+  const navItems = [
+    {
+      icon: <GridIcon />,
+      name: "Dashboard",
+      subItems: [{ name: "Ecommerce", path: route('tailadmin.dashboard'), pro: false }],
+	    visible: true,
+    },
+    {
+      icon: <CalenderIcon />,
+      name: "Calendar",
+      path: route('tailadmin.calendar'),
+      visible: false,
+    },
+    {
+      icon: <UserCircleIcon />,
+      name: "User Profile",
+      path: route('profile.edit'),
+      visible: true,
+    },
+    {
+      name: "Forms",
+      icon: <ListIcon />,
+      subItems: [{ name: "Form Elements", path: route('tailadmin.form'), pro: false }],
+      visible: false,
+    },
+    {
+      name: "Tables",
+      icon: <TableIcon />,
+      subItems: [{ name: "Basic Tables", path: route('tailadmin.table'), pro: false }],
+      visible: false,
+    },
+    {
+      name: "Pages",
+      icon: <PageIcon />,
+      subItems: [
+        { name: "Blank Page", path: route('tailadmin.blank'), pro: false },
+        { name: "404 Error", path: route('tailadmin.404'), pro: false },
+      ],
+      visible: false,
+    },
+    {
+      icon: <UserCircleIcon />,
+      name: tChoice('general.users',2),
+      path: route('users.index'),
+      visible: can('read-users')  ? true : false,
+    },
+    {
+      icon: <UserCircleIcon />,
+      name: tChoice('general.roles',2),
+      path: route('roles.index'),
+      visible: can('read-roles')  ? true : false,
+    },
+    {
+      icon: <UserCircleIcon />,
+      name: tChoice('general.user_groups',2),
+      path: route('usergroups.index'),
+      visible: can('read-usergroups')  ? true : false,
+    },
+  ];
+
 	const renderMenuItems = (items, menuType) => (
 		<ul className="flex flex-col gap-4 mb-6">
 			{items.map((nav, index) => (
 				<li key={nav.name}>
 					{
-						nav.subItems ?
+						nav.subItems && nav.visible ?
 							(
 								<button
 									onClick={() => handleSubmenuToggle(index, menuType)}
@@ -277,7 +306,7 @@ function AppSidebar() {
 
 								</button>
 							) :
-							(nav.path && (
+							(nav.path && nav.visible && (
 								<Link
 									href={nav.path}
 									className={`menu-item group ${isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"

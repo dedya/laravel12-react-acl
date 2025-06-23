@@ -34,7 +34,11 @@ class UserController extends BaseController
         
         $users = $query->paginate(10)->withQueryString();
         $filters = $request->only(['name', 'email']);
-        return Inertia::render('Users/Index', compact('users', 'filters'));
+        
+        // Create pluralized user count text
+        $userCountText = trans_choice('general.users', $users->total());
+        
+        return Inertia::render('Users/Index', compact('users', 'filters', 'userCountText'));
     }
 
     public function create()

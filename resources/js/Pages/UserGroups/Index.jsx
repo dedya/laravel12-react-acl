@@ -1,23 +1,36 @@
-import React , { useState, useEffect }from 'react';
-import { Link, usePage, router} from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { Link, usePage, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 // Import SweetAlert2
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { can } from '@/utils/can';
-import { swalSuccessDefaults, swalConfirmDeleteDefaults} from '@/utils/swalDefaults';
+import { swalSuccessDefaults, swalConfirmDeleteDefaults } from '@/utils/swalDefaults';
 
-import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa'; 
+import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa';
+import PageMeta from "@/Components/Common/PageMeta";
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import PageBreadcrumb from "@/Components/Common/PageBreadCrumb";
+import ComponentCard from "@/Components/Common/ComponentCard";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHeader,
+	TableRow,
+} from "@/Components/UI/Table"; 
+import Button from "@/Components/UI/Button/Button";
 
 export default function Index({ auth }) {
-  const { groups, general, alertTimer} = usePage().props;
- 
+  const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
+  const { groups, general, alertTimer, groupCountText } = usePage().props;
+
   const canCreate = can('create-user-groups');
   const canUpdate = can('update-user-groups');
   const canDelete = can('delete-user-groups');
 
-  const params = new URLSearchParams({page: groups.current_page }).toString();
+  const params = new URLSearchParams({ page: groups.current_page }).toString();
 
 
   const handlePage = (url) => {
@@ -35,81 +48,82 @@ export default function Index({ auth }) {
       ...swalConfirmDeleteDefaults,
     }).then((result) => {
       if (result.isConfirmed) {
-      router.delete(route('usergroups.destroy', userId), {
-        onSuccess: () => {
-        Swal.fire({
-          title:
-          (general?.data_is_deleted
-            ? general.data_is_deleted.replace(':name', userName)
-            : `User "${userName}" is deleted successfully!`),
-          timer: alertTimer || 4000,         
-          ...swalSuccessDefaults,
+        router.delete(route('usergroups.destroy', userId), {
+          onSuccess: () => {
+            Swal.fire({
+              title:
+                (general?.data_is_deleted
+                  ? general.data_is_deleted.replace(':name', userName)
+                  : `User "${userName}" is deleted successfully!`),
+              timer: alertTimer || 4000,
+              ...swalSuccessDefaults,
+            });
+          },
         });
-        },
-      });
       }
     });
   };
 
   return (
-    <AuthenticatedLayout
-      user={auth.user}
-      header={
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          {general?.user_group_list_title || 'User Group List'}
-        </h2>
-      }
-    >
-      <Head title={general?.user_groups_page_title || 'User Groups'} />
 
-      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-4">
-          <div></div>
-          { canCreate && (
-            <Link
-              href={route('usergroups.create')}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow ml-auto"
+    <>
+      {/*<Head title={general?.user_groups_page_title || 'User Groups'} />*/}
+      <PageMeta
+        title={tChoice('general.user_groups', 2)}
+        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+      />
+
+      <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />
+
+      <div className="space-y-6">
+        <ComponentCard title="">
+          <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
+            
+            {canCreate && (
+              <Link
+                href={route('usergroups.create')}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow ml-auto"
               >
                 {general?.add_button || '+ Add'}
-            </Link>
-          )}
-        </div>
+              </Link>
+            )}
+          </div>
 
-        <div className="overflow-x-auto bg-white rounded shadow">
-          <div className="mb-2 text-sm text-gray-600">
-            &nbsp;&nbsp;{groups.from} &nbsp;-&nbsp;
+          <div className="max-w-full overflow-x-auto">
+            <div className="mb-2 text-sm text-gray-600">
+              &nbsp;&nbsp;{groups.from} &nbsp;-&nbsp;
               {groups.to}
               &nbsp;/&nbsp;
-              {groups.total}
-          </div>
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{general?.id || "ID"}</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{general?.name || "Name"}</th>
-                <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{general?.actions || "Actions"}</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
-              {groups.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="px-4 py-4 text-center text-gray-400">
-                    {general?.no_data_found}
-                  </td>
-                </tr>
-              )}
-              {groups.data.map(group => (
-                <tr key={group.id}>
-                  <td className="px-4 py-2">{group.id}</td>
-                  <td className="px-4 py-2">
-                      <div className="flex items-center gap-3">
+              {groups.total} {groupCountText}
+            </div>
+            <Table>
+              <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
+                <TableRow>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.id || "ID"}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.name || "Name"}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.actions || "Actions"}</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                {groups.length === 0 && (
+                  <TableRow key={group.id}>
+                    <TableCell className="px-5 py-4 sm:px-6 text-start" coslpan="4">
+                      {general?.no_data_found}
+                    </TableCell>
+                  </TableRow>
+                )}
+                {groups.data.map(group => (
+                  <TableRow key={group.id}>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{group.id}</TableCell>
+                    <TableCell className="px-5 py-4 sm:px-6 text-start">
+                      <div className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                         <span>{group.name}</span>
                       </div>
-                    </td>
-                  <td className="px-4 py-2 space-x-2">
-                    
-                       {canUpdate && 
-                      (
+                    </TableCell>
+                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+
+                      {canUpdate &&
+                        (
                           group.is_active ? (
                             <button
                               onClick={() =>
@@ -119,7 +133,7 @@ export default function Index({ auth }) {
                                 })
                               }
                               className="text-green-600 hover:underline cursor-pointer"
-                              title={general?.enable || "Enable"} 
+                              title={general?.enable || "Enable"}
                             >
                               <FaToggleOn size={24} />
                             </button>
@@ -139,45 +153,50 @@ export default function Index({ auth }) {
                           )
                         )}
 
-                    {canUpdate && (
-                      <Link
-                        title={general.edit}
-                        href={route('usergroups.edit', group.id)}
-                        className="inline-block text-blue-600 hover:underline"
-                      >
-                        <FaEdit size={24} />                      
-                      </Link>
-                    )}
+                      {canUpdate && (
+                        <Link
+                          title={general.edit}
+                          href={route('usergroups.edit', group.id)}
+                          className="inline-block text-blue-600 hover:underline"
+                        >
+                          <FaEdit size={24} />
+                        </Link>
+                      )}
 
-                    {canDelete && 
-                      <button
-                        title={general.delete}
-                        type="button"
-                        onClick={e => handleDelete(e, group.id, group.name)}
-                        className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"
-                      >
-                        <FaTrashAlt size={24} />                      
-                      </button>
-                    }
-                  </td>
-                </tr>
-              ))}
-              
-            </tbody>
-          </table>
-          <div className="mt-4">
-                {groups.links.map(link => (
-                  <button
-                    key={link.label}
-                    disabled={!link.url}
-                    onClick={() => link.url && handlePage(link.url)}
-                    className={`px-3 py-1 mx-1 rounded ${link.active ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-                    dangerouslySetInnerHTML={{ __html: link.label }}
-                  />
+                      {canDelete &&
+                        <button
+                          title={general.delete}
+                          type="button"
+                          onClick={e => handleDelete(e, group.id, group.name)}
+                          className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"
+                        >
+                          <FaTrashAlt size={24} />
+                        </button>
+                      }
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </div>
-        </div>
+
+              </TableBody>
+            </Table>
+            <div className="mt-4">
+              {groups.links.map(link => (
+                <Button
+                  size="sm"
+							    variant="outline"
+                  key={link.label}
+                  disabled={!link.url}
+                  onClick={() => link.url && handlePage(link.url)}
+                  className={`px-3 py-1 mx-1 rounded ${link.active ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+                  dangerouslySetInnerHTML={{ __html: link.label }}
+                >
+                  <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                </Button>
+              ))}
+            </div>
+          </div>
+        </ComponentCard>
       </div>
-    </AuthenticatedLayout>
+    </>
   );
 }

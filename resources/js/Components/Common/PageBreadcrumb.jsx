@@ -3,6 +3,7 @@ import React from "react"; // Explicitly import React for JSX
 // Use Link from @inertiajs/react for Inertia applications
 import { Link } from "@inertiajs/react"; // IMPORTANT: Changed from "react-router"
 import PropTypes from 'prop-types'; // Import PropTypes for validation
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 /**
  * PageBreadcrumb component displays a page title and a basic breadcrumb navigation.
@@ -11,6 +12,8 @@ import PropTypes from 'prop-types'; // Import PropTypes for validation
  * @param {string} props.pageTitle - The title of the current page, displayed as the main heading and the last breadcrumb item.
  */
 const PageBreadcrumb = ({ pageTitle }) => {
+	const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
+
 	return (
 		<div className="flex flex-wrap items-center justify-between gap-3 mb-6">
 			<h2
@@ -25,9 +28,9 @@ const PageBreadcrumb = ({ pageTitle }) => {
 					<li>
 						<Link
 							className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
-							href={route('tailadmin.dashboard')} // IMPORTANT: In Inertia's Link, use `href` instead of `to`
+							href={route('dashboard')} // IMPORTANT: In Inertia's Link, use `href` instead of `to`
 						>
-							Home
+							{t('general.dashboard')}
 							<svg
 								className="stroke-current"
 								width="17"
