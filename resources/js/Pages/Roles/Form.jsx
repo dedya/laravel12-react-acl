@@ -16,12 +16,14 @@ import Input from "@/Components/Form/Input/InputField";
 import Label from "@/Components/Form/Label";
 import InputError from '@/Components/InputError';
 import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHeader,
-	TableRow,
-} from "@/Components/UI/Table"; 
+    Table,
+    TableBody,
+    TableCell,
+    TableHeader,
+    TableRow,
+} from "@/Components/UI/Table";
+import Checkbox from "@/Components/Form/Input/Checkbox";
+import InputGroup from "@/Components/Form/Group/InputGroup";
 
 export default function PermissionMatrix({ auth, role, all_permissions }) {
     const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
@@ -134,15 +136,16 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
             <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
                 <div className="space-y-6">
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        <Input
-                            label={general?.role_name}
+                        <InputGroup
                             name="name"
-                            value={data.name}
+                            type="text"
+                            label={t('general.name')}
                             onChange={e => setData('name', e.target.value)}
-                            error={errors.name}
-                            inputRef={firstInputRef} // Focus on this input 
+                            hint={errors.name}
+                            value={data.name}
                             required
                         />
+
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-400">{general?.permissions}</label>
                             <div className="max-w-full overflow-x-auto">
@@ -150,19 +153,20 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
                                     <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                                         <TableRow>
                                             <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                                                <input
-                                                    type="checkbox"
+                                                <Checkbox
                                                     checked={isAllChecked}
                                                     onChange={e => handleCheckAll(e.target.checked)}
-                                                /> &nbsp;Check All
+                                                    label={t('general.check_all')}
+                                                    />
+                                                
                                             </TableCell>
                                             {actions.map(action => (
-                                                <TableCell key={action + '-check'}  isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
-                                                    <input
-                                                        type="checkbox"
+                                                <TableCell key={action + '-check'} isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                                    <Checkbox
                                                         checked={isColumnChecked(action)}
                                                         onChange={e => handleCheckColumn(action, e.target.checked)}
                                                     />
+
                                                 </TableCell>
                                             ))}
                                         </TableRow>
@@ -183,13 +187,13 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
                                                     const permName = `${action}-${page}`;
                                                     return (
                                                         <TableCell key={action} className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400 capitalize">
-                                                        
+
                                                             {permissionExists(action, page) ? (
-                                                                <input
-                                                                    type="checkbox"
+                                                                <Checkbox
                                                                     checked={data.permissions.includes(permName)}
                                                                     onChange={() => handlePermissionChange(permName)}
                                                                 />
+
                                                             ) : null}
                                                         </TableCell>
                                                     );

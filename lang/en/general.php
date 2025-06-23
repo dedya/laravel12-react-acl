@@ -6,6 +6,7 @@ return [
     'users' => 'User|Users',
     'roles' => 'Role|Roles',
     'user_groups' => 'User Group|User Groups',
+    'check_all' => 'Check All',
     'buttons' => [
         'create' => 'Create',
         'edit' => 'Edit',

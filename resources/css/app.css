@@ -776,3 +776,8 @@ span.flatpickr-weekday,
 .simplebar-scrollbar.simplebar-visible:before {
   @apply opacity-100;
 }
+
+/* If you need to target a specific class or want more specific control: */
+.Toastify__toast-container {
+  z-index: 99999 !important; /* Use !important if necessary to override defaults */
+}

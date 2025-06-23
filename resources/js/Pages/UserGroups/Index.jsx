@@ -21,14 +21,16 @@ import {
 	TableRow,
 } from "@/Components/UI/Table"; 
 import Button from "@/Components/UI/Button/Button";
+import { toast } from 'react-toastify';
 
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
   const { groups, general, alertTimer, groupCountText } = usePage().props;
+  const { flash } = usePage().props; 
 
-  const canCreate = can('create-user-groups');
-  const canUpdate = can('update-user-groups');
-  const canDelete = can('delete-user-groups');
+  const canCreate = can('create-usergroups');
+  const canUpdate = can('update-usergroups');
+  const canDelete = can('delete-usergroups');
 
   const params = new URLSearchParams({ page: groups.current_page }).toString();
 
@@ -77,7 +79,7 @@ export default function Index({ auth }) {
 
       <div className="space-y-6">
         <ComponentCard title="">
-          <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03]">
+          <div className="overflow-hidden rounded-xl flex justify-end p-4">
             
             {canCreate && (
               <Link

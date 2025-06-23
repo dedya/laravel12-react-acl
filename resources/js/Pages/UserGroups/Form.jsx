@@ -18,6 +18,7 @@ import Button from "@/Components/UI/Button/Button";
 import Input from "@/Components/Form/Input/InputField";
 import Label from "@/Components/Form/Label";
 import InputError from '@/Components/InputError';
+import InputGroup from "@/Components/Form/Group/InputGroup";
 
 export default function Form({ usergroup, auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
@@ -34,7 +35,7 @@ export default function Form({ usergroup, auth }) {
   const { errors, general } = usePage().props;
   const photoInput = useRef();
 
-  const canUpdateOrCreate = can('update-user-groups') || can('create-user-groups');
+  const canUpdateOrCreate = can('update-usergroups') || can('create-usergroups');
 
   const { data, setData, post, put, processing } = useForm({
     name: usergroup?.name || '',
@@ -60,27 +61,21 @@ export default function Form({ usergroup, auth }) {
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />
-      
+
 
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <div className="space-y-6">
           <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
-            <div className="col-span-2 lg:col-span-1">
-              <Label htmlFor="name">{t('general.name')}</Label>
-              <Input
-                label={general?.name}
-                name="name"
-                value={data.name}
-                onChange={e => setData('name', e.target.value)}
-                error={errors.name}
-                inputRef={firstInputRef} // Focus on this input 
-                required
-              />
-              <InputError className="mt-2" message={errors.name} />
-            </div>
+            <InputGroup
+              name="name"
+              type="text"
+              label={t('general.name')}
+              onChange={e => setData('name', e.target.value)}
+              hint={errors.name}
+              value={data.name}
+              required
+            />
             
-
-
             <div className="flex items-center gap-4 mt-6">
               <Link
                 href={route('usergroups.index')}
