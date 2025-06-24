@@ -14,7 +14,7 @@ import {
 	PlugInIcon,
 	TableIcon,
 	UserCircleIcon,
-} from './../utils/icons';
+} from '../utils/icons';
 import { useSidebar } from "../utils/context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
 import { useLaravelReactI18n } from 'laravel-react-i18n';

@@ -19,6 +19,7 @@ import {
   TableRow,
 } from "@/Components/UI/Table";
 import Button from "@/Components/UI/Button/Button";
+import IconButton from "@/Components/UI/Button/IconButton";
 
 export default function RoleIndex({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
@@ -78,7 +79,7 @@ export default function RoleIndex({ auth }) {
       <div className="space-y-6">
         <ComponentCard title="">
           <div className="overflow-hidden rounded-xl flex justify-end p-4">
-            
+
             {canCreate && (
               <Link
                 href={route('roles.create')}
@@ -111,27 +112,47 @@ export default function RoleIndex({ auth }) {
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{role.id}</TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{role.name}</TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {canUpdate && (
+                      <div className="flex gap-4">
+                        {canUpdate && (
+                          <>
+                            <IconButton
+                              type="link"
+                              onClick={route('roles.edit', role.id)}
+                              className="text-blue-600">
+                              <FaEdit size={24} />
+                            </IconButton>
+                            {/*
                         <Link
                           title={general?.edit || 'Edit'}
                           href={route('roles.edit', role.id)}
                           className="inline-block text-blue-600 hover:underline"
                         >
                           <FaEdit size={18} />
-                        </Link>
-                      )}
+                        </Link>*/}
+                          </>
+                        )}
 
-                      {canDelete &&
+                        {canDelete &&
+                          <>
+                            <IconButton
+                              type="button"
+                              onClick={e => handleDelete(e, role.id, role.name)}
+                              className="text-red-600">
+                              <FaTrashAlt size={24} />
+                            </IconButton>
+                            {/*
+                          <button
+                            title={general?.delete || 'Delete'}
+                            type="button"
+                            onClick={e => handleDelete(e, role.id, role.name)}
+                            className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"
+                          >
+                            <FaTrashAlt size={18} />
+                          </button>*/}
+                          </>
 
-                        <button
-                          title={general?.delete || 'Delete'}
-                          type="button"
-                          onClick={e => handleDelete(e, role.id, role.name)}
-                          className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"
-                        >
-                          <FaTrashAlt size={18} />
-                        </button>
-                      }
+                        }
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

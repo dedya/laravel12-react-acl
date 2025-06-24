@@ -3,7 +3,7 @@ import {
   ArrowUpIcon,
   BoxIconLine,
   GroupIcon,
-}  from './../../utils/icons';
+}  from '../../utils/icons';
 
 import Badge from "../UI/Badge/Badge";
 

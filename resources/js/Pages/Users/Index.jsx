@@ -22,6 +22,8 @@ import {
 } from "@/Components/UI/Table";
 import Button from "@/Components/UI/Button/Button";
 import Input from "@/Components/Form/Input/InputField";
+import IconButton from "@/Components/UI/Button/IconButton";
+import Switch from "@/Components/Form/Switch/Switch";
 
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
@@ -176,49 +178,94 @@ export default function Index({ auth }) {
                         : '-'}
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                      <div className="flex gap-4">
+                        {canUpdate &&
+                          (
+                            user.is_active ? (
+                              <>
+                                <Switch
+                                  label=""
+                                  defaultChecked={true}
+                                  onChange={() =>
+                                    router.patch(`${route('users.disable', user.id)}?${params}`, {}, {
+                                      preserveState: true,
+                                      replace: true,
+                                    })
+                                  }
 
-                      {canUpdate &&
-                        (
-                          user.is_active ? (
-                            <button
-                              onClick={() =>
-                                router.patch(`${route('users.disable', user.id)}?${params}`, {}, {
-                                  preserveState: true,
-                                  replace: true,
-                                })
-                              }
-                              className="text-green-600 hover:underline cursor-pointer"
-                              title={general?.enable || "Enable"}
-                            >
-                              <FaToggleOn size={24} />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() =>
-                                router.patch(`${route('users.enable', user.id)}?${params}`, {}, {
-                                  preserveState: true,
-                                  replace: true,
-                                })
-                              }
-                              className="text-yellow-600 hover:underline cursor-pointer"
-                              title={general?.disable || "Disable"}
-                            >
-                              <FaToggleOff size={24} />
-                            </button>
-                          )
-                        )}
+                                />
+                                {/*
+                              <button
+                                onClick={() =>
+                                  router.patch(`${route('users.disable', user.id)}?${params}`, {}, {
+                                    preserveState: true,
+                                    replace: true,
+                                  })
+                                }
+                                className="text-green-600 hover:underline cursor-pointer"
+                                title={general?.enable || "Enable"}
+                              >
+                                <FaToggleOn size={24} />
+                              </button>*/}
+                              </>
+                            ) : (
+                              <>
+                                <Switch
+                                  label=""
+                                  defaultChecked={false}
+                                  onChange={() =>
+                                    router.patch(`${route('users.enable', user.id)}?${params}`, {}, {
+                                    preserveState: true,
+                                    replace: true,
+                                  })
+                                  }
 
-                      {canUpdate && (
+                                />
+                                {/*
+                              <button
+                                onClick={() =>
+                                  router.patch(`${route('users.enable', user.id)}?${params}`, {}, {
+                                    preserveState: true,
+                                    replace: true,
+                                  })
+                                }
+                                className="text-yellow-600 hover:underline cursor-pointer"
+                                title={general?.disable || "Disable"}
+                              >
+                                <FaToggleOff size={24} />
+                              </button>*/}
+                              </>
+                            )
+                          )}
+
+                        {canUpdate && (
+                          <>
+                            <IconButton
+                              type="link"
+                              onClick={route('users.edit', user.id)}
+                              className="text-blue-600">
+                              <FaEdit size={24} />
+                            </IconButton>
+                            {/*
                         <Link
                           title={general.edit}
                           href={route('users.edit', user.id)}
                           className="inline-block text-blue-600 hover:underline"
                         >
                           <FaEdit size={24} />
-                        </Link>
-                      )}
+                        </Link>*/}
+                          </>
+                        )}
 
-                      {canDelete &&
+                        {canDelete &&
+                          <>
+                            <IconButton
+                              type="button"
+                              onClick={e => handleDelete(e, user.id, user.name)}
+                              className="text-red-600">
+                              <FaTrashAlt size={24} />
+                            </IconButton>
+                            {/*
                         <button
                           title={general.delete}
                           type="button"
@@ -226,8 +273,10 @@ export default function Index({ auth }) {
                           className="inline-block text-red-600 hover:underline bg-transparent border-0 p-0 m-0 cursor-pointer"
                         >
                           <FaTrashAlt size={24} />
-                        </button>
-                      }
+                        </button>*/}
+                          </>
+                        }
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -238,11 +287,11 @@ export default function Index({ auth }) {
               {users.links.map(link => (
                 <Button
                   size="sm"
-							    variant="outline"
+                  variant="outline"
                   key={link.label}
                   disabled={!link.url}
                   onClick={() => link.url && handlePage(link.url)}
-                  
+
                   dangerouslySetInnerHTML={{ __html: link.label }}
                 >
                   <span dangerouslySetInnerHTML={{ __html: link.label }} />
