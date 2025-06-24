@@ -24,11 +24,12 @@ import Button from "@/Components/UI/Button/Button";
 import { toast } from 'react-toastify';
 import Switch from "@/Components/Form/Switch/Switch";
 import IconButton from "@/Components/UI/Button/IconButton";
+import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
   const { groups, alertTimer, groupCountText } = usePage().props;
-  const { flash } = usePage().props;
+  const { theme } = useTheme();
 
   const canCreate = can('create-usergroups');
   const canUpdate = can('update-usergroups');
@@ -45,11 +46,14 @@ export default function Index({ auth }) {
   const handleDelete = (e, userId, userName) => {
     e.preventDefault();
     Swal.fire({
+      theme:theme,
       title: t('message.confirm.sure'),
       text: t('message.confirm.delete',{'title' : tChoice('general.user_groups',1)}),
+      icon: 'warning',
+      showCancelButton: true,
       cancelButtonText: t('general.buttons.cancel'),
       confirmButtonText: t('general.buttons.confirm_delete'),
-      ...swalConfirmDeleteDefaults,
+      //...swalConfirmDeleteDefaults,
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('usergroups.destroy', userId), {

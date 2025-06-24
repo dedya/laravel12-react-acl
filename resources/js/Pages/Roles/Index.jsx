@@ -20,10 +20,12 @@ import {
 } from "@/Components/UI/Table";
 import Button from "@/Components/UI/Button/Button";
 import IconButton from "@/Components/UI/Button/IconButton";
+import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 
 export default function RoleIndex({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
   const { roles } = usePage().props;
+  const { theme } = useTheme();
 
   const canCreate = can('create-roles');
   const canUpdate = can('update-roles');
@@ -33,6 +35,7 @@ export default function RoleIndex({ auth }) {
   const handleDelete = (e, roleId, roleName) => {
     e.preventDefault();
     Swal.fire({
+      theme:theme,
       title: t('message.confirm.sure'),
       text: t('message.confirm.delete',{'title' : tChoice('general.roles',1)}),
       icon: 'warning',
@@ -60,6 +63,7 @@ export default function RoleIndex({ auth }) {
                 timerProgressBar: true,
                 background: '#d1fae5',
                 color: '#166534',
+                ...swalSuccessDefaults,
               });
             },
           });

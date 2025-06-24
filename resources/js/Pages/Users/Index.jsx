@@ -24,10 +24,12 @@ import Button from "@/Components/UI/Button/Button";
 import Input from "@/Components/Form/Input/InputField";
 import IconButton from "@/Components/UI/Button/IconButton";
 import Switch from "@/Components/Form/Switch/Switch";
+import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
   const { users, filters, alertTimer } = usePage().props;
+  const { theme } = useTheme();
 
   const canCreate = can('create-users');
   const canUpdate = can('update-users');
@@ -56,11 +58,13 @@ export default function Index({ auth }) {
   const handleDelete = (e, userId, userName) => {
     e.preventDefault();
     Swal.fire({
+      theme:theme,
       title: t('message.confirm.sure'),
       text: t('message.confirm.delete',{'title' : tChoice('general.users',1)}),
+      showCancelButton: true,
       cancelButtonText: t('general.buttons.cancel'),
       confirmButtonText: t('general.buttons.confirm_delete'),
-      ...swalConfirmDeleteDefaults,
+      //...swalConfirmDeleteDefaults,
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('users.destroy', userId), {

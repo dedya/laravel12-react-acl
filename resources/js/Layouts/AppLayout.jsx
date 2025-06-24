@@ -42,6 +42,7 @@ const LayoutContent = ({ children }) => {
       Swal.fire({
         title: message,
         timer: duration,
+        theme: isDarkTheme ? 'dark' : 'light',
         ...defaults,
       });
     };
