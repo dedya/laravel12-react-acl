@@ -27,7 +27,7 @@ import Switch from "@/Components/Form/Switch/Switch";
 
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
-  const { users, general, filters, alertTimer } = usePage().props;
+  const { users, filters, alertTimer } = usePage().props;
 
   const canCreate = can('create-users');
   const canUpdate = can('update-users');
@@ -56,20 +56,20 @@ export default function Index({ auth }) {
   const handleDelete = (e, userId, userName) => {
     e.preventDefault();
     Swal.fire({
-      title: general?.delete_confirm_title || 'Are you sure ?',
-      text: general?.delete_confirm_text || 'This user will be deleted permanently!',
-      confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
-      cancelButtonText: general?.cancel,
+      title: t('message.confirm.sure'),
+      text: t('message.confirm.delete',{'title' : tChoice('general.users',1)}),
+      cancelButtonText: t('general.buttons.cancel'),
+      confirmButtonText: t('general.buttons.confirm_delete'),
       ...swalConfirmDeleteDefaults,
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('users.destroy', userId), {
           onSuccess: () => {
             Swal.fire({
-              title:
-                (general?.data_is_deleted
+              title: t('message.success.deleted',{title : tChoice('general.users',1), key: userName }),
+                /*(general?.data_is_deleted
                   ? general.data_is_deleted.replace(':name', userName)
-                  : `User "${userName}" is deleted successfully!`),
+                  : `User "${userName}" is deleted successfully!`),*/
               timer: alertTimer || 4000,
               ...swalSuccessDefaults,
             });
@@ -97,7 +97,7 @@ export default function Index({ auth }) {
                 href={route('users.create')}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow ml-auto"
               >
-                {general?.add_button || '+ Add'}
+                 {t('general.buttons.create')}
               </Link>
             )}
           </div>
@@ -141,18 +141,18 @@ export default function Index({ auth }) {
             <Table>
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.id || "ID"}</TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.name || "Name"}</TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.email || "Email"}</TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.role || "Role"}</TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.actions || "Actions"}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{t('general.id')}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{t('general.name')}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{t('general.email')}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{tChoice('general.roles',1)}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{tChoice('general.actions',2)}</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {users.length === 0 && (
                   <TableRow key={user.id}>
                     <TableCell className="px-5 py-4 sm:px-6 text-start" coslpan="4">
-                      {general?.no_data_found}
+                      {t('general.no_data_found')}
                     </TableCell>
                   </TableRow>
                 )}

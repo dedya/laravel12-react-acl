@@ -23,7 +23,7 @@ import IconButton from "@/Components/UI/Button/IconButton";
 
 export default function RoleIndex({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
-  const { roles, general } = usePage().props;
+  const { roles } = usePage().props;
 
   const canCreate = can('create-roles');
   const canUpdate = can('update-roles');
@@ -33,13 +33,14 @@ export default function RoleIndex({ auth }) {
   const handleDelete = (e, roleId, roleName) => {
     e.preventDefault();
     Swal.fire({
-      title: general?.delete_confirm_title || 'Are you sure?',
-      text: general?.delete_confirm_text || 'This role will be deleted permanently!',
+      title: t('message.confirm.sure'),
+      text: t('message.confirm.delete',{'title' : tChoice('general.roles',1)}),
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
+      cancelButtonText: t('general.buttons.cancel'),
+      confirmButtonText: t('general.buttons.confirm_delete'),
       reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
@@ -50,10 +51,10 @@ export default function RoleIndex({ auth }) {
                 toast: true,
                 position: 'top-end',
                 icon: 'success',
-                title:
-                  (general?.data_is_deleted
+                title: t('message.success.deleted',{title : tChoice('general.roles',1), key: roleName }),
+                  /*(general?.data_is_deleted
                     ? general.data_is_deleted.replace(':name', roleName)
-                    : `Role "${roleName}" is deleted successfully!`),
+                    : `Role "${roleName}" is deleted successfully!`),*/
                 showConfirmButton: false,
                 timer: 2000,
                 timerProgressBar: true,
@@ -94,16 +95,16 @@ export default function RoleIndex({ auth }) {
             <Table>
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.id}</TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.name}</TableCell>
-                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{general?.actions}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{t('general.id')}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{t('general.name')}</TableCell>
+                  <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">{tChoice('general.actions',2)}</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
                 {roles.length === 0 && (
                   <TableRow key={group.id}>
                     <TableCell className="px-5 py-4 sm:px-6 text-start" coslpan="3">
-                      {general?.no_data_found}
+                      {t('general.no_data_found')}
                     </TableCell>
                   </TableRow>
                 )}

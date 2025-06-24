@@ -11,5 +11,10 @@ return [
                     retain.',
     'confirm' => [
         'delete_account' => 'Are you sure you want to delete your account?',
+        'sure' => 'Are you sure?',
+        'delete' => 'This :title will be deleted permanently!',
+    ],
+    'success' => [
+        'deleted' => ':title :key is deleted successfully!'
     ]
 ];
