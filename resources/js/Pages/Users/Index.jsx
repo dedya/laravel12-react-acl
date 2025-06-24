@@ -63,20 +63,22 @@ export default function Index({ auth }) {
       text: t('message.confirm.delete',{'title' : tChoice('general.users',1)}),
       showCancelButton: true,
       cancelButtonText: t('general.buttons.cancel'),
+      confirmButtonColor:'#dc2626',
       confirmButtonText: t('general.buttons.confirm_delete'),
       //...swalConfirmDeleteDefaults,
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('users.destroy', userId), {
           onSuccess: () => {
+            /*
             Swal.fire({
               title: t('message.success.deleted',{title : tChoice('general.users',1), key: userName }),
                 /*(general?.data_is_deleted
                   ? general.data_is_deleted.replace(':name', userName)
-                  : `User "${userName}" is deleted successfully!`),*/
+                  : `User "${userName}" is deleted successfully!`),
               timer: alertTimer || 4000,
               ...swalSuccessDefaults,
-            });
+            });*/
           },
         });
       }

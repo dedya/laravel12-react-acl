@@ -50,21 +50,23 @@ export default function RoleIndex({ auth }) {
         if (result.isConfirmed) {
           router.delete(route('roles.destroy', roleId), {
             onSuccess: () => {
+              /*
               Swal.fire({
+                theme:theme,
                 toast: true,
                 position: 'top-end',
                 icon: 'success',
                 title: t('message.success.deleted',{title : tChoice('general.roles',1), key: roleName }),
                   /*(general?.data_is_deleted
                     ? general.data_is_deleted.replace(':name', roleName)
-                    : `Role "${roleName}" is deleted successfully!`),*/
+                    : `Role "${roleName}" is deleted successfully!`),
                 showConfirmButton: false,
                 timer: 2000,
                 timerProgressBar: true,
                 background: '#d1fae5',
                 color: '#166534',
-                ...swalSuccessDefaults,
-              });
+                //...swalSuccessDefaults,
+              });*/
             },
           });
         }

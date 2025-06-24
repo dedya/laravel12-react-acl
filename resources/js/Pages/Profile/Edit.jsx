@@ -31,7 +31,7 @@ export default function Edit({ mustVerifyEmail, status }) {
                         mustVerifyEmail={mustVerifyEmail}
                         status={status} />
                     <UserInfoCard />
-                    <DeleteUserForm />
+                    {/*<DeleteUserForm />*/}
 
                 </div>
             </div>

@@ -152,7 +152,7 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
                                 <Table>
                                     <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                                         <TableRow>
-                                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-center text-theme-xs dark:text-gray-400">
                                                 <Checkbox
                                                     checked={isAllChecked}
                                                     onChange={e => handleCheckAll(e.target.checked)}
@@ -172,9 +172,9 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
                                         </TableRow>
 
                                         <TableRow>
-                                            <TableCell className="px-4 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400">{general?.module}</TableCell>
+                                            <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{general?.module}</TableCell>
                                             {actions.map(action => (
-                                                <TableCell key={action} className="px-4 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400 capitalize">{action}</TableCell>
+                                                <TableCell key={action} className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400 capitalize">{action}</TableCell>
                                             ))}
                                         </TableRow>
 
@@ -186,7 +186,7 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
                                                 {actions.map(action => {
                                                     const permName = `${action}-${page}`;
                                                     return (
-                                                        <TableCell key={action} className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400 capitalize">
+                                                        <TableCell key={action} className="px-4 py-3 text-gray-500 text-center text-theme-sm dark:text-gray-400 capitalize">
 
                                                             {permissionExists(action, page) ? (
                                                                 <Checkbox

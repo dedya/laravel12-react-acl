@@ -31,9 +31,11 @@ import FileInput from "@/Components/Form/Input/FileInput";
 import InputGroup from "@/Components/Form/Group/InputGroup";
 import SelectGroup from "@/Components/Form/Group/SelectGroup";
 import CheckboxGroup from "@/Components/Form/Group/CheckboxGroup";
+import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 
 export default function Form({ user, roles, groups, auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
+  const { theme } = useTheme();
 
   const firstInputRef = useRef(null);
 
@@ -205,13 +207,15 @@ export default function Form({ user, roles, groups, auth }) {
                       style={{ transform: 'translate(50%,-50%)' }}
                       onClick={async () => {
                         const result = await Swal.fire({
+                          theme:theme,
                           title: general?.delete_confirm_title,
                           text: general?.delete_image_confirm_text,
                           icon: 'warning',
+                          showCancelButton:true,
                           confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
                           cancelButtonText: general?.cancel,
                           toast: false,
-                          ...swalConfirmDeleteDefaults,
+                          //...swalConfirmDeleteDefaults,
                         });
                         if (result.isConfirmed) {
                           setRemovePhoto(true);
@@ -220,14 +224,15 @@ export default function Form({ user, roles, groups, auth }) {
                           setPhotoPreview(null);
                           if (photoInput.current) photoInput.current.value = '';
                           Swal.fire({
+                            theme:theme,
                             toast: true,
                             position: 'top-end',
                             icon: 'success',
                             title: general?.image_will_removed_after_save,
                             showConfirmButton: false,
                             timer: 2000,
-                            background: '#f0fdf4',
-                            color: '#166534',
+                            //background: '#f0fdf4',
+                            //color: '#166534',
                           });
                         }
                       }}

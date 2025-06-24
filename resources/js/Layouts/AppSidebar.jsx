@@ -207,10 +207,12 @@ function AppSidebar() {
   const navItems = [
     {
       icon: <GridIcon />,
-      name: "Dashboard",
-      subItems: [{ name: "Ecommerce", path: route('tailadmin.dashboard'), pro: false }],
-	    visible: true,
+      name: t('general.dashboard'),
+      path: route('tailadmin.dashboard'),
+      //subItems: [{ name: "Ecommerce", path: route('tailadmin.dashboard'), pro: false }],
+		  visible: true,
     },
+ /*
     {
       icon: <CalenderIcon />,
       name: "Calendar",
@@ -221,7 +223,7 @@ function AppSidebar() {
       icon: <UserCircleIcon />,
       name: "User Profile",
       path: route('profile.edit'),
-      visible: true,
+      visible: false,
     },
     {
       name: "Forms",
@@ -243,7 +245,7 @@ function AppSidebar() {
         { name: "404 Error", path: route('tailadmin.404'), pro: false },
       ],
       visible: false,
-    },
+    }, */
     {
       icon: <UserCircleIcon />,
       name: tChoice('general.users',2),
@@ -328,7 +330,7 @@ function AppSidebar() {
 							)
 					}
 					{
-						nav.subItems && (isExpanded || isHovered || isMobileOpen) && (
+						nav.subItems && nav.visible && (isExpanded || isHovered || isMobileOpen) && (
 							<div className="overflow-hidden transition-all duration-300"
 								ref={(el) => {
 									subMenuRefs.current[`${menuType}-${index}`] = el;
@@ -465,7 +467,7 @@ function AppSidebar() {
 					</div>
 					{/* start of Menu Group  */}
 
-					{/* start of other Menu Group  */}
+					{/* start of other Menu Group  
 					<div className="">
 						<h2
 							className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
@@ -479,13 +481,13 @@ function AppSidebar() {
 								<HorizontaLDots />
 							)}
 						</h2>
-						{renderMenuItems(othersItems, "others")}
-					</div>
+						{/*renderMenuItems(othersItems, "others")
+					</div>*/}
 					{/* end of other Menu Group  */}
 				</nav>
 				{/* end of Sidebar Menu  */}
 
-				{isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
+				{/*isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null*/}
 
 			</div>
 		</aside>

@@ -35,7 +35,7 @@ export default function Form({ usergroup, auth }) {
   const { errors, general } = usePage().props;
   const photoInput = useRef();
 
-  const canUpdateOrCreate = can('update-usergroups') || can('create-usergroups');
+  const canUpdateOrCreate = can('update-user-groups') || can('create-user-groups');
 
   const { data, setData, post, put, processing } = useForm({
     name: usergroup?.name || '',

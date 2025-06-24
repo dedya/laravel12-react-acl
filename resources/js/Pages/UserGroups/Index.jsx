@@ -31,9 +31,9 @@ export default function Index({ auth }) {
   const { groups, alertTimer, groupCountText } = usePage().props;
   const { theme } = useTheme();
 
-  const canCreate = can('create-usergroups');
-  const canUpdate = can('update-usergroups');
-  const canDelete = can('delete-usergroups');
+  const canCreate = can('create-user-groups');
+  const canUpdate = can('update-user-groups');
+  const canDelete = can('delete-user-groups');
 
   const params = new URLSearchParams({ page: groups.current_page }).toString();
 
@@ -52,20 +52,22 @@ export default function Index({ auth }) {
       icon: 'warning',
       showCancelButton: true,
       cancelButtonText: t('general.buttons.cancel'),
+      confirmButtonColor:'#dc2626',
       confirmButtonText: t('general.buttons.confirm_delete'),
       //...swalConfirmDeleteDefaults,
     }).then((result) => {
       if (result.isConfirmed) {
         router.delete(route('usergroups.destroy', userId), {
           onSuccess: () => {
+            /*
             Swal.fire({
               title: t('message.success.deleted',{title : tChoice('general.user_groups',1), key: userName }),
                 /*(general?.data_is_deleted
                   ? general.data_is_deleted.replace(':name', userName)
-                  : `User "${userName}" is deleted successfully!`),*/
+                  : `User "${userName}" is deleted successfully!`),
               timer: alertTimer || 4000,
               ...swalSuccessDefaults,
-            });
+            });*/
           },
         });
       }

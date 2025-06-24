@@ -121,7 +121,7 @@ const AppHeader = () => {
           </button>
 					{/* end of mobile togle  */}
 
-					{/* start of global search  */}
+					{/* start of global search  
 					<div className="hidden lg:block">
 						<form>
 							<div className="relative">
@@ -158,7 +158,7 @@ const AppHeader = () => {
 							</div>
 						</form>
 					</div>
-					{/* end of global search   */}
+					end of global search   */}
 
 				</div>
 
@@ -171,7 +171,7 @@ const AppHeader = () => {
 						{/* <!-- start Dark Mode Toggler --> */}
 						<ThemeToggleButton />{/* <!-- end of Dark Mode Toggler --> */}
 
-						{/* <!-- start Notification Menu Area--> */}
+						{/* <!-- start Notification Menu Area--> 
 						<NotificationDropdown />{/* <!-- end of Notification Menu Area --> */}
 					</div>
 

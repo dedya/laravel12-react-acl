@@ -65,10 +65,10 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
                   The src is changed to a placeholder image for Canvas compatibility.
                   In a real app, this would be a dynamic path (e.g., from an API response). */}
 							<img
-								src="https://placehold.co/80x80/cccccc/333333?text=User"
+								src={user.photo_url ? user.photo_url : '/assets/avatar/avatar.png'}
 								alt={user.name}
 								className="w-full h-full object-cover" // Ensure image covers the area
-								onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/80x80/cccccc/333333?text=Error"; }} // Fallback on error
+								onError={(e) => { e.target.onerror = null; e.target.src ="{`user.photo_url ? user.photo_url : '/assets/avatar/avatar.png'`}"; }} // Fallback on error
 							/>
 						</div>
 						{/* User name, role, and location text details.
@@ -91,7 +91,7 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 						{/* Social media links section.Occupies available space (grow) and aligns to the end on extra-large screens. */}
 						<div className="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
 							{/* Individual social media link components (Facebook, X.com, LinkedIn, Instagram). Each uses a common styling for consistent appearance. */}
-							{/* Facebook Link */}
+							{/* Facebook Link 
 							<a
 								href="https://www.facebook.com/PimjoHQ"
 								target="_blank"
@@ -99,7 +99,7 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 								className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
 								aria-label="Facebook profile" // Added for accessibility
 							>
-								{/* SVG icon for Facebook */}
+								{/* SVG icon for Facebook 
 								<svg
 									className="fill-current"
 									width="20"
@@ -113,9 +113,9 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 										fill="currentColor" // Use currentColor to inherit color from parent
 									/>
 								</svg>
-							</a>
+							</a>*/}
 
-							{/* X.com (formerly Twitter) Link */}
+							{/* X.com (formerly Twitter) Link 
 							<a
 								href="https://x.com/PimjoHQ"
 								target="_blank"
@@ -123,7 +123,7 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 								className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
 								aria-label="X.com profile"
 							>
-								{/* SVG icon for X.com */}
+								{/* SVG icon for X.com 
 								<svg
 									className="fill-current"
 									width="20"
@@ -137,9 +137,9 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 										fill="currentColor"
 									/>
 								</svg>
-							</a>
+							</a>*/}
 
-							{/* LinkedIn Link */}
+							{/* LinkedIn Link 
 							<a
 								href="https://www.linkedin.com/company/pimjo"
 								target="_blank"
@@ -147,7 +147,7 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 								className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
 								aria-label="LinkedIn profile"
 							>
-								{/* SVG icon for LinkedIn */}
+								{/* SVG icon for LinkedIn 
 								<svg
 									className="fill-current"
 									width="20"
@@ -161,9 +161,9 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 										fill="currentColor"
 									/>
 								</svg>
-							</a>
+							</a>*/}
 
-							{/* Instagram Link */}
+							{/* Instagram Link 
 							<a
 								href="https://instagram.com/PimjoHQ"
 								target="_blank"
@@ -171,7 +171,7 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 								className="flex h-11 w-11 items-center justify-center gap-2 rounded-full border border-gray-300 bg-white text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
 								aria-label="Instagram profile"
 							>
-								{/* SVG icon for Instagram */}
+								{/* SVG icon for Instagram
 								<svg
 									className="fill-current"
 									width="20"
@@ -185,13 +185,14 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 										fill="currentColor"
 									/>
 								</svg>
-							</a>
+							</a> */}
 						</div>
 					</div>
 					{/* Edit Profile button, triggers the modal to open */}
 					<Button
 						onClick={openModal}
-						className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
+						type="outline"
+						className="flex w-full items-center justify-center gap-2 rounded-full border border-gray-300  px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto"
 						aria-label="Edit personal and social information" // Added for accessibility
 					>
 						{/* SVG icon for the edit button */}
@@ -210,7 +211,7 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 								fill="currentColor"
 							/>
 						</svg>
-						Edit
+						{t('general.buttons.edit')}
 					</Button>
 				</div>
 			</div>
