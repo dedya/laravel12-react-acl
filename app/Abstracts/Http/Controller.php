@@ -5,9 +5,11 @@ namespace App\Abstracts\Http;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Str;
+use App\Traits\Jobs;
 
 abstract class Controller extends BaseController
 {
+    use Jobs;
     /**
      * Instantiate a new controller instance.
      */

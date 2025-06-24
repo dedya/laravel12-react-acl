@@ -10,8 +10,9 @@ import { swalSuccessDefaults, swalConfirmDeleteDefaults} from '@/utils/swalDefau
 
 import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa'; 
 
-export default function Index({ auth }) {
-  const { users, general, filters, alertTimer} = usePage().props;
+export default function Index({ auth,users }) {
+  const {  general, filters, alertTimer} = usePage().props;
+
  
   const canCreate = can('create-users');
   const canUpdate = can('update-users');
@@ -22,6 +23,8 @@ export default function Index({ auth }) {
     name: filters.name || '',
     email: filters.email || '',
   });
+
+  console.log('users:',users);
 
   const params = new URLSearchParams({ ...filter, page: users.current_page }).toString();
 

@@ -9,8 +9,10 @@ use App\Models\Role;
 use App\Models\UserGroup as Group; 
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\UpdateUser;
-use App\Jobs\DeleteUser;
+//use App\Jobs\UpdateUser;
+//use App\Jobs\DeleteUser;
+use App\Jobs\User\DeleteUser;
+use App\Jobs\User\UpdateUser;
 
 //use Illuminate\Routing\Controller as BaseController;
 use App\Abstracts\Http\Controller as BaseController;
@@ -23,7 +25,7 @@ class UserController extends BaseController
     {
         Log::info('USER LIST');
 
-         $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
+        $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
@@ -56,7 +58,7 @@ class UserController extends BaseController
         $groups = Group::get(); // Fetch groups
         if ($user && $user->exists) { 
             $user->load(['roles','userGroup']); // Load roles and group relationships
-            $user->photo_url = $user->userPhoto?->photo_url; 
+            //$user->photo_url = $user->userPhoto?->photo_url; 
         } else {
             $user = null;
         }
@@ -77,7 +79,21 @@ class UserController extends BaseController
 
     public function update(UserRequest $request, User $user)
     {
-        return $this->saveUser($request, $user);
+        //return $this->saveUser($request, $user);
+        $validated = $request->validated();
+        $response = $this->dispatch(new UpdateUser($user, $request));
+        $messageKey = $user ? 'data_is_updated' : 'data_is_created';
+        $name = $user ? $user->name : $validated['name'];
+        $message = __('general.' . $messageKey, ['name' => $name]);
+
+        if (!$response['success']) {
+            $message = $response['message'];
+            return redirect()->route('users.index')->with('error', $message);
+        } else {
+
+            return redirect()->route('users.index')->with('success', $message);
+        }
+
     }
  
     private function saveUser(UserRequest $request, ?User $user = null)
