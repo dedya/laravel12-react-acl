@@ -103,7 +103,7 @@ class UserController extends BaseController
 
     public function destroy(User $user)
     {
-        (new DeleteUser($user, auth()->id()))->handle();
+        (new DeleteUser($user))->handle();
         $message = __('general.data_is_deleted', ['name' => $user->name]);
         return back()->with('success', $message);
     }
