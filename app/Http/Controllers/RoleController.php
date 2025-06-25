@@ -15,11 +15,22 @@ class RoleController extends BaseController
 {
 
     //permission checking for the controller is done in BaseController
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::with('permissions')->get();
+        $defaultPerPage = config('custom.defaultPerPage', 20); // Default per page value
+        $perPageOptions = config('custom.perPageOptions'); // Define per page options
         
-        return Inertia::render('Roles/Index', compact('roles'));
+        $filters = $request->only(['per_page', 'page']);
+        $perPage = $filters['per_page'] ?? $defaultPerPage;
+        $query = Role::with(['permissions']);
+        
+        $roles = $query->paginate($perPage)->withQueryString();
+        
+        return Inertia::render('Roles/Index', compact(
+            'roles',
+            'filters', 
+            'perPageOptions'
+        ));
     }
 
     public function create()

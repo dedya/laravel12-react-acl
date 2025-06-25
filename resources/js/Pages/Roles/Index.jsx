@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
@@ -21,16 +21,25 @@ import {
 import Button from "@/Components/UI/Button/Button";
 import IconButton from "@/Components/UI/Button/IconButton";
 import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
+import PaginationControls from "@/Components/UI/PaginationControls";
+import usePagination from '@/hooks/usePagination';
+
 
 export default function RoleIndex({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
-  const { roles } = usePage().props;
+  const { roles, filters, perPageOptions } = usePage().props;
   const { theme } = useTheme();
 
   const canCreate = can('create-roles');
   const canUpdate = can('update-roles');
   const canDelete = can('delete-roles');
+  
+  // State for filter form
+  const [filter, setFilter] = useState({
+    per_page: filters.per_page || 20  });
 
+  const { handlePerPageChange, handlePage } = usePagination('users.index', filter, setFilter);
+    
   // Handler for delete confirmation using SweetAlert2
   const handleDelete = (e, roleId, roleName) => {
     e.preventDefault();
@@ -97,6 +106,16 @@ export default function RoleIndex({ auth }) {
             )}
           </div>
 
+        {/* Top pagination controls */}
+         <PaginationControls
+            records={roles}
+            filter={filter}
+            onPerPageChange={handlePerPageChange}
+            onPageChange={handlePage}
+            t={t}
+            perPageOptions={perPageOptions}
+          />
+
           <div className="max-w-full overflow-x-auto">
             <Table>
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
@@ -107,14 +126,15 @@ export default function RoleIndex({ auth }) {
                 </TableRow>
               </TableHeader>
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                {roles.length === 0 && (
-                  <TableRow key={group.id}>
-                    <TableCell className="px-5 py-4 sm:px-6 text-start" coslpan="3">
+                {roles.data.length === 0 && (
+                  <TableRow>
+                    <TableCell className="px-5 py-4 sm:px-6 text-start" colSpan="5">
                       {t('general.no_data_found')}
                     </TableCell>
                   </TableRow>
                 )}
-                {roles.map(role => (
+
+                {roles.data.map(role => (
                   <TableRow key={role.id}>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{role.id}</TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">{role.name}</TableCell>
@@ -166,6 +186,16 @@ export default function RoleIndex({ auth }) {
               </TableBody>
             </Table>
           </div>
+          
+          {/* Bottom pagination controls */}
+          <PaginationControls
+            records={roles}
+            filter={filter}
+            onPerPageChange={handlePerPageChange}
+            onPageChange={handlePage}
+            t={t}
+            perPageOptions={perPageOptions}
+          />
         </ComponentCard>
       </div>
     </>

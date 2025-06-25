@@ -25,10 +25,11 @@ import IconButton from "@/Components/UI/Button/IconButton";
 import Switch from "@/Components/Form/Switch/Switch";
 import { useTheme } from '@/utils/context/ThemeContext';
 import PaginationControls from "@/Components/UI/PaginationControls";
+import usePagination from '@/hooks/usePagination';
 
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
-  const { users, filters, alertTimer,perPageOptions } = usePage().props;
+  const { users, filters, perPageOptions } = usePage().props;
   const { theme } = useTheme();
 
   const canCreate = can('create-users');
@@ -40,6 +41,8 @@ export default function Index({ auth }) {
     name: filters.name || '',
     email: filters.email || '',
     per_page: filters.per_page || 20  });
+  
+  const { handlePerPageChange, handlePage } = usePagination('users.index', filter, setFilter);
 
   const params = new URLSearchParams({ ...filter, page: users.current_page }).toString();
 
@@ -47,18 +50,6 @@ export default function Index({ auth }) {
   const handleFilter = (e) => {
     e.preventDefault();
     router.get(route('users.index'), filter, { preserveState: true, replace: true });
-  };
-
-  // Handle per page change
-  const handlePerPageChange = (perPage) => {
-    const newFilter = { ...filter, per_page: perPage };
-    setFilter(newFilter);
-    router.get(route('users.index'), { ...newFilter, page: 1 }, { preserveState: true, replace: true });
-  };
-
-  // Handle pagination with filter
-  const handlePage = (url) => {
-    router.get(url, filter, { preserveState: true, replace: true });
   };
 
   // Handler for delete confirmation using SweetAlert2
