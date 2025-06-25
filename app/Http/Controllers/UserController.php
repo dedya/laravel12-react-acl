@@ -23,10 +23,10 @@ class UserController extends BaseController
     //permission checking for the controller is done in BaseController
     public function index(Request $request)
     {
-        Log::info('USER LIST');
         $defaultPerPage = config('custom.defaultPerPage', 20); // Default per page value
-        $perPage = $request->get('per_page', $defaultPerPage);
-        
+        $perPageOptions = config('custom.perPageOptions'); // Define per page options
+
+        $perPage = $request->get('per_page', $defaultPerPage);        
         $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
 
         if ($request->filled('name')) {
@@ -37,9 +37,7 @@ class UserController extends BaseController
         }
         
         $users = $query->paginate($perPage)->withQueryString();
-        $perPageOptions = config('custom.perPageOptions'); // Define per page options
         $filters = $request->only(['name', 'email','per_page', 'page']); // Get filters from request
-        
         
         return Inertia::render('Users/Index', compact('users', 'filters', 'perPageOptions'));
     }
