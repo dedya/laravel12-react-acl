@@ -80,7 +80,6 @@ export default function Index({ auth }) {
     <>
       <PageMeta
         title={tChoice('general.users', 2)}
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.users', 2)} />

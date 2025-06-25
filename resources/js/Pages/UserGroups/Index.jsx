@@ -84,7 +84,6 @@ export default function Index({ auth }) {
       {/*<Head title={general?.user_groups_page_title || 'User Groups'} />*/}
       <PageMeta
         title={tChoice('general.user_groups', 2)}
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />
