@@ -215,7 +215,6 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
                                 <Button
                                     type="submit"
                                     disabled={processing}
-                                    className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow disabled:opacity-50"
                                 >
                                     {general?.submit}
                                 </Button>
