@@ -28,7 +28,7 @@ import PaginationControls from "@/Components/UI/PaginationControls";
 
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
-  const { users, filters, alertTimer } = usePage().props;
+  const { users, filters, alertTimer,perPageOptions } = usePage().props;
   const { theme } = useTheme();
 
   const canCreate = can('create-users');
@@ -40,6 +40,7 @@ export default function Index({ auth }) {
     name: filters.name || '',
     email: filters.email || '',
     per_page: filters.per_page || 20,
+    perPageOptions: perPageOptions|| [10, 20, 50, 100],
   });
 
   const params = new URLSearchParams({ ...filter, page: users.current_page }).toString();
