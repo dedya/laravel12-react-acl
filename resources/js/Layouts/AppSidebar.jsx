@@ -262,7 +262,7 @@ function AppSidebar() {
       icon: <UserCircleIcon />,
       name: tChoice('general.user_groups',2),
       path: route('usergroups.index'),
-      visible: can('read-usergroups')  ? true : false,
+      visible: can('read-user-groups')  ? true : false,
     },
   ];
 
