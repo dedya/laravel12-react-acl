@@ -40,11 +40,10 @@ export default function RoleIndex({ auth }) {
       text: t('message.confirm.delete',{'title' : tChoice('general.roles',1)}),
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
       cancelButtonText: t('general.buttons.cancel'),
+      confirmButtonColor:'#dc2626',
       confirmButtonText: t('general.buttons.confirm_delete'),
-      reverseButtons: true,
+      reverseButtons: false,
     }).then((result) => {
       if (result.isConfirmed) {
         if (result.isConfirmed) {

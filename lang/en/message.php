@@ -15,6 +15,7 @@ return [
         'delete' => 'This :title will be deleted permanently!',
     ],
     'success' => [
-        'deleted' => ':title :key is deleted successfully!'
+        'deleted' => ':title :key is deleted successfully!',
+        'profile_is_updated' => 'Your profile is updated successfully',
     ]
 ];

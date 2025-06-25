@@ -182,7 +182,7 @@ export default function Form({ user, roles, groups, auth }) {
             />
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 {t('general.profile_image')}
               </label>
               <FileInput
@@ -205,15 +205,18 @@ export default function Form({ user, roles, groups, auth }) {
                       variant="outline"
                       title="Remove photo"
                       style={{ transform: 'translate(50%,-50%)' }}
-                      onClick={async () => {
+                      onClick={async (e) => {
+                        e.preventDefault();
+
                         const result = await Swal.fire({
                           theme:theme,
                           title: general?.delete_confirm_title,
                           text: general?.delete_image_confirm_text,
                           icon: 'warning',
                           showCancelButton:true,
-                          confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
-                          cancelButtonText: general?.cancel,
+                          cancelButtonText: t('general.buttons.cancel'),
+                          confirmButtonColor:'#dc2626',
+                          confirmButtonText: t('general.buttons.confirm_delete'),
                           toast: false,
                           //...swalConfirmDeleteDefaults,
                         });
@@ -255,7 +258,7 @@ export default function Form({ user, roles, groups, auth }) {
             <div className="flex items-center gap-4 mt-6">
               <Link
                 href={route('users.index')}
-                className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100"
+                className="inline-block px-4 py-2 rounded-lg border border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-100"
               >
                 {general?.cancel}
               </Link>
