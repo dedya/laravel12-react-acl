@@ -2,11 +2,12 @@ import React from 'react';
 import Button from "@/Components/UI/Button/Button";
 
 export default function PaginationControls({
-  records,
-  filter,
-  onPerPageChange,
-  onPageChange,
-  t
+    records,
+    filter,
+    onPerPageChange,
+    onPageChange,
+    t,
+    perPageOptions = [10, 20, 50, 100],
 }) {
     
   return (

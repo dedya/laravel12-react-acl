@@ -39,9 +39,7 @@ export default function Index({ auth }) {
   const [filter, setFilter] = useState({
     name: filters.name || '',
     email: filters.email || '',
-    per_page: filters.per_page || 20,
-    perPageOptions: perPageOptions|| [10, 20, 50, 100],
-  });
+    per_page: filters.per_page || 20  });
 
   const params = new URLSearchParams({ ...filter, page: users.current_page }).toString();
 
@@ -144,6 +142,7 @@ export default function Index({ auth }) {
             onPerPageChange={handlePerPageChange}
             onPageChange={handlePage}
             t={t}
+            perPageOptions={perPageOptions}
           />
 
           <div className="max-w-full overflow-x-auto">
@@ -247,6 +246,7 @@ export default function Index({ auth }) {
             onPerPageChange={handlePerPageChange}
             onPageChange={handlePage}
             t={t}
+            perPageOptions={perPageOptions}
           />
         </ComponentCard>
       </div>
