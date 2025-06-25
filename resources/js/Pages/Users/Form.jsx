@@ -94,7 +94,6 @@ export default function Form({ user, roles, groups, auth }) {
     <>
       <PageMeta
         title={isEdit ? t('general.edit_user') : t('general.create_user')}
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.users', 2)} />

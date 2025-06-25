@@ -57,7 +57,6 @@ export default function Form({ usergroup, auth }) {
 
       <PageMeta
         title={isEdit ? general.edit_group : general.create_group}
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />
