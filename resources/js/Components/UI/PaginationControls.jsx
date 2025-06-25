@@ -14,11 +14,7 @@ export default function PaginationControls({
     <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-4 py-4 bg-white dark:bg-boxdark border-t border-stroke dark:border-strokedark">
 
     {/* Records per page selector */}
-    {(() => {
-        // You can pass perPageOptions from backend via props or config
-        // Example: pass as a prop to PaginationControls from your Laravel controller/view
-        const perPageOptions = filter.perPageOptions || [10, 20, 50, 100];
-
+    {(() => {        
         return (
           <div className="flex items-center gap-2">
             <span className="text-sm text-bodydark2 dark:text-bodydark">{t('general.show', { default: 'Show' })}</span>
