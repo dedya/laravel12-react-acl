@@ -14,14 +14,22 @@ class UserGroupController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $groups = Group::paginate(10)->withQueryString();
+        $defaultPerPage = config('custom.defaultPerPage', 20); // Default per page value
+        $perPageOptions = config('custom.perPageOptions'); // Define per page options
+
+         // Extract filters from request
+        $filters = $request->only(['per_page', 'page']);
+        $perPage = $filters['per_page'] ?? $defaultPerPage;
+
+        $groups = Group::paginate($perPage)->withQueryString();        
         
-        // Create pluralized user group count text
-        $groupCountText = trans_choice('general.user_group', $groups->total());
-        
-        return Inertia::render('UserGroups/Index', compact('groups', 'groupCountText'));
+        return Inertia::render('UserGroups/Index', compact(
+            'groups', 
+            'filters', 
+            'perPageOptions'
+        ));
     }
 
      public function create()

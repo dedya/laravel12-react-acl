@@ -26,9 +26,13 @@ import Switch from "@/Components/Form/Switch/Switch";
 import IconButton from "@/Components/UI/Button/IconButton";
 import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 
+// Pagination controls component
+import PaginationControls from "@/Components/UI/PaginationControls";
+import usePagination from '@/hooks/usePagination';
+
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
-  const { groups, alertTimer, groupCountText } = usePage().props;
+  const { groups, filters, perPageOptions } = usePage().props;
   const { theme } = useTheme();
 
   const canCreate = can('create-user-groups');
@@ -37,10 +41,10 @@ export default function Index({ auth }) {
 
   const params = new URLSearchParams({ page: groups.current_page }).toString();
 
-
-  const handlePage = (url) => {
-    router.get(url, { preserveState: true, replace: true });
-  };
+  const [filter, setFilter] = useState({
+    per_page: filters.per_page || 20  });
+  
+  const { handlePerPageChange, handlePage } = usePagination('usergroups.index', filter, setFilter);
 
   // Handler for delete confirmation using SweetAlert2
   const handleDelete = (e, userId, userName) => {
@@ -99,13 +103,17 @@ export default function Index({ auth }) {
             )}
           </div>
 
+          {/* Top pagination controls */}
+         <PaginationControls
+            records={groups}
+            filter={filter}
+            onPerPageChange={handlePerPageChange}
+            onPageChange={handlePage}
+            t={t}
+            perPageOptions={perPageOptions}
+          />
+
           <div className="max-w-full overflow-x-auto">
-            <div className="mb-2 text-sm text-gray-600">
-              &nbsp;&nbsp;{groups.from} &nbsp;-&nbsp;
-              {groups.to}
-              &nbsp;/&nbsp;
-              {groups.total} {groupCountText}
-            </div>
             <Table>
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
@@ -237,23 +245,17 @@ export default function Index({ auth }) {
                 ))}
 
               </TableBody>
-            </Table>
-            <div className="mt-4">
-              {groups.links.map(link => (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  key={link.label}
-                  disabled={!link.url}
-                  onClick={() => link.url && handlePage(link.url)}
-                  className={`px-3 py-1 mx-1 rounded ${link.active ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-                  dangerouslySetInnerHTML={{ __html: link.label }}
-                >
-                  <span dangerouslySetInnerHTML={{ __html: link.label }} />
-                </Button>
-              ))}
-            </div>
+            </Table>            
           </div>
+          {/* Bottom pagination controls */}
+          <PaginationControls
+          records={groups}
+          filter={filter}
+          onPerPageChange={handlePerPageChange}
+          onPageChange={handlePage}
+          t={t}
+          perPageOptions={perPageOptions}
+        />
         </ComponentCard>
       </div>
     </>

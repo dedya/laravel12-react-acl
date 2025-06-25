@@ -101,7 +101,7 @@ export default function RoleIndex({ auth }) {
             {canCreate && (
               <Link
                 href={route('roles.create')}
-                className="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded shadow"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow ml-auto"
               >
                 {t('general.buttons.create')}
               </Link>
