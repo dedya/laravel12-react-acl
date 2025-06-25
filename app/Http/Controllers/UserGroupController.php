@@ -7,16 +7,9 @@ use App\Abstracts\Http\Controller as BaseController;
 use App\Models\UserGroup as Group; 
 use Inertia\Inertia;
 use App\Http\Requests\UserGroupRequest;
-use App\Services\UserGroupService;
 
 class UserGroupController extends BaseController
 {
-    private UserGroupService $userGroupService;
-
-    public function __construct(UserGroupService $userGroupService)
-    {
-        $this->userGroupService = $userGroupService;
-    }
 
     /**
      * Display a listing of the resource.
@@ -64,10 +57,15 @@ class UserGroupController extends BaseController
         $validated = $request->validated();
     
         try {
-            $savedGroup = $this->userGroupService->save($validated, $usergroup);
+             if ($usergroup) {
+                $usergroup->update($validated);
+                $messageKey = 'data_is_updated';
+            } else {
+                $usergroup = Group::create($validated);
+                $messageKey = 'data_is_created';
+            }
 
-            $messageKey = $usergroup ? 'data_is_updated' : 'data_is_created';
-            $name = $savedGroup->name;
+            $name = $usergroup->name;
             $message = __('general.' . $messageKey, ['name' => $name]);
             
             return redirect()->route('usergroups.index')->with('success', $message);
@@ -90,9 +88,14 @@ class UserGroupController extends BaseController
      */
     public function destroy(Group $usergroup)
     {
+        // Check if the user group is still used by any users
+        if ($usergroup->users()->exists()) {
+            $message =  __('general.data_is_still_used', ['name' => $usergroup->name]);
+            return back()->with('error', $message);
+        }
+
         try {
-            $this->userGroupService->delete($usergroup);
-                
+            $usergroup->delete(); // soft delete                
             $message =  __('general.data_is_deleted', ['name' => $usergroup->name]);
 
             return back()->with('success',$message);
@@ -111,10 +114,11 @@ class UserGroupController extends BaseController
         return $this->setActive($request, $usergroup, false);
     }
 
-    private function setActive($request,$usergroup, $active)
+    private function setActive($request, $usergroup, $active)
     {
         try {
-            $this->userGroupService->setActive($usergroup, $active);
+            $usergroup->is_active = $active;
+            $usergroup->save();
 
             // get page from requst, then redirect it with query string
             $query = $request->only(['page']);

@@ -10,17 +10,9 @@ use App\Http\Requests\RoleRequest;
 //use Illuminate\Routing\Controller as BaseController;
 use App\Abstracts\Http\Controller as BaseController;
 use App\Models\Role;
-use App\Services\RoleService;
 
 class RoleController extends BaseController
 {
-
-    private RoleService $roleService;
-
-    public function __construct(RoleService $roleService)
-    {
-        $this->roleService = $roleService;
-    }
 
     //permission checking for the controller is done in BaseController
     public function index()
@@ -70,11 +62,17 @@ class RoleController extends BaseController
         $validated = $request->validated();
     
         try {
-            $savedRole = $this->roleService->save($validated, $role);
-            $savedRole->syncPermissions($request->permissions ?? []);
+             if ($role) {
+                $role->update($validated);
+                $messageKey = 'data_is_updated';
+            } else {
+                $role = Role::create($validated);
+                $messageKey = 'data_is_created';
+            }
 
-            $messageKey = $role ? 'data_is_updated' : 'data_is_created';
-            $name = $savedRole->name;
+            $role->syncPermissions($request->permissions ?? []);
+
+            $name = $role->name;
             $message = __('general.' . $messageKey, ['name' => $name]);
             
             return redirect()->route('roles.index')->with('success', $message);
@@ -86,11 +84,15 @@ class RoleController extends BaseController
 
     public function destroy(Role $role)
     {
-        try {
-            $this->roleService->delete($role);
-                
+         // Check if the user group is still used by any users
+        if ($role->users()->exists()) {
+            $message =  __('general.data_is_still_used', ['name' => $role->name]);
+            return back()->with('error', $message);
+        }
+        
+        try {            
+            $role->delete(); // soft delete 
             $message =  __('general.data_is_deleted', ['name' => $role->name]);
-
             return back()->with('success',$message);
         } catch (\Exception $e) {
             return back()->with('error', $e->getMessage());
