@@ -36,7 +36,8 @@ class UserController extends BaseController
         }
         
         $users = $query->paginate($perPage)->withQueryString();
-        $filters = $request->only(['name', 'email','per_page', 'page']);
+        $perPageOptions = [10, 20, 50, 100]; // Define per page options
+        $filters = $request->only(['name', 'email','per_page', 'page','perPageOptions']);
         
         // Create pluralized user count text
         $userCountText = trans_choice('general.users', $users->total());
