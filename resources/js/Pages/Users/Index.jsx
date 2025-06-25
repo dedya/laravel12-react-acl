@@ -24,6 +24,8 @@ import Input from "@/Components/Form/Input/InputField";
 import IconButton from "@/Components/UI/Button/IconButton";
 import Switch from "@/Components/Form/Switch/Switch";
 import { useTheme } from '@/utils/context/ThemeContext';
+
+// Pagination controls component
 import PaginationControls from "@/Components/UI/PaginationControls";
 import usePagination from '@/hooks/usePagination';
 

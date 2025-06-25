@@ -21,6 +21,8 @@ import {
 import Button from "@/Components/UI/Button/Button";
 import IconButton from "@/Components/UI/Button/IconButton";
 import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
+
+// Pagination controls component
 import PaginationControls from "@/Components/UI/PaginationControls";
 import usePagination from '@/hooks/usePagination';
 
