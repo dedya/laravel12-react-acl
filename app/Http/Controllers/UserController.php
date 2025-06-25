@@ -9,8 +9,10 @@ use App\Models\Role;
 use App\Models\UserGroup as Group; 
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\UpdateUser;
-use App\Jobs\DeleteUser;
+//use App\Jobs\UpdateUser;
+//use App\Jobs\DeleteUser;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 //use Illuminate\Routing\Controller as BaseController;
 use App\Abstracts\Http\Controller as BaseController;
@@ -88,7 +90,42 @@ class UserController extends BaseController
         $removePhoto = $request->boolean('remove_photo');
 
         try {
-            (new UpdateUser($validated, $user, $file, $removePhoto))->handle();
+            //(new UpdateUser($validated, $user, $file, $removePhoto))->handle();
+            // Handle password
+            if (!empty($validated['password'])) {
+                $validated['password'] = Hash::make($validated['password']);
+            } else {
+                unset($validated['password']);
+            }
+
+            //update user
+            if ($user) {
+                $user->update($validated);
+                $user->syncRoles([$validated['role']]);
+
+                // Handle photo removal
+                if ($removePhoto) {
+                    try{
+                        $user->clearMediaCollection('photos');
+                    } catch (\Exception $e) {
+                        throw new \Exception("Failed to remove photo: " . $e->getMessage());
+                    }
+                }
+            } else {
+                // create new user
+                $user = User::create($validated);
+                $user->assignRole($validated['role']);
+            }
+
+            // Handle file upload with Spatie Media Library
+            if ($file) {
+                try{
+                    $user->clearMediaCollection('photos'); // Clear existing photos if any
+                    $user->addMedia($file)->toMediaCollection('photos');               
+                } catch (\Exception $e) {
+                    return redirect()->route('users.index')->with('error', $e->getMessage());
+                }
+            }
 
             $messageKey = $user ? 'data_is_updated' : 'data_is_created';
             $name = $user ? $user->name : $validated['name'];
@@ -103,9 +140,17 @@ class UserController extends BaseController
 
     public function destroy(User $user)
     {
-        (new DeleteUser($user))->handle();
-        $message = __('general.data_is_deleted', ['name' => $user->name]);
-        return back()->with('success', $message);
+        try {            
+            if ($user->photo) {
+                Storage::disk('public')->delete($user->photo);
+            }
+
+            $user->delete(); 
+            $message = __('general.data_is_deleted', ['name' => $user->name]);
+            return back()->with('success', $message);
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }      
     }
 
     public function enable(Request $request, User $user)
