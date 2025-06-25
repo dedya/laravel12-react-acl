@@ -26,7 +26,10 @@ class UserController extends BaseController
         $defaultPerPage = config('custom.defaultPerPage', 20); // Default per page value
         $perPageOptions = config('custom.perPageOptions'); // Define per page options
 
-        $perPage = $request->get('per_page', $defaultPerPage);        
+         // Extract filters from request
+        $filters = $request->only(['name', 'email', 'per_page', 'page']);
+        $perPage = $filters['per_page'] ?? $defaultPerPage;
+
         $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
 
         if ($request->filled('name')) {
@@ -37,9 +40,13 @@ class UserController extends BaseController
         }
         
         $users = $query->paginate($perPage)->withQueryString();
-        $filters = $request->only(['name', 'email','per_page', 'page']); // Get filters from request
         
-        return Inertia::render('Users/Index', compact('users', 'filters', 'perPageOptions'));
+        return Inertia::render('Users/Index', 
+            compact(
+                'users', 
+                'filters', 
+                'perPageOptions'
+            ));
     }
 
     public function create()
