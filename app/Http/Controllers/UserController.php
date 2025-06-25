@@ -114,13 +114,15 @@ class UserController extends BaseController
                     try{
                         $user->clearMediaCollection('photos');
                     } catch (\Exception $e) {
-                        throw new \Exception("Failed to remove photo: " . $e->getMessage());
+                        return redirect()->route('users.index')->with('error', $e->getMessage());
                     }
                 }
+                $messageKey = 'data_is_updated';
             } else {
                 // create new user
                 $user = User::create($validated);
                 $user->assignRole($validated['role']);
+                $messageKey = 'data_is_created';
             }
 
             // Handle file upload with Spatie Media Library
@@ -133,7 +135,6 @@ class UserController extends BaseController
                 }
             }
 
-            $messageKey = $user ? 'data_is_updated' : 'data_is_created';
             $name = $user ? $user->name : $validated['name'];
             $message = __('general.' . $messageKey, ['name' => $name]);
         } catch (\Exception $e) {
