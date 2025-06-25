@@ -24,8 +24,9 @@ class UserController extends BaseController
     public function index(Request $request)
     {
         Log::info('USER LIST');
-
-         $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
+        $perPage = $request->get('per_page', 20);
+        
+        $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
@@ -34,8 +35,8 @@ class UserController extends BaseController
             $query->where('email', 'like', '%' . $request->email . '%');
         }
         
-        $users = $query->paginate(10)->withQueryString();
-        $filters = $request->only(['name', 'email']);
+        $users = $query->paginate($perPage)->withQueryString();
+        $filters = $request->only(['name', 'email','per_page', 'page']);
         
         // Create pluralized user count text
         $userCountText = trans_choice('general.users', $users->total());
