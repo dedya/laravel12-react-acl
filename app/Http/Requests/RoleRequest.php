@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+use Illuminate\Validation\Rule;
+
 class RoleRequest extends FormRequest
 {
     /**
@@ -21,19 +23,27 @@ class RoleRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
-            'permissions' => 'array',
-            'permissions.*' => 'exists:permissions,name',
-        ];
+        $id = $this->route('role') ?->id;
+
+        $nameRule = Rule::unique('roles', 'name')->whereNull('deleted_at');
         
-        if ($this->isMethod('post')) {
-            // Store
-            $rules['name'] = 'required|string|max:255|unique:roles,name';
-        } else {
-            // Update
-            $id = $this->route('role') ? $this->route('role')->id : null;
-            $rules['name'] = 'required|string|max:255|unique:roles,name,'.$id;
+        if($id){
+            // If the role is being updated, we need to ignore the current role's ID for unique validation
+            $nameRule->ignore($id, 'id');
         }
+        
+        $rules = [
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                $nameRule
+            ],
+            'permissions' => [
+                'array'
+            ],
+            'permissions.*' => [Rule::exists('permissions', 'name')],
+        ];
 
         return $rules;
     }

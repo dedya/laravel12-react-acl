@@ -10,6 +10,7 @@ import { swalSuccessDefaults, swalErrorDefaults} from '@/utils/swalDefaults';
 import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { can } from '@/utils/can';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
@@ -17,39 +18,44 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     const { flash, alertTimer,errors } = usePage().props;
-
+    
+    const canReadUser = can('read-users');
+    const canReadRole = can('read-roles');
+    const canReadUserGroup = can('read-user-groups');
+    
     useEffect(() => {
-    // Show validation errors
-    if (errors && Object.keys(errors).length > 0) {
-      Object.values(errors).forEach((msg) => {
-        toast.error(msg, {
-          position: "top-right",
-          autoClose: alertTimer || 4000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      });
-    }
+        const duration = alertTimer || 4000;
 
-    console.log('flash.success:', flash?.success);
-    if (flash?.success) {
-        Swal.fire({
-        title: flash.success,
-        timer: alertTimer || 4000,         
-            ...swalSuccessDefaults,
+        // Show validation errors
+        if (errors && Object.keys(errors).length > 0) {
+        Object.values(errors).forEach((msg) => {
+            toast.error(msg, {
+            position: "top-right",
+            autoClose: alertTimer || 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            });
         });
-    }else
-    if (flash?.error) { 
-        Swal.fire({
-        title: flash.error,
-        timer: alertTimer || 4000,         
-            ...swalErrorDefaults,
-        });
-    }
+        }
+
+        //Show flash success or error using SweetAlert
+        const showFlashAlert = (message, defaults) => {
+            Swal.fire({
+                title: message,
+                timer: duration,
+                ...defaults,
+            });
+        };
+        
+        if (flash?.success) {
+            showFlashAlert(flash.success, swalSuccessDefaults);
+        } else if (flash?.error) {
+            showFlashAlert(flash.error, swalErrorDefaults);
+        }
     }, [flash?.success, flash?.error, errors, alertTimer]);
 
     return (
@@ -71,14 +77,24 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
-
-                                 <NavLink href={route('users.index')} active={route().current('users.index')}>
-                                    User
+                                {canReadUser && (
+                                <NavLink href={route('users.index')} active={route().current('users.index')}>
+                                    Users
                                 </NavLink>
-                                 <NavLink href={route('roles.index')} active={route().current('roles.index')}>
+                                )}
+                                
+                                {canReadRole && (
+                                <NavLink href={route('roles.index')} active={route().current('roles.index')}>
                                     Roles
                                 </NavLink>
+                                )}
 
+                                {canReadUserGroup && (
+                                <NavLink href={route('usergroups.index')} active={route().current('usergroups.index')}>
+                                    User Groups
+                                </NavLink>
+                                )}
+                                
                             </div>
                         </div>
 
