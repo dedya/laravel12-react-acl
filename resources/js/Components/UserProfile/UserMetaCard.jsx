@@ -35,9 +35,9 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 
 	const submit = (e) => {
 		e.preventDefault();
-		console.log('submit');
-
+		//console.log('submit');
 		patch(route('profile.update'));
+		closeModal(); // Close the modal after saving
 	};
 
 	const { data, setData, patch, errors, processing, recentlySuccessful } =
@@ -77,16 +77,18 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 							<h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
 								{user.name}
 							</h4>
+
+							{/*
 							<div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
 								<p className="text-sm text-gray-500 dark:text-gray-400">
 									-
 								</p>
-								{/* Vertical separator line, hidden on smaller screens and visible on extra-large screens */}
+								{/* Vertical separator line, hidden on smaller screens and visible on extra-large screens 
 								<div className="hidden h-3.5 w-px bg-gray-300 dark:bg-gray-700 xl:block"></div>
 								<p className="text-sm text-gray-500 dark:text-gray-400">
 									-
 								</p>
-							</div>
+							</div>*/}
 						</div>
 						{/* Social media links section.Occupies available space (grow) and aligns to the end on extra-large screens. */}
 						<div className="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
@@ -343,11 +345,11 @@ export default function UserMetaCard({ mustVerifyEmail,status,className = '',}) 
 						</div>
 						{/* Modal action buttons: Close and Save Changes.Aligned to the end on large screens. */}
 						<div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-							<Button size="sm" variant="outline" disabled={processing}>
-								Close
+							<Button type="button" size="sm" variant="outline" onClick={closeModal}>
+								{t('general.buttons.close')}
 							</Button>
 							<Button size="sm" disabled={processing}>
-								{tChoice('general.save_changes',2)}
+								{tChoice('general.buttons.save_changes',2)}
 							</Button>
 						</div>
 					</form>

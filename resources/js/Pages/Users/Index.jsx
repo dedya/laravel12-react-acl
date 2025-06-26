@@ -60,7 +60,8 @@ export default function Index({ auth }) {
     Swal.fire({
       theme: theme,
       title: t('message.confirm.sure'),
-      text: t('message.confirm.delete', { 'title': tChoice('general.users', 1) }),
+      text: t('message.confirm.delete',{'title' : tChoice('general.users',1)}),
+      icon: 'warning',
       showCancelButton: true,
       cancelButtonText: t('general.buttons.cancel'),
       confirmButtonColor: '#dc2626',
