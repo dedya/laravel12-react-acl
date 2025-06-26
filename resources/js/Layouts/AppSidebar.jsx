@@ -54,7 +54,7 @@ const othersItems = [
 	},
 ];
 function AppSidebar() {
-	const { general } = usePage().props;
+	const { general,setting } = usePage().props;
   	const { t, tChoice, currentLocale, setLocale, getLocales, isLocale  } = useLaravelReactI18n();
 	const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
 	//const location = useLocation();
@@ -415,14 +415,14 @@ function AppSidebar() {
 						<>
 							<img
 								className="dark:hidden"
-								src="/assets/images/logo/logo.svg"
+								src={setting.general.app_logo}
 								alt="Logo"
 								width={150}
 								height={40}
 							/>
 							<img
 								className="hidden dark:block"
-								src="/assets/images/logo/logo-dark.svg"
+								src={setting.general.app_logo}
 								alt="Logo"
 								width={150}
 								height={40}
@@ -430,7 +430,7 @@ function AppSidebar() {
 						</>
 					) : (
 						<img
-							src="/assets/images/logo/logo-icon.svg"
+							src={setting.general.app_logo}
 							alt="Logo"
 							width={32}
 							height={32}

@@ -99,10 +99,20 @@ return [
      */
     'general' => [
         'app_logo' => [
+            'name' => 'app_logo',
+            'default' => '/assets/images/logo/logo-dark.svg',
             'alias' => 'app_logo_150x40',
             'collection' => 'logos',
             'width' => 150,
             'height' => 40,
+        ],
+        'app_favicon' => [
+            'name' => 'app_favicon',
+            'default' => '/assets/images/logo/logo-dark.svg',
+            'alias' => 'app_favicon_32x32',
+            'collection' => 'favicons',
+            'width' => 32,
+            'height' => 32,
         ]
     ],
 ];

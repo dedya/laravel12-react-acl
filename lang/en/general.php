@@ -3,7 +3,7 @@
 return [
     'app_name' => 'Application Name',
     'app_logo' => 'Application Logo',
-    'app_favicon' => 'Application Favicon',
+    'app_fav' => 'Application Favicon',
     'user_list_title' => 'Users',
     'users_page_title' => 'Users',
     'users' => 'User|Users',

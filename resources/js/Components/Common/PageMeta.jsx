@@ -11,14 +11,20 @@ import { usePage } from '@inertiajs/react';
  */
 
 
-const PageMeta = ({ title, description })  => {
+  const PageMeta = ({ title, description })  => {
   const { setting } = usePage().props;
+
+  console.log('setting:',setting);
+  const favicon = setting?.general?.app_favicon;
 
   //console.log('meta settings',usePage().props);
   return (
   <Helmet>
     <title>{title} - {setting?.general?.app_name}</title>
     <meta name="description" content={description} />
+    { favicon && (
+      <link rel="icon" href={favicon} type="image/x-icon" />
+    )}
   </Helmet>
   );
 };

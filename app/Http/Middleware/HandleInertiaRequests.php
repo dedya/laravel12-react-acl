@@ -42,7 +42,12 @@ class HandleInertiaRequests extends Middleware
             ],
             
             'setting' => [ // Share your settings here
-                'general' => app(GeneralSettings::class)->toArray(), // Convert to array for easy access
+                //'general' => app(GeneralSettings::class)->toArray(), // Convert to array for easy access
+                'general' => [
+                    'app_name' => app(GeneralSettings::class)->app_name,
+                    'app_logo' => get_logo(),
+                    'app_favicon' => get_favicon(),
+                ]
             ],
         ];
     }

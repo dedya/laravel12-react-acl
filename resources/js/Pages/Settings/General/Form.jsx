@@ -10,36 +10,47 @@ import FileInput from "@/Components/Form/Input/FileInput";
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
-import { router } from '@inertiajs/react';
+import { can } from '@/utils/can';
 
-export default function Form({ settings, appLogo }) {
+export default function Form({ settings, appLogo,appFav }) {
   const { t, tChoice } = useLaravelReactI18n();
   const { theme } = useTheme();
   const { errors } = usePage().props;
   const [previewLogo, setPreviewLogo] = useState(appLogo);
   const [removeLogo, setRemoveLogo] = useState(false);
+  const [previewFav, setPreviewFav] = useState(appFav);
+  const [removeFav, setRemoveFav] = useState(false);
 
   const { data, setData, post, processing } = useForm({
     app_name: settings?.app_name || null,
     app_logo: null,
-    clear_app_logo: false, // For clearing the logo
+    clear_app_logo: false,//For clearing the logo
+    app_fav: null,
+    clear_app_fav: false,//For clearing the fav
     _method: 'PUT',
   });
 
-  const canUpdateOrCreate = true;
-
-  //console.log('preview logo:',previewLogo);
+  const canUpdateOrCreate = can('update-settings-general');
 
   useEffect(() => {
     if (data.app_logo) {
-      console.log('xpreview logo', URL.createObjectURL(data.app_logo));
       setPreviewLogo(URL.createObjectURL(data.app_logo));
     } else if (appLogo && !data.clear_app_logo) {
       setPreviewLogo(appLogo);
     } else {
       setPreviewLogo(null);
     }
-  }, [data.app_logo, appLogo, data.clear_app_logo]);
+
+    if (data.app_fav) {
+      setPreviewFav(URL.createObjectURL(data.app_fav));
+    } else if (appFav && !data.clear_app_fav) {
+      setPreviewFav(appFav);
+    } else {
+      setPreviewFav(null);
+    }
+
+
+  }, [data.app_logo, appLogo, data.clear_app_logo,data.app_fav, appFav, data.clear_app_fav]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,14 +64,15 @@ export default function Form({ settings, appLogo }) {
     });
   };
 
-  // Handle file change
+  // Handle logo change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    setRemoveLogo(false);
     setData('app_logo', file);
     setData('clear_app_logo', false); // If a new file is selected, don't clear
   };
 
-  const handleClearLogo = () => {
+  const handleClearLogo = (e) => {
     e.preventDefault();
 
     const result = Swal.fire({
@@ -72,31 +84,49 @@ export default function Form({ settings, appLogo }) {
       cancelButtonText: t('general.buttons.cancel'),
       confirmButtonColor: '#dc2626',
       confirmButtonText: t('general.buttons.confirm_delete'),
-      toast: false,
+      toast: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setRemoveLogo(true);
+        setData('app_logo', null);
+        setData('clear_app_logo', true);
+      }
     });
-    if (result.isConfirmed) {
-      setRemoveLogo(true);
-      setData('app_logo', null);
-      setData('clear_app_logo', true);
-      //if (photoInput.current) photoInput.current.value = '';
-      Swal.fire({
-        theme: theme,
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: t('general.image_will_removed_after_save'),
-        showConfirmButton: false,
-        timer: 2000,
-        //background: '#f0fdf4',
-        //color: '#166534',
-      });
-    }
+  };
 
+  // Handle logo change
+  const handleFavChange = (e) => {
+    const file = e.target.files[0];
+    console.log('fav:',file);
+    setRemoveFav(false);
+    setData('app_fav', file);
+    setData('clear_app_fav', false); // If a new file is selected, don't clear
+  };
+
+  const handleClearFav = (e) => {
+    e.preventDefault();
+
+    const result = Swal.fire({
+      theme: theme,
+      title: t('general.delete_confirm_title'),
+      text: t('general.delete_image_confirm_text'),
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: t('general.buttons.cancel'),
+      confirmButtonColor: '#dc2626',
+      confirmButtonText: t('general.buttons.confirm_delete'),
+      toast: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setRemoveFav(true);
+        setData('app_fav', null);
+        setData('clear_app_fav', true);
+      }
+    });
   };
 
   return (
     <>
-
       <PageMeta
         title={tChoice('general.general_settings', 2)}
         description={t('message.settings.general')}
@@ -121,7 +151,7 @@ export default function Form({ settings, appLogo }) {
               required
             />
 
-            <div>
+            <div className='app-logo'>
               <Label htmlFor="app_logo">
                 {t('general.app_logo')}
                 <span className="text-red-500 ml-1">*</span>
@@ -131,37 +161,10 @@ export default function Form({ settings, appLogo }) {
                 onChange={handleFileChange}
               />
 
-              {previewLogo && (
+              {previewLogo &&  !removeLogo && ( // Show previously uploaded logo if no new file selected and not cleared
                 <div className="mt-2 relative inline-block">
                   <img
                     src={previewLogo}
-                    alt="Preview"
-                    className="object-cover"
-                  />
-                  {
-                    canUpdateOrCreate &&
-
-                    <Button
-                      type="button"
-                      variant="outline"
-                      title="Remove app logo"
-                      style={{ transform: 'translate(50%,-50%)' }}
-                      onClick={async (e) => {
-                        handleClearLogo(e);
-                      }}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </Button>
-                  }
-                </div>
-              )}
-
-              {!previewLogo && appLogo && ( // Show previously uploaded logo if no new file selected and not cleared
-                <div className="mt-2 relative inline-block">
-                  <img
-                    src={appLogo}
                     alt="Preview"
                     className="object-cover"
                   />
@@ -190,6 +193,49 @@ export default function Form({ settings, appLogo }) {
               )}
               {errors.app_logo && <div className="text-red-500 text-sm mt-1">{errors.app_logo}</div>}
 
+            </div>
+
+            <div className='app-fav'>
+              <Label htmlFor="app_fav">
+                {t('general.app_fav')}
+                <span className="text-red-500 ml-1">*</span>
+              </Label>
+              <FileInput
+                accept="image/*"
+                onChange={handleFavChange}
+              />
+
+              {previewFav &&  !removeFav && ( // Show previously uploaded logo if no new file selected and not cleared
+                <div className="mt-2 relative inline-block">
+                  <img
+                    src={previewFav}
+                    alt="Preview"
+                    className="object-cover"
+                  />
+                  {
+                    canUpdateOrCreate &&
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      title="Remove app fav"
+                      style={{ transform: 'translate(50%,-50%)' }}
+                      onClick={async (e) => {
+                        handleClearLogo(e);
+                      }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </Button>
+                  }
+                </div>
+              )}
+
+              {removeFav && !previewFav && (
+                <div className="text-sm text-gray-500 mt-2">{t('general.image_will_removed_after_save')}</div>
+              )}
+              {errors.app_fav && <div className="text-red-500 text-sm mt-1">{errors.app_fav}</div>}
 
             </div>
 
