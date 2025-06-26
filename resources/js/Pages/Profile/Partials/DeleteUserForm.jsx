@@ -1,14 +1,18 @@
 import DangerButton from '@/Components/DangerButton';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import Modal from '@/Components/Modal';
+//import Modal from '@/Components/Modal';
+import { Modal } from "@/Components/UI/Modal";
 import SecondaryButton from '@/Components/SecondaryButton';
 import TextInput from '@/Components/TextInput';
+import Label from "@/Components/Form/Label";
 import { useForm } from '@inertiajs/react';
 import { useRef, useState } from 'react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 export default function DeleteUserForm({ className = '' }) {
     const [confirmingUserDeletion, setConfirmingUserDeletion] = useState(false);
+    const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
     const passwordInput = useRef();
 
     const {
@@ -48,41 +52,36 @@ export default function DeleteUserForm({ className = '' }) {
     return (
         <section className={`space-y-6 ${className}`}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Delete Account
+                <h2 className="text-lg font-medium text-gray-500 dark:text-gray-400">
+                    {t('general.delete_account')}
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Once your account is deleted, all of its resources and data
-                    will be permanently deleted. Before deleting your account,
-                    please download any data or information that you wish to
-                    retain.
+                    {t('message.warning_account_delete')}
                 </p>
             </header>
 
             <DangerButton onClick={confirmUserDeletion}>
-                Delete Account
+                {t('general.delete_account')}
             </DangerButton>
 
-            <Modal show={confirmingUserDeletion} onClose={closeModal}>
+            <Modal isOpen={confirmingUserDeletion} onClose={closeModal}>
                 <form onSubmit={deleteUser} className="p-6">
-                    <h2 className="text-lg font-medium text-gray-900">
-                        Are you sure you want to delete your account?
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-400">
+                        {t('message.confirm.delete_account')}
                     </h2>
 
                     <p className="mt-1 text-sm text-gray-600">
-                        Once your account is deleted, all of its resources and
-                        data will be permanently deleted. Please enter your
-                        password to confirm you would like to permanently delete
-                        your account.
+                        {t('message.warning_account_delete')}
                     </p>
 
                     <div className="mt-6">
-                        <InputLabel
+                        {/*<InputLabel
                             htmlFor="password"
                             value="Password"
                             className="sr-only"
-                        />
+                        />*/}
+                        <Label htmlFor="firstName">{t('general.password')}</Label>
 
                         <TextInput
                             id="password"
@@ -93,7 +92,6 @@ export default function DeleteUserForm({ className = '' }) {
                             onChange={(e) =>
                                 setData('password', e.target.value)
                             }
-                            className="mt-1 block w-3/4"
                             isFocused
                             placeholder="Password"
                         />

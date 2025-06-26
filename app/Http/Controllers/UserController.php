@@ -34,12 +34,13 @@ class UserController extends BaseController
             $query->where('email', 'like', '%' . $request->email . '%');
         }
         
-        $users = $query->paginate(10)->withQueryString()->through(function ($user) {
-            $user->photo_url = $user->userPhoto?->photo_url; 
-            return $user;
-        });
+        $users = $query->paginate(10)->withQueryString();
         $filters = $request->only(['name', 'email']);
-        return Inertia::render('Users/Index', compact('users', 'filters'));
+        
+        // Create pluralized user count text
+        $userCountText = trans_choice('general.users', $users->total());
+        
+        return Inertia::render('Users/Index', compact('users', 'filters', 'userCountText'));
     }
 
     public function create()
@@ -124,7 +125,7 @@ class UserController extends BaseController
         DeleteUser::dispatch($user); 
 
         $message = __('general.data_is_deleted', ['name' => $user->name]);
-        return redirect()->route('users.index')->with('success', $message);
+        return back()->with('success', $message);
     }
 
     public function enable(Request $request, User $user)
@@ -151,6 +152,6 @@ class UserController extends BaseController
             $message = __('general.set_disabled', ['name' => $user->name]);
 
         Log::info('ENABLE USER', ['id' => $user->id, 'query' => $query]);
-        return redirect()->route('users.index', $query)->with('success',$message);
+        return back()->with('success',$message);
     }
 }

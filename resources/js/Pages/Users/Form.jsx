@@ -11,8 +11,31 @@ import {
   TextInput,
   SelectDropdown
 } from '@/Components/Form';
+import PageMeta from "@/Components/Common/PageMeta";
+import { useLaravelReactI18n } from 'laravel-react-i18n';
+import PageBreadcrumb from "@/Components/Common/PageBreadCrumb";
+import ComponentCard from "@/Components/Common/ComponentCard";
+import Button from "@/Components/UI/Button/Button";
+import Input from "@/Components/Form/Input/InputField";
+import Label from "@/Components/Form/Label";
+import InputError from '@/Components/InputError';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/Components/UI/Table";
+import Select from "@/Components/Form/Select";
+import FileInput from "@/Components/Form/Input/FileInput";
+import InputGroup from "@/Components/Form/Group/InputGroup";
+import SelectGroup from "@/Components/Form/Group/SelectGroup";
+import CheckboxGroup from "@/Components/Form/Group/CheckboxGroup";
+import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 
 export default function Form({ user, roles, groups, auth }) {
+  const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
+  const { theme } = useTheme();
 
   const firstInputRef = useRef(null);
 
@@ -65,119 +88,106 @@ export default function Form({ user, roles, groups, auth }) {
   };
 
   const [changePassword, setChangePassword] = useState(!isEdit);
-
+  console.log('error name', errors.name);
   return (
-    <AuthenticatedLayout
-      user={auth?.user}
-      header={
-        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-          {isEdit ? general.edit_user : general.create_user}
-        </h2>
-      }
-    >
-      <Head title={isEdit ? general.edit_user : general.create_user} />
-      <div className="max-w-xl mx-auto py-8">
-        <div className="bg-white rounded shadow p-6">
+
+    <>
+      <PageMeta
+        title={isEdit ? t('general.edit_user') : t('general.create_user')}
+        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+      />
+
+      <PageBreadcrumb pageTitle={tChoice('general.users', 2)} />
+
+      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
+        <div className="space-y-6">
           <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
-            <TextInput
-              label={general?.name}
+            <InputGroup
               name="name"
-              value={data.name}
+              type="text"
+              label={t('general.name')}
               onChange={e => setData('name', e.target.value)}
-              error={errors.name}
-              inputRef={firstInputRef} // Focus on this input 
+              hint={errors.name}
+              value={data.name}
               required
             />
 
-            <TextInput
-              label={general?.email}
+            <InputGroup
               name="email"
               type="email"
-              value={data.email}
+              label={t('general.email')}
               onChange={e => setData('email', e.target.value)}
-              error={errors.email}
+              hint={errors.email}
+              value={data.email}
               required
             />
 
             {
               isEdit && (
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="change_password"
+                <>
+                  <CheckboxGroup
+                    label={t('general.change_password')}
                     name="change_password"
                     checked={changePassword}
                     onChange={(e) => {
+                      console.log(e);
                       setChangePassword(e.target.checked);
                       // Clear password fields if checkbox is unchecked
                       if (!e.target.checked) {
                         setData('password', '');
-                        setData('change_password',false);
+                        setData('change_password', false);
                       } else {
-                        setData('change_password',e.target.checked);
+                        setData('change_password', e.target.checked);
                       }
                     }}
-                    className="rounded border-gray-300 text-purple-600 shadow-sm focus:ring-purple-500"
                   />
-                  <label htmlFor="change_password" className="ml-2 block text-sm text-gray-900">
-                    {general?.change_password || 'Change Password'}
-                  </label>
-                </div>
+                </>
               )
             }
 
             {(changePassword || !isEdit) && (
               <>
-                <TextInput
-                  label={
-                    <>
-                      {general?.password}
-                      {/*
-                      {isEdit && (
-                        <span className="text-xs text-gray-400">({general?.leave_blank})</span>
-                      )}*/}
-                    </>
-                  }
-                  name="password"
-                  type="password"
-                  value={data.password}
+                <InputGroup
+                  name="email"
+                  type="email"
+                  label={t('general.password')}
                   onChange={e => setData('password', e.target.value)}
-                  error={errors.password}
-                  required={changePassword || !isEdit} 
+                  hint={errors.password}
+                  value={data.password}
+                  required={changePassword || !isEdit}
                 />
               </>
             )}
 
-            <SelectDropdown
-              label={general?.role}
+
+
+            <SelectGroup
+              label={tChoice('general.roles', 1)}
               name="role"
               value={data.role}
               onChange={e => setData('role', e.target.value)}
               options={roles.map(role => ({ value: role.name, label: role.name }))}
-              error={errors.role}
+              hint={errors.role}
               required
             />
 
-            <SelectDropdown
-              label={general?.user_group}
+            <SelectGroup
+              label={tChoice('general.user_groups', 1)}
               name="user_group_id"
               value={data.user_group_id}
               onChange={e => setData('user_group_id', e.target.value)}
               options={groups.map(group => ({ value: group.id, label: group.name }))}
-              error={errors.user_group_id}
+              hint={errors.user_group_id}
               required
             />
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {general.profile_image}
+                {t('general.profile_image')}
               </label>
-              <input
-                type="file"
+              <FileInput
                 accept="image/*"
-                ref={photoInput}
                 onChange={handlePhotoChange}
-                className="border rounded px-3 py-2 w-full"
               />
 
               {(photoPreview || (user?.photo_url && !removePhoto)) && (
@@ -190,20 +200,22 @@ export default function Form({ user, roles, groups, auth }) {
                   {
                     canUpdateOrCreate &&
 
-                    <button
+                    <Button
                       type="button"
-                      className="absolute top-0 right-0 m-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 flex items-center justify-center opacity-70 hover:opacity-100"
+                      variant="outline"
                       title="Remove photo"
                       style={{ transform: 'translate(50%,-50%)' }}
                       onClick={async () => {
                         const result = await Swal.fire({
+                          theme:theme,
                           title: general?.delete_confirm_title,
                           text: general?.delete_image_confirm_text,
                           icon: 'warning',
+                          showCancelButton:true,
                           confirmButtonText: general?.delete_confirm_yes || 'Yes, delete it!',
                           cancelButtonText: general?.cancel,
                           toast: false,
-                          ...swalConfirmDeleteDefaults,
+                          //...swalConfirmDeleteDefaults,
                         });
                         if (result.isConfirmed) {
                           setRemovePhoto(true);
@@ -212,14 +224,15 @@ export default function Form({ user, roles, groups, auth }) {
                           setPhotoPreview(null);
                           if (photoInput.current) photoInput.current.value = '';
                           Swal.fire({
+                            theme:theme,
                             toast: true,
                             position: 'top-end',
                             icon: 'success',
                             title: general?.image_will_removed_after_save,
                             showConfirmButton: false,
                             timer: 2000,
-                            background: '#f0fdf4',
-                            color: '#166534',
+                            //background: '#f0fdf4',
+                            //color: '#166534',
                           });
                         }
                       }}
@@ -227,7 +240,7 @@ export default function Form({ user, roles, groups, auth }) {
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                       </svg>
-                    </button>
+                    </Button>
                   }
                 </div>
               )}
@@ -248,13 +261,13 @@ export default function Form({ user, roles, groups, auth }) {
               </Link>
               {
                 canUpdateOrCreate &&
-                <button
+                <Button
                   type="submit"
                   disabled={processing}
-                  className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow disabled:opacity-50"
+
                 >
-                  {general?.submit}
-                </button>
+                  {t('general.buttons.submit')}
+                </Button>
               }
 
 
@@ -262,6 +275,6 @@ export default function Form({ user, roles, groups, auth }) {
           </form>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </>
   );
 }

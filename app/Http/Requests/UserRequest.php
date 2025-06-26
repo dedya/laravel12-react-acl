@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Validation\Rule;
 class UserRequest extends FormRequest
 {
     /**
@@ -23,26 +23,34 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        Log::info('user request', ["aaa",$this->all()]);
+        $userId = $this->route('user')?->id;
+        $emailRule =Rule::unique('users', 'email')->whereNull('deleted_at');
 
-        $rules = [
-            'name' => 'required|string|max:255',
-            'role' => 'required|string|exists:roles,name',
-            'user_group_id' => 'required|exists:user_groups,id',
+        $passwordRule = 'required';
+
+        // Update
+        if ($userId) {
+            $emailRule->ignore($userId, 'id');
+            $passwordRule = 'nullable';
+        }
+
+         $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'role' => ['required', 'string', Rule::exists('roles', 'name')],
+            'user_group_id' => ['required', Rule::exists('user_groups', 'id')],
+            'email' => [
+                'required',
+                'email',
+                $emailRule
+            ],
+            'password' => [
+                $passwordRule,
+                'string',
+                'min:6',
+            ],
+            'is_active' => 'nullable|boolean',
         ];
 
-        if ($this->isMethod('post')) {
-            // Store
-            $rules['email'] = 'required|email|unique:users';
-            $rules['password'] = 'required|string|min:6';
-        } else {
-            // Update
-            //$userId = is_numeric($this->user) ? $this->user : $this->user->getAttribute('id');
-            $userId = $this->route('user') ? $this->route('user')->id : null;
-            $rules['email'] = 'required|email|unique:users,email,' . $userId;
-            $rules['password'] = $this->request->get('change_password') ? 'required|string|min:6' : 'nullable';
-        }
-              
         return $rules;
     }
 
