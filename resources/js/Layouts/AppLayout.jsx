@@ -3,7 +3,7 @@ import Backdrop from "./Backdrop";
 import AppHeader from "./AppHeader";
 import { SidebarProvider, useSidebar } from "../utils/context/SidebarContext";
 import { useEffect } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTheme } from '@/utils/context/ThemeContext';
