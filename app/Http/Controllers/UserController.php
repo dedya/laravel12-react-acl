@@ -9,8 +9,10 @@ use App\Models\Role;
 use App\Models\UserGroup as Group; 
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\UpdateUser;
-use App\Jobs\DeleteUser;
+//use App\Jobs\UpdateUser;
+//use App\Jobs\DeleteUser;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 //use Illuminate\Routing\Controller as BaseController;
 use App\Abstracts\Http\Controller as BaseController;
@@ -21,9 +23,14 @@ class UserController extends BaseController
     //permission checking for the controller is done in BaseController
     public function index(Request $request)
     {
-        Log::info('USER LIST');
+        $defaultPerPage = config('custom.defaultPerPage', 20); // Default per page value
+        $perPageOptions = config('custom.perPageOptions'); // Define per page options
 
-         $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
+         // Extract filters from request
+        $filters = $request->only(['name', 'email', 'per_page', 'page']);
+        $perPage = $filters['per_page'] ?? $defaultPerPage;
+
+        $query = User::with(['userPhoto','roles:id,name'])->select('id', 'name', 'email','is_active');
 
         if ($request->filled('name')) {
             $query->where('name', 'like', '%' . $request->name . '%');
@@ -32,13 +39,14 @@ class UserController extends BaseController
             $query->where('email', 'like', '%' . $request->email . '%');
         }
         
-        $users = $query->paginate(10)->withQueryString();
-        $filters = $request->only(['name', 'email']);
+        $users = $query->paginate($perPage)->withQueryString();
         
-        // Create pluralized user count text
-        $userCountText = trans_choice('general.users', $users->total());
-        
-        return Inertia::render('Users/Index', compact('users', 'filters', 'userCountText'));
+        return Inertia::render('Users/Index', 
+            compact(
+                'users', 
+                'filters', 
+                'perPageOptions'
+            ));
     }
 
     public function create()
@@ -88,9 +96,45 @@ class UserController extends BaseController
         $removePhoto = $request->boolean('remove_photo');
 
         try {
-            (new UpdateUser($validated, $user, $file, $removePhoto))->handle();
+            //(new UpdateUser($validated, $user, $file, $removePhoto))->handle();
+            // Handle password
+            if (!empty($validated['password'])) {
+                $validated['password'] = Hash::make($validated['password']);
+            } else {
+                unset($validated['password']);
+            }
 
-            $messageKey = $user ? 'data_is_updated' : 'data_is_created';
+            //update user
+            if ($user) {
+                $user->update($validated);
+                $user->syncRoles([$validated['role']]);
+
+                // Handle photo removal
+                if ($removePhoto) {
+                    try{
+                        $user->clearMediaCollection('photos');
+                    } catch (\Exception $e) {
+                        return redirect()->route('users.index')->with('error', $e->getMessage());
+                    }
+                }
+                $messageKey = 'data_is_updated';
+            } else {
+                // create new user
+                $user = User::create($validated);
+                $user->assignRole($validated['role']);
+                $messageKey = 'data_is_created';
+            }
+
+            // Handle file upload with Spatie Media Library
+            if ($file) {
+                try{
+                    $user->clearMediaCollection('photos'); // Clear existing photos if any
+                    $user->addMedia($file)->toMediaCollection('photos');               
+                } catch (\Exception $e) {
+                    return redirect()->route('users.index')->with('error', $e->getMessage());
+                }
+            }
+
             $name = $user ? $user->name : $validated['name'];
             $message = __('general.' . $messageKey, ['name' => $name]);
         } catch (\Exception $e) {
@@ -103,9 +147,17 @@ class UserController extends BaseController
 
     public function destroy(User $user)
     {
-        (new DeleteUser($user, auth()->id()))->handle();
-        $message = __('general.data_is_deleted', ['name' => $user->name]);
-        return back()->with('success', $message);
+        try {            
+            if ($user->photo) {
+                Storage::disk('public')->delete($user->photo);
+            }
+
+            $user->delete(); 
+            $message = __('general.data_is_deleted', ['name' => $user->name]);
+            return back()->with('success', $message);
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }      
     }
 
     public function enable(Request $request, User $user)

@@ -15,15 +15,13 @@ class DeleteUser implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $user;
-    public $deletedBy;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(User $user, $deletedBy = null)
+    public function __construct(User $user)
     {
         $this->user = $user;
-        $this->deletedBy = $deletedBy;
     }
 
     /**
@@ -35,8 +33,6 @@ class DeleteUser implements ShouldQueue
             Storage::disk('public')->delete($this->user->photo);
         }
 
-        $this->user->deleted_by = $this->deletedBy;
-        $this->user->save();
         $this->user->delete(); // this will set deleted_at
   }
 }

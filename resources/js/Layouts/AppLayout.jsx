@@ -2,12 +2,9 @@ import AppSidebar from "./AppSidebar";
 import Backdrop from "./Backdrop";
 import AppHeader from "./AppHeader";
 import { SidebarProvider, useSidebar } from "../utils/context/SidebarContext";
-import { Outlet } from "react-router";
 import { useEffect } from 'react';
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { toast, ToastContainer } from 'react-toastify';
-import Swal from 'sweetalert2';
-import { swalSuccessDefaults, swalErrorDefaults} from '@/utils/swalDefaults';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTheme } from '@/utils/context/ThemeContext';
 
@@ -36,16 +33,6 @@ const LayoutContent = ({ children }) => {
         });
       });
     }
-
-    //Show flash success or error using SweetAlert
-    const showFlashAlert = (message, defaults) => {
-      Swal.fire({
-        title: message,
-        timer: duration,
-        theme: isDarkTheme ? 'dark' : 'light',
-        ...defaults,
-      });
-    };
 
     if (flash?.success) {
       console.log('success',flash?.success);

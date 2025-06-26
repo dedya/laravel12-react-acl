@@ -56,8 +56,8 @@ export default function Form({ usergroup, auth }) {
       {/*<Head title={isEdit ? general.edit_group : general.create_group} />*/}
 
       <PageMeta
-        title={isEdit ? general.edit_group : general.create_group}
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title={isEdit ? t('general.edit_group') : t('general.create_group')}
+        description={isEdit ? t('general.edit_group') : t('general.create_group')}         
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />
@@ -88,7 +88,6 @@ export default function Form({ usergroup, auth }) {
                 <Button
                   type="submit"
                   disabled={processing}
-                  className="cursor-pointer bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded shadow disabled:opacity-50"
                 >
                   {general?.submit}
                 </Button>
