@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { can } from '@/utils/can';
 
-import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import PageMeta from "@/Components/Common/PageMeta";
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import PageBreadcrumb from "@/Components/Common/PageBreadCrumb";
