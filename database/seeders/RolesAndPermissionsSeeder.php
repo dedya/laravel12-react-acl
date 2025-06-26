@@ -24,10 +24,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'create-roles',
             'update-roles',
             'delete-roles',
-            'read-usergroups',
-            'create-usergroups',
-            'update-usergroups',
-            'delete-usergroups',
+            'read-user-groups',
+            'create-user-groups',
+            'update-user-groups',
+            'delete-user-groups',
+            'read-settings-general',
+            'update-settings-general'
         ];
 
         foreach ($permissions as $permission) {

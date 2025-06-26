@@ -17,5 +17,8 @@ return [
     'success' => [
         'deleted' => ':title :key is deleted successfully!',
         'profile_is_updated' => 'Your profile is updated successfully',
+    ],
+    'settings' => [
+        'general' => 'The section of this app is designed to provide you with comprehensive control over its behavior, appearance, and your personal data.'
     ]
 ];

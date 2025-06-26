@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\UserController;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserGroupController;
-use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     /*return Inertia::render('Welcome', [
@@ -40,6 +40,13 @@ Route::middleware('auth')->group(function () {
     Route::resource('usergroups', UserGroupController::class);
     Route::patch('/usergroups/{usergroup}/enable', [UserGroupController::class, 'enable'])->name('usergroups.enable');
     Route::patch('/usergroups/{usergroup}/disable', [UserGroupController::class, 'disable'])->name('usergroups.disable');
+
+    Route::prefix('settings')->as('settings.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Settings\SettingController::class, 'show'])->name('main');
+
+        Route::get('/general', [\App\Http\Controllers\Settings\GeneralSettingController::class, 'edit'])->name('general.edit');
+        Route::put('/general', [\App\Http\Controllers\Settings\GeneralSettingController::class, 'update'])->name('general.update');
+    });
 
     //artisan commands
     Route::get('/artisan/{command}', function ($command) {
