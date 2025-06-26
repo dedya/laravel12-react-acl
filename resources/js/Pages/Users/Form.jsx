@@ -94,6 +94,7 @@ export default function Form({ user, roles, groups, auth }) {
     <>
       <PageMeta
         title={isEdit ? t('general.edit_user') : t('general.create_user')}
+        description={isEdit ? t('general.edit_user') : t('general.create_user')}      
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.users', 2)} />

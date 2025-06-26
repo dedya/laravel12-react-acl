@@ -56,7 +56,8 @@ export default function Form({ usergroup, auth }) {
       {/*<Head title={isEdit ? general.edit_group : general.create_group} />*/}
 
       <PageMeta
-        title={isEdit ? general.edit_group : general.create_group}
+        title={isEdit ? t('general.edit_group') : t('general.create_group')}
+        description={isEdit ? t('general.edit_group') : t('general.create_group')}         
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />

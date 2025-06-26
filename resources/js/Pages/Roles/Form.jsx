@@ -127,8 +127,9 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
             {/*<Head title={isEdit ? general?.edit_role : general?.create_role} />*/}
 
             <PageMeta
-                title={isEdit ? general.edit_role : general.create_role}
-            />
+                title={isEdit ? t('general.edit_role') : t('general.create_role')}
+                description={isEdit ? t('general.edit_role') : t('general.create_role')}
+             />
 
             <PageBreadcrumb pageTitle={tChoice('general.roles', 2)} />
 
