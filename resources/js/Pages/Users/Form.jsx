@@ -33,6 +33,9 @@ import SelectGroup from "@/Components/Form/Group/SelectGroup";
 import CheckboxGroup from "@/Components/Form/Group/CheckboxGroup";
 import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Form({ user, roles, groups, auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
   const { theme } = useTheme();
@@ -89,6 +92,32 @@ export default function Form({ user, roles, groups, auth }) {
 
   const [changePassword, setChangePassword] = useState(!isEdit);
   console.log('error name', errors.name);
+
+  const handleDeletePhoto = async (e, user) => {
+    e.preventDefault();
+
+    const result = await Swal.fire({
+      theme:theme,
+      title: t('message.confirm.sure'),
+      text: t('message.confirm.delete', {
+        title: tChoice('general.user_photo',1),
+      }),
+      cancelButtonText: t('general.buttons.cancel'),
+      confirmButtonText: t('general.buttons.confirm_delete'),
+        ...swalConfirmDeleteDefaults,
+    });
+    if (result.isConfirmed) {
+      setRemovePhoto(true);
+      setData('photo', null);
+      setData('remove_photo', true);
+      setPhotoPreview(null);
+      if (photoInput.current) photoInput.current.value = '';
+      
+      //display success message
+      toast.success(t('general.image_will_removed_after_save'));
+    }
+  };
+
   return (
 
     <>
@@ -205,40 +234,7 @@ export default function Form({ user, roles, groups, auth }) {
                       variant="outline"
                       title="Remove photo"
                       style={{ transform: 'translate(50%,-50%)' }}
-                      onClick={async (e) => {
-                        e.preventDefault();
-
-                        const result = await Swal.fire({
-                          theme:theme,
-                          title: general?.delete_confirm_title,
-                          text: general?.delete_image_confirm_text,
-                          icon: 'warning',
-                          showCancelButton:true,
-                          cancelButtonText: t('general.buttons.cancel'),
-                          confirmButtonColor:'#dc2626',
-                          confirmButtonText: t('general.buttons.confirm_delete'),
-                          toast: false,
-                          //...swalConfirmDeleteDefaults,
-                        });
-                        if (result.isConfirmed) {
-                          setRemovePhoto(true);
-                          setData('photo', null);
-                          setData('remove_photo', true);
-                          setPhotoPreview(null);
-                          if (photoInput.current) photoInput.current.value = '';
-                          Swal.fire({
-                            theme:theme,
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'success',
-                            title: general?.image_will_removed_after_save,
-                            showConfirmButton: false,
-                            timer: 2000,
-                            //background: '#f0fdf4',
-                            //color: '#166534',
-                          });
-                        }
-                      }}
+                      onClick={async (e) => handleDeletePhoto(e, user)}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
