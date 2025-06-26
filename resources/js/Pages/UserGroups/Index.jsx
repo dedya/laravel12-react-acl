@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
 // Import SweetAlert2
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { can } from '@/utils/can';
-import { swalSuccessDefaults, swalConfirmDeleteDefaults } from '@/utils/swalDefaults';
 
 import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa';
 import PageMeta from "@/Components/Common/PageMeta";
@@ -20,8 +17,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/UI/Table";
-import Button from "@/Components/UI/Button/Button";
-import { toast } from 'react-toastify';
 import Switch from "@/Components/Form/Switch/Switch";
 import IconButton from "@/Components/UI/Button/IconButton";
 import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
@@ -30,6 +25,7 @@ import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 import PaginationControls from "@/Components/UI/PaginationControls";
 import usePagination from '@/hooks/usePagination';
 
+import useDelete from '@/hooks/useDelete';
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
   const { groups, filters, perPageOptions } = usePage().props;
@@ -46,35 +42,16 @@ export default function Index({ auth }) {
   
   const { handlePerPageChange, handlePage } = usePagination('usergroups.index', filter, setFilter);
 
-  // Handler for delete confirmation using SweetAlert2
-  const handleDelete = (e, userId, userName) => {
-    e.preventDefault();
-    Swal.fire({
-      theme:theme,
-      title: t('message.confirm.sure'),
-      text: t('message.confirm.delete',{'title' : tChoice('general.user_groups',1)}),
-      icon: 'warning',
-      showCancelButton: true,
-      cancelButtonText: t('general.buttons.cancel'),
-      confirmButtonColor:'#dc2626',
-      confirmButtonText: t('general.buttons.confirm_delete'),
-      //...swalConfirmDeleteDefaults,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.delete(route('usergroups.destroy', userId), {
-          onSuccess: () => {
-            /*
-            Swal.fire({
-              title: t('message.success.deleted',{title : tChoice('general.user_groups',1), key: userName }),
-                /*(general?.data_is_deleted
-                  ? general.data_is_deleted.replace(':name', userName)
-                  : `User "${userName}" is deleted successfully!`),
-              timer: alertTimer || 4000,
-              ...swalSuccessDefaults,
-            });*/
-          },
-        });
-      }
+  //handle delete using custom hook
+  const deleteHandler = useDelete({ theme });
+
+  const handleDelete = (e, group) => {
+    deleteHandler({
+      e,
+      routeName: 'usergroups.destroy',
+      resourceId: group.id,
+      resourceKey: group.name,
+      resourceLabelKey: tChoice('general.user_groups',1)
     });
   };
 
@@ -224,7 +201,7 @@ export default function Index({ auth }) {
                         <>
                         <IconButton
                           type="button"
-                          onClick={e => handleDelete(e, group.id, group.name)}
+                          onClick={e => handleDelete(e, group)}
                           className="text-red-600">
                           <FaTrashAlt size={24} />
                         </IconButton>

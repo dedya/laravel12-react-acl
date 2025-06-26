@@ -42,6 +42,8 @@ export default function Index({ auth }) {
     email: filters.email || '',
     per_page: filters.per_page || 20  });
   
+  // Custom hook for pagination
+  // This hook handles pagination logic and updates the filter state  
   const { handlePerPageChange, handlePage } = usePagination('users.index', filter, setFilter);
 
   const params = new URLSearchParams({ ...filter, page: users.current_page }).toString();
@@ -64,29 +66,6 @@ export default function Index({ auth }) {
     e.preventDefault();
     router.get(route('users.index'), filter, { preserveState: true, replace: true });
   };
-
-  // Handler for delete confirmation using SweetAlert2
-  /*const handleDelete = (e, userId, userName) => {
-    e.preventDefault();
-    Swal.fire({
-      theme: theme,
-      title: t('message.confirm.sure'),
-      text: t('message.confirm.delete',{'title' : tChoice('general.users',1)}),
-      icon: 'warning',
-      showCancelButton: true,
-      cancelButtonText: t('general.buttons.cancel'),
-      confirmButtonColor: '#dc2626',
-      confirmButtonText: t('general.buttons.confirm_delete'),
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.delete(route('users.destroy', userId), {
-          onSuccess: () => {
-            // Success handling
-          },
-        });
-      }
-    });
-  };*/
 
   return (
     <>
@@ -230,6 +209,7 @@ export default function Index({ auth }) {
 
                         {canDelete &&
                           <IconButton
+                            title={t('general.buttons.delete')}
                             type="button"
                             onClick={e => handleDelete(e, user)}
                             className="text-red-600">

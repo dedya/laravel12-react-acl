@@ -26,6 +26,7 @@ import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 import PaginationControls from "@/Components/UI/PaginationControls";
 import usePagination from '@/hooks/usePagination';
 
+import useDelete from '@/hooks/useDelete';
 
 export default function RoleIndex({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
@@ -41,48 +42,20 @@ export default function RoleIndex({ auth }) {
     per_page: filters.per_page || 20  });
 
   const { handlePerPageChange, handlePage } = usePagination('users.index', filter, setFilter);
-    
-  // Handler for delete confirmation using SweetAlert2
-  const handleDelete = (e, roleId, roleName) => {
-    e.preventDefault();
-    Swal.fire({
-      theme:theme,
-      title: t('message.confirm.sure'),
-      text: t('message.confirm.delete',{'title' : tChoice('general.roles',1)}),
-      icon: 'warning',
-      showCancelButton: true,
-      cancelButtonText: t('general.buttons.cancel'),
-      confirmButtonColor:'#dc2626',
-      confirmButtonText: t('general.buttons.confirm_delete'),
-      reverseButtons: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (result.isConfirmed) {
-          router.delete(route('roles.destroy', roleId), {
-            onSuccess: () => {
-              /*
-              Swal.fire({
-                theme:theme,
-                toast: true,
-                position: 'top-end',
-                icon: 'success',
-                title: t('message.success.deleted',{title : tChoice('general.roles',1), key: roleName }),
-                  /*(general?.data_is_deleted
-                    ? general.data_is_deleted.replace(':name', roleName)
-                    : `Role "${roleName}" is deleted successfully!`),
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                background: '#d1fae5',
-                color: '#166534',
-                //...swalSuccessDefaults,
-              });*/
-            },
-          });
-        }
-      }
+  
+  //handle delete using custom hook
+  const deleteHandler = useDelete({ theme });
+
+  const handleDelete = (e, role) => {
+    deleteHandler({
+      e,
+      routeName: 'roles.destroy',
+      resourceId: role.id,
+      resourceKey: role.name,
+      resourceLabelKey: tChoice('general.roles',1)
     });
   };
+
 
   return (
     <>
@@ -145,6 +118,7 @@ export default function RoleIndex({ auth }) {
                           <>
                             <IconButton
                               type="link"
+                              title={t('general.buttons.edit')}
                               onClick={route('roles.edit', role.id)}
                               className="text-blue-600">
                               <FaEdit size={24} />
@@ -164,7 +138,8 @@ export default function RoleIndex({ auth }) {
                           <>
                             <IconButton
                               type="button"
-                              onClick={e => handleDelete(e, role.id, role.name)}
+                              title={t('general.buttons.delete')}
+                              onClick={e => handleDelete(e, role)}
                               className="text-red-600">
                               <FaTrashAlt size={24} />
                             </IconButton>
