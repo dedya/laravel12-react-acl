@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { can } from '@/utils/can';
-import { swalSuccessDefaults, swalConfirmDeleteDefaults } from '@/utils/swalDefaults';
 
 import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa';
 import PageMeta from "@/Components/Common/PageMeta";
