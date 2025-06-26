@@ -14,6 +14,8 @@ return [
         'delete' => 'Delete',
         'submit' => 'Submit',
         'confirm_delete' => 'Yes, delete it!',
+        'close' => 'Close',
+        'save_changes' => 'Save Change|Save Changes',
     ],
     'add_button' => '+ Add',
     'id' => 'ID',
