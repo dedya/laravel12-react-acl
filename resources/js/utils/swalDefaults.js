@@ -2,10 +2,6 @@ export const swalConfirmDeleteDefaults = {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#d33',  //red
-    cancelButtonColor: '#3085d6',   //blue
-    reverseButtons: true,
-    showCloseButton: true,
-    background: '#fff', // white background
 };
 
 export const swalSuccessDefaults = {

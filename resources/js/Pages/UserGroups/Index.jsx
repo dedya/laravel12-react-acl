@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, usePage, router } from '@inertiajs/react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
 // Import SweetAlert2
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import { can } from '@/utils/can';
-import { swalSuccessDefaults, swalConfirmDeleteDefaults } from '@/utils/swalDefaults';
 
 import { FaEdit, FaTrashAlt, FaToggleOn, FaToggleOff } from 'react-icons/fa';
 import PageMeta from "@/Components/Common/PageMeta";
@@ -20,15 +17,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/UI/Table";
-import Button from "@/Components/UI/Button/Button";
-import { toast } from 'react-toastify';
 import Switch from "@/Components/Form/Switch/Switch";
 import IconButton from "@/Components/UI/Button/IconButton";
 import { useTheme } from '@/utils/context/ThemeContext'; // Your theme hook
 
+// Pagination controls component
+import PaginationControls from "@/Components/UI/PaginationControls";
+import usePagination from '@/hooks/usePagination';
+
+import useDelete from '@/hooks/useDelete';
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
-  const { groups, alertTimer, groupCountText } = usePage().props;
+  const { groups, filters, perPageOptions } = usePage().props;
   const { theme } = useTheme();
 
   const canCreate = can('create-user-groups');
@@ -37,40 +37,21 @@ export default function Index({ auth }) {
 
   const params = new URLSearchParams({ page: groups.current_page }).toString();
 
+  const [filter, setFilter] = useState({
+    per_page: filters.per_page || 20  });
+  
+  const { handlePerPageChange, handlePage } = usePagination('usergroups.index', filter, setFilter);
 
-  const handlePage = (url) => {
-    router.get(url, { preserveState: true, replace: true });
-  };
+  //handle delete using custom hook
+  const deleteHandler = useDelete({ theme });
 
-  // Handler for delete confirmation using SweetAlert2
-  const handleDelete = (e, userId, userName) => {
-    e.preventDefault();
-    Swal.fire({
-      theme:theme,
-      title: t('message.confirm.sure'),
-      text: t('message.confirm.delete',{'title' : tChoice('general.user_groups',1)}),
-      icon: 'warning',
-      showCancelButton: true,
-      cancelButtonText: t('general.buttons.cancel'),
-      confirmButtonColor:'#dc2626',
-      confirmButtonText: t('general.buttons.confirm_delete'),
-      //...swalConfirmDeleteDefaults,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        router.delete(route('usergroups.destroy', userId), {
-          onSuccess: () => {
-            /*
-            Swal.fire({
-              title: t('message.success.deleted',{title : tChoice('general.user_groups',1), key: userName }),
-                /*(general?.data_is_deleted
-                  ? general.data_is_deleted.replace(':name', userName)
-                  : `User "${userName}" is deleted successfully!`),
-              timer: alertTimer || 4000,
-              ...swalSuccessDefaults,
-            });*/
-          },
-        });
-      }
+  const handleDelete = (e, group) => {
+    deleteHandler({
+      e,
+      routeName: 'usergroups.destroy',
+      resourceId: group.id,
+      resourceKey: group.name,
+      resourceLabelKey: tChoice('general.user_groups',1)
     });
   };
 
@@ -80,7 +61,7 @@ export default function Index({ auth }) {
       {/*<Head title={general?.user_groups_page_title || 'User Groups'} />*/}
       <PageMeta
         title={tChoice('general.user_groups', 2)}
-        description="This is React.js Basic Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        description={tChoice('general.user_groups', 2)}
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />
@@ -99,13 +80,17 @@ export default function Index({ auth }) {
             )}
           </div>
 
+          {/* Top pagination controls */}
+         <PaginationControls
+            records={groups}
+            filter={filter}
+            onPerPageChange={handlePerPageChange}
+            onPageChange={handlePage}
+            t={t}
+            perPageOptions={perPageOptions}
+          />
+
           <div className="max-w-full overflow-x-auto">
-            <div className="mb-2 text-sm text-gray-600">
-              &nbsp;&nbsp;{groups.from} &nbsp;-&nbsp;
-              {groups.to}
-              &nbsp;/&nbsp;
-              {groups.total} {groupCountText}
-            </div>
             <Table>
               <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                 <TableRow>
@@ -216,7 +201,7 @@ export default function Index({ auth }) {
                         <>
                         <IconButton
                           type="button"
-                          onClick={e => handleDelete(e, group.id, group.name)}
+                          onClick={e => handleDelete(e, group)}
                           className="text-red-600">
                           <FaTrashAlt size={24} />
                         </IconButton>
@@ -237,23 +222,17 @@ export default function Index({ auth }) {
                 ))}
 
               </TableBody>
-            </Table>
-            <div className="mt-4">
-              {groups.links.map(link => (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  key={link.label}
-                  disabled={!link.url}
-                  onClick={() => link.url && handlePage(link.url)}
-                  className={`px-3 py-1 mx-1 rounded ${link.active ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
-                  dangerouslySetInnerHTML={{ __html: link.label }}
-                >
-                  <span dangerouslySetInnerHTML={{ __html: link.label }} />
-                </Button>
-              ))}
-            </div>
+            </Table>            
           </div>
+          {/* Bottom pagination controls */}
+          <PaginationControls
+          records={groups}
+          filter={filter}
+          onPerPageChange={handlePerPageChange}
+          onPageChange={handlePage}
+          t={t}
+          perPageOptions={perPageOptions}
+        />
         </ComponentCard>
       </div>
     </>

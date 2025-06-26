@@ -103,4 +103,8 @@ return [
     'account_agreement' => 'By creating an account means you agree to the',
     'and_our' => 'and our',
     'already_have_account' => 'Already have an account?',
+    'show'  => 'Show',
+    'entries_per_page' => 'Entries per page',
+    'showing_records' => 'Showing :from to :to of :total records',
+    'user_photo' => 'Image|Images',
 ];

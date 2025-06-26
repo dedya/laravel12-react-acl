@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
         Inertia::share([
-            'general' => function () {
+            'general' => function () { //this is not used anymore
                 return Lang::get('general');
             },
             'alertTimer' => config('app.alert_timer'),
