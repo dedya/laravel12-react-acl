@@ -29,6 +29,8 @@ import { useTheme } from '@/utils/context/ThemeContext';
 import PaginationControls from "@/Components/UI/PaginationControls";
 import usePagination from '@/hooks/usePagination';
 
+import useDelete from '@/hooks/useDelete';
+
 export default function Index({ auth }) {
   const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
   const { users, filters, perPageOptions } = usePage().props;
@@ -48,6 +50,19 @@ export default function Index({ auth }) {
 
   const params = new URLSearchParams({ ...filter, page: users.current_page }).toString();
 
+  //handle delete using custom hook
+  const deleteHandler = useDelete({ theme });
+
+  const handleDelete = (e, user) => {
+    deleteHandler({
+      e,
+      routeName: 'users.destroy',
+      resourceId: user.id,
+      resourceKey: user.name,
+      resourceLabelKey: tChoice('general.users',1)
+    });
+  };
+
   // Handle filter form submit
   const handleFilter = (e) => {
     e.preventDefault();
@@ -55,7 +70,7 @@ export default function Index({ auth }) {
   };
 
   // Handler for delete confirmation using SweetAlert2
-  const handleDelete = (e, userId, userName) => {
+  /*const handleDelete = (e, userId, userName) => {
     e.preventDefault();
     Swal.fire({
       theme: theme,
@@ -75,12 +90,13 @@ export default function Index({ auth }) {
         });
       }
     });
-  };
+  };*/
 
   return (
     <>
       <PageMeta
         title={tChoice('general.users', 2)}
+        description={tChoice('general.users', 2)}
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.users', 2)} />
@@ -219,7 +235,7 @@ export default function Index({ auth }) {
                         {canDelete &&
                           <IconButton
                             type="button"
-                            onClick={e => handleDelete(e, user.id, user.name)}
+                            onClick={e => handleDelete(e, user)}
                             className="text-red-600">
                             <FaTrashAlt size={24} />
                           </IconButton>

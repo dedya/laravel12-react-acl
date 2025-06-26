@@ -84,6 +84,7 @@ export default function Index({ auth }) {
       {/*<Head title={general?.user_groups_page_title || 'User Groups'} />*/}
       <PageMeta
         title={tChoice('general.user_groups', 2)}
+        description={tChoice('general.user_groups', 2)}
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.user_groups', 2)} />

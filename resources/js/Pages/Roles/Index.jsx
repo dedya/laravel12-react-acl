@@ -88,6 +88,7 @@ export default function RoleIndex({ auth }) {
     <>
       <PageMeta
         title={tChoice('general.roles', 2)}
+        description={tChoice('general.roles', 2)}
       />
 
       <PageBreadcrumb pageTitle={tChoice('general.roles', 2)} />
