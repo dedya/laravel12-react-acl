@@ -9,8 +9,8 @@ Using these libraries :
 - Spatie Laravel permissions (https://spatie.be/docs/laravel-permission/v6/introduction)
 - Spatie Laravel activitylog (https://spatie.be/docs/laravel-activitylog/v4/introduction)
 - Spatie Laravel media library (https://spatie.be/docs/laravel-medialibrary/v11/introduction)
+- Spatie Laravel settings (https://github.com/spatie/laravel-settings)
 - Laravel React i18n (https://github.com/EugeneMeles/laravel-react-i18n)
-
 
 To setup : 
 - Clone the source 
