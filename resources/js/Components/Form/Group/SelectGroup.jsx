@@ -9,6 +9,7 @@ const SelectGroup = ({
   options,
   hint,
   required = true,
+  placeholder
 }) => {
   return (
     <div className="col-span-2 lg:col-span-1">
@@ -26,6 +27,7 @@ const SelectGroup = ({
         error={hint != undefined ? true : false}
         hint={hint}
         required = {required}
+        placeholder={placeholder}
       />
     </div>
   );

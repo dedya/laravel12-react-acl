@@ -189,7 +189,6 @@ export default function Form({ user, roles, groups, auth }) {
             )}
 
 
-
             <SelectGroup
               label={tChoice('general.roles', 1)}
               name="role"
@@ -197,6 +196,7 @@ export default function Form({ user, roles, groups, auth }) {
               onChange={e => setData('role', e.target.value)}
               options={roles.map(role => ({ value: role.name, label: role.name }))}
               hint={errors.role}
+              placeholder={t('select_an_option')}
               required
             />
 
@@ -207,6 +207,7 @@ export default function Form({ user, roles, groups, auth }) {
               onChange={e => setData('user_group_id', e.target.value)}
               options={groups.map(group => ({ value: group.id, label: group.name }))}
               hint={errors.user_group_id}
+              placeholder={t('select_an_option')}
               required
             />
 
