@@ -3,7 +3,6 @@ import MonthlySalesChart from "../../Components/Ecommerce/MonthlySalesChart";
 import StatisticsChart from "../../Components/Ecommerce/StatisticsChart";
 import MonthlyTarget from "../../Components/Ecommerce/MonthlyTarget";
 import RecentOrders from "../../Components/Ecommerce/RecentOrders";
-import DemographicCard from "../../Components/Ecommerce/DemographicCard";
 import PageMeta from "../../Components/Common/PageMeta";
 
 export default function Home() {
@@ -26,10 +25,6 @@ export default function Home() {
 
 				<div className="col-span-12">
 					<StatisticsChart />
-				</div>
-
-				<div className="col-span-12 xl:col-span-5">
-					<DemographicCard />
 				</div>
 
 				<div className="col-span-12 xl:col-span-7">
