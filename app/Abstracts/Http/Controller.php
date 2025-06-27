@@ -32,11 +32,19 @@ abstract class Controller extends BaseController
             $controller.='s';
         }
 
-        // Add CRUD permission check
-        $this->middleware('permission:create-' . $controller)->only('create', 'store', 'duplicate', 'import');
-        $this->middleware('permission:read-' . $controller)->only('index', 'show', 'edit', 'export');
-        $this->middleware('permission:update-' . $controller)->only('update', 'enable', 'disable');
-        $this->middleware('permission:delete-' . $controller)->only('destroy');
+        // Map specific controllers to their permission groups, into 'masters' group
+        $permissionMap = [
+            'general-settings' => 'settings',
+        ];
+
+        $permissionGroup = $permissionMap[$controller] ?? $controller;
+        
+        //check if the permission exists
+        $this->middleware("permission:create-{$permissionGroup}")->only('create', 'store', 'duplicate', 'import');
+        $this->middleware("permission:read-{$permissionGroup}")->only('index', 'show', 'edit', 'export');
+        $this->middleware("permission:update-{$permissionGroup}")->only('update', 'enable', 'disable');
+        $this->middleware("permission:delete-{$permissionGroup}")->only('destroy');  
+
     }
 }
 
