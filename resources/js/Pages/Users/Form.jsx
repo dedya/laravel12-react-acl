@@ -182,7 +182,6 @@ export default function Form({ user, roles, groups, auth }) {
                   label={t('general.password')}
                   onChange={e => setData('password', e.target.value)}
                   hint={errors.password}
-                  value=""
                   required={changePassword || !isEdit}
                 />
               </>
