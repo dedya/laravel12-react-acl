@@ -108,7 +108,7 @@ return [
         ],
         'app_favicon' => [
             'name' => 'app_favicon',
-            'default' => '/assets/images/logo/logo-dark.svg',
+            'default' => '/assets/images/default-favicon.ico',
             'alias' => 'app_favicon_32x32',
             'collection' => 'favicons',
             'width' => 32,

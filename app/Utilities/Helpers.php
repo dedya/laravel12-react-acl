@@ -26,7 +26,8 @@ if (! function_exists('get_logo')) {
      */
     function get_logo() : string
     {
-        $app_logo = '/assets/images/logo/logo-dark.svg';
+        $app_logo = config('settings.general.app_logo.default'); //get default
+
         $settings = app(GeneralSettings::class);
 
         if ($settings && $settings->app_logo) {
@@ -48,7 +49,8 @@ if (! function_exists('get_favicon')) {
      */
     function get_favicon() : string
     {
-        $app_favicon = '/assets/images/logo/logo-dark.svg';
+        $app_favicon = config('settings.general.app_favicon.default'); //get default
+        //')'/assets/images/default-favicon.ico';
         $settings = app(GeneralSettings::class);
 
         if ($settings && $settings->app_favicon) {
