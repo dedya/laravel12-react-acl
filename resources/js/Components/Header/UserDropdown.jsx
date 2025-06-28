@@ -91,7 +91,7 @@ export default function UserDropdown() {
                   fill=""
                 />
               </svg>
-              {t('general.edit_profile')}
+              {t('general.profile')}
 
 						</DropdownItem>
 					</li>
