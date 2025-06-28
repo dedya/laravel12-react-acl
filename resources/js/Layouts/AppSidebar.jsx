@@ -13,6 +13,7 @@ import {
 	PieChartIcon,
 	PlugInIcon,
 	TableIcon,
+	GearIcon,
 	UserCircleIcon,
 } from '../utils/icons';
 import { useSidebar } from "../utils/context/SidebarContext";
@@ -263,6 +264,12 @@ function AppSidebar() {
       name: tChoice('general.user_groups',2),
       path: route('usergroups.index'),
       visible: can('read-user-groups')  ? true : false,
+    },
+	{
+      icon: <GearIcon />,
+      name: tChoice('general.settings',2),
+      path: route('settings.main'),
+      visible: can('read-settings')  ? true : false,
     },
   ];
 

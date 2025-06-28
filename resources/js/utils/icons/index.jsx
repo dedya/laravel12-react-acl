@@ -13,6 +13,7 @@ import  VideoIcon from "./videos.svg?react";
 import  AudioIcon from "./audio.svg?react";
 import  GridIcon from "./grid.svg?react";
 import  FileIcon from "./file.svg?react";
+import  GearIcon from "./gear.svg?react";
 import  DownloadIcon from "./download.svg?react";
 import  ArrowRightIcon from "./arrow-right.svg?react";
 import  GroupIcon from "./group.svg?react";
@@ -57,6 +58,7 @@ import  ErrorHexaIcon from "./info-hexa.svg?react";
 
 export {
   GridIcon,
+  GearIcon,
   ErrorHexaIcon,
   AlertHexaIcon,
   MoreDotIcon,

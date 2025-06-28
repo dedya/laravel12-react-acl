@@ -95,7 +95,7 @@ export default function UserDropdown() {
 
 						</DropdownItem>
 					</li>
-
+          {/*
 					<li>
             <DropdownItem
               onItemClick={closeDropdown}
@@ -120,7 +120,7 @@ export default function UserDropdown() {
               </svg>
               {tChoice('general.settings',2)}
             </DropdownItem>
-          </li>
+          </li>*/}
 				</ul>
 
 				<Link
