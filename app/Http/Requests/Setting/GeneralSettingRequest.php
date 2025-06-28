@@ -23,7 +23,7 @@ class GeneralSettingRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'app_name' => ['required', 'string', 'max:255'],
+            'app_name' => ['nullable', 'string','min:3', 'max:255'],
             'app_logo' => 'nullable|image',
             'app_favicon' => 'nullable|image'
         ];

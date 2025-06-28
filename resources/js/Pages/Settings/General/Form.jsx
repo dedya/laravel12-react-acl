@@ -148,13 +148,13 @@ export default function Form({ settings, appLogo,appFav }) {
               onChange={e => setData('app_name', e.target.value)}
               hint={errors.name}
               value={data.app_name}
-              required
+              required={false}
             />
 
             <div className='app-logo'>
               <Label htmlFor="app_logo">
                 {t('general.app_logo')}
-                <span className="text-red-500 ml-1">*</span>
+                {/*<span className="text-red-500 ml-1">*</span>*/}
               </Label>
               <FileInput
                 accept="image/*"
@@ -198,7 +198,7 @@ export default function Form({ settings, appLogo,appFav }) {
             <div className='app-fav'>
               <Label htmlFor="app_fav">
                 {t('general.app_fav')}
-                <span className="text-red-500 ml-1">*</span>
+                {/*<span className="text-red-500 ml-1">*</span>*/}
               </Label>
               <FileInput
                 accept="image/*"
@@ -221,7 +221,7 @@ export default function Form({ settings, appLogo,appFav }) {
                       title="Remove app fav"
                       style={{ transform: 'translate(50%,-50%)' }}
                       onClick={async (e) => {
-                        handleClearLogo(e);
+                        handleClearFav(e);
                       }}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
