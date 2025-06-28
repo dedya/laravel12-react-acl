@@ -8,13 +8,6 @@ use Inertia\Inertia;
 
 class SettingController extends BaseController
 {
-    public function __construct() 
-    {
-        // Add CRUD permission check
-        $this->middleware('permission:read-settings-general|read-settings-localization')
-            ->only('show');
-    }
-    
 
     public function show() 
     {

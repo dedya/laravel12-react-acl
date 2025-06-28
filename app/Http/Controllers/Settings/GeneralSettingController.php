@@ -13,13 +13,6 @@ use Inertia\Inertia;
 use Illuminate\Foundation\Http\FormRequest;
 class GeneralSettingController extends BaseController
 {
-    public function __construct() 
-    {
-        // Add CRUD permission check
-        $this->middleware('permission:read-settings-general')->only('edit');
-        $this->middleware('permission:update-settings-general')->only('update');
-    }
-
     public function edit(GeneralSettings $settings) 
     {
         return $this->form($settings);

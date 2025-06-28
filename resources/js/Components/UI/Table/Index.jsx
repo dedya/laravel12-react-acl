@@ -100,7 +100,7 @@ const TableCell = ({
 
 // PropTypes for TableCell
 TableCell.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   isHeader: PropTypes.bool,
   className: PropTypes.string,
 };

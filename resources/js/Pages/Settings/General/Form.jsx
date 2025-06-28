@@ -30,7 +30,7 @@ export default function Form({ settings, appLogo,appFav }) {
     _method: 'PUT',
   });
 
-  const canUpdateOrCreate = can('update-settings-general');
+  const canUpdateOrCreate = can('update-settings');
 
   useEffect(() => {
     if (data.app_logo) {

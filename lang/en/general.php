@@ -107,4 +107,5 @@ return [
     'entries_per_page' => 'Entries per page',
     'showing_records' => 'Showing :from to :to of :total records',
     'user_photo' => 'Image|Images',
+    'select_an_option'  => 'Select an option'
 ];

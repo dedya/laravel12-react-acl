@@ -20,7 +20,7 @@ export default function View({ }) {
       <div className="space-y-6">
         <ComponentCard title="">
           <div className="mt-8 grid lg:grid-cols-4 md:grid-cols-4 gap-6">
-            {can('read-settings-general') && (
+            {can('read-settings') && (
               <Link
                 href={route('settings.general.edit')}
                 key="1"

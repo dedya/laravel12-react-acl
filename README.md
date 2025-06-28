@@ -18,7 +18,7 @@ To setup :
 - Run 'npm install'
 - run 'php artisan migrate' to apply db changes
 - run 'php artisan db:seed --class=RolesAndPermissionsSeeder' to input role data
-- run 'php artisan db:seed --class=AdminRolesAndPermissionsSeeder' to input admin user
+- run 'php artisan db:seed --class=AdminRoleAndPermissionSeeder' to input admin user
 - run 'php artisan db:seed --class=UserSeeder' to 20 sample user if needed (optional)
 - Copy .env.example to .env
 - Update the .env
