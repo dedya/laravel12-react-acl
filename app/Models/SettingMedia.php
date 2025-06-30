@@ -33,12 +33,12 @@ use HasFactory, InteractsWithMedia;
     public function registerMediaConversions(?Media $media = null): void
     {
         //if($this->key == SettingMedia::APP_LOGO) {
-        $this->addMediaConversion(config('settings.general.app_logo.alias')) // You can name your conversion 'thumb', 'logo_150x40', etc.
+        /*$this->addMediaConversion(config('settings.general.app_logo.alias')) // You can name your conversion 'thumb', 'logo_150x40', etc.
             ->fit(Fit::Crop, config('settings.general.app_logo.width'), config('settings.general.app_logo.height')) // <--- Updated call 
              ->nonQueued(); // For smaller images like logos, you might not need to queue it.
-                             // Remove nonQueued() for larger images or if you have a queue worker.
+                             // Remove nonQueued() for larger images or if you have a queue worker.*/
         //} else if($this->key == SettingMedia::APP_FAVICON) {
-            $this->addMediaConversion(config('settings.general.app_favicon.alias')) // You can name your conversion 'thumb', 'logo_150x40', etc.
+        $this->addMediaConversion(config('settings.general.app_favicon.alias')) // You can name your conversion 'thumb', 'logo_150x40', etc.
             ->fit(Fit::Crop, config('settings.general.app_favicon.width'), config('settings.general.app_favicon.height')) // <--- Updated call 
              ->nonQueued(); // For smaller images like logos, you might not need to queue it.
                              // Remove nonQueued() for larger images or if you have a queue worker.
