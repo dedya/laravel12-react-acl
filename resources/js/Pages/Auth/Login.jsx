@@ -12,8 +12,10 @@ import Input from "../../Components/Form/Input/InputField";
 import Checkbox from "@/Components/Form/input/Checkbox";
 import Button from "../../Components/UI/Button/Button";
 import { useState } from "react";
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 export default function Login({ status, canResetPassword }) {
+    const { t, tChoice } = useLaravelReactI18n();
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -30,12 +32,12 @@ export default function Login({ status, canResetPassword }) {
             onFinish: () => reset('password'),
         });
     };
-    const { general, message } = usePage().props;
+    //const { general, message } = usePage().props;
 
     return (
         <>
             <PageMeta
-                title="Login"
+                title={t('general.sign_in')}
                 description="This is React.js SignIn Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
             />
             {/*<GuestLayout>
@@ -62,10 +64,10 @@ export default function Login({ status, canResetPassword }) {
                     <div>
                         <div className="mb-5 sm:mb-8">
                             <h1 className="mb-2 font-semibold text-center text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-                                {general?.sign_in}
+                                {t('general.sign_in')}
                             </h1>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                {message?.enter_email}
+                            <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
+                                {t('message.enter_email')}
                             </p>
                         </div>
                         <div>                         
@@ -73,7 +75,7 @@ export default function Login({ status, canResetPassword }) {
                                 <div className="space-y-6">
                                     <div>
                                         <Label>
-                                            Email <span className="text-error-500">*</span>{" "}
+                                            {t('general.email')} <span className="text-error-500">*</span>{" "}
                                         </Label>
                                         <Input
                                             placeholder="info@gmail.com"
@@ -91,7 +93,7 @@ export default function Login({ status, canResetPassword }) {
 
                                     <div>
                                         <Label>
-                                            Password <span className="text-error-500">*</span>{" "}
+                                            {t('general.password')} <span className="text-error-500">*</span>{" "}
                                         </Label>
                                         <div className="relative">
                                             <Input
@@ -125,7 +127,7 @@ export default function Login({ status, canResetPassword }) {
                                         <div className="flex items-center gap-3">
                                             <Checkbox checked={isChecked} onChange={setIsChecked} />
                                             <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                                                {general?.keep_me_logged_in}
+                                                {t('general.keep_me_logged_in')}
                                             </span>
                                         </div>
                                         {canResetPassword && (
@@ -133,13 +135,13 @@ export default function Login({ status, canResetPassword }) {
                                                 href={route('password.request')}
                                                 className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
                                             >
-                                                {general?.forgot_password}
+                                                {t('general.forgot_password')}
                                             </Link>
                                         )}
                                     </div>
                                     <div>
                                         <Button className="w-full" size="sm" disabled={processing}>
-                                            {general?.sign_in}
+                                            {t('general.sign_in')}
                                         </Button>
                                     </div>
 
