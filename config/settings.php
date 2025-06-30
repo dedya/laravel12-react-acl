@@ -103,8 +103,8 @@ return [
             'default' => '/assets/images/logo/logo-dark.svg',
             'alias' => 'app_logo_150x40',
             'collection' => 'logos',
-            'width' => 150,
-            'height' => 40,
+            'width' => 24,
+            'height' => 24,
         ],
         'app_favicon' => [
             'name' => 'app_favicon',

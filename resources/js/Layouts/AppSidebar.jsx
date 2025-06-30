@@ -417,23 +417,24 @@ function AppSidebar() {
 		>
 			{/* start of SIDEBAR HEADER  */}
 			<div className="flex items-center gap-2 pt-8 sidebar-header pb-7">
-				<Link href="/">
+				<Link href="/" className="flex items-center gap-2">
 					{isExpanded || isHovered || isMobileOpen ? (
 						<>
 							<img
-								className="dark:hidden w-[150px] h-[40px]"
+								className="dark:hidden w-[24] h-[24]"
 								src={setting.general.app_logo}
 								alt="Logo"
-								width={150}
-								height={40}
+								width={24}
+								height={24}
 							/>
 							<img
-								className="hidden dark:block w-[150px] h-[40px]"
+								className="hidden dark:block w-[24] h-[24]"
 								src={setting.general.app_logo}
 								alt="Logo"
-								width={150}
-								height={40}
+								width={24}
+								height={24}
 							/>
+							<span className="font-medium text-gray-500 text-start text-theme-md dark:text-gray-400">{setting.general?.app_name}</span>
 						</>
 					) : (
 						<img

@@ -21,13 +21,14 @@ export default function AuthLayout({ children }) {
 
         {/* Logo Section */}
         <div className="flex justify-center items-center pt-8 pb-4 lg:absolute lg:top-8 lg:left-1/2 lg:-translate-x-1/2">
-          <Link href="/" className="block">
+          <Link href="/" className="flex flex-col items-center">
             <img
-              width={150} // Adjust width as needed
-              height={40} // Adjust height as needed
+              width={60} // Adjust width as needed
+              height={60} // Adjust height as needed
               src={setting.general.app_logo} // Make sure this path is correct
-              className="w-[150px] h-[40px]" // Tailwind classes for responsive height and auto width
+              className="w-[60px] h-[60px]" // Tailwind classes for responsive height and auto width
             />
+            <span className="text-gray-500 text-center mt-5 text-theme-xl dark:text-gray-400">{setting.general?.app_name}</span>
           </Link>
         </div>
 
