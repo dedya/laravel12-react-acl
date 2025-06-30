@@ -421,14 +421,14 @@ function AppSidebar() {
 					{isExpanded || isHovered || isMobileOpen ? (
 						<>
 							<img
-								className="dark:hidden"
+								className="dark:hidden w-[150px] h-[40px]"
 								src={setting.general.app_logo}
 								alt="Logo"
 								width={150}
 								height={40}
 							/>
 							<img
-								className="hidden dark:block"
+								className="hidden dark:block w-[150px] h-[40px]"
 								src={setting.general.app_logo}
 								alt="Logo"
 								width={150}
@@ -438,6 +438,7 @@ function AppSidebar() {
 					) : (
 						<img
 							src={setting.general.app_logo}
+							className="w-[32px] h-[32px]"
 							alt="Logo"
 							width={32}
 							height={32}
