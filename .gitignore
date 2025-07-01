@@ -27,3 +27,4 @@ _ide_helper.php
 lang/php_en.json
 package-lock.json
 storage/media-library
+/patches
