@@ -177,17 +177,15 @@ export default function Form({ user, roles, groups, auth }) {
             {(changePassword || !isEdit) && (
               <>
                 <InputGroup
-                  name="email"
-                  type="email"
+                  name="password"
+                  type="password"
                   label={t('general.password')}
                   onChange={e => setData('password', e.target.value)}
                   hint={errors.password}
-                  value={data.password}
                   required={changePassword || !isEdit}
                 />
               </>
             )}
-
 
 
             <SelectGroup
@@ -197,6 +195,7 @@ export default function Form({ user, roles, groups, auth }) {
               onChange={e => setData('role', e.target.value)}
               options={roles.map(role => ({ value: role.name, label: role.name }))}
               hint={errors.role}
+              placeholder={t('general.select_an_option')}
               required
             />
 
@@ -207,6 +206,7 @@ export default function Form({ user, roles, groups, auth }) {
               onChange={e => setData('user_group_id', e.target.value)}
               options={groups.map(group => ({ value: group.id, label: group.name }))}
               hint={errors.user_group_id}
+              placeholder={t('general.select_an_option')}
               required
             />
 

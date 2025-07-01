@@ -1,6 +1,7 @@
 import React from "react"; 
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import PropTypes from 'prop-types'; // Import PropTypes for validation
+import { usePage } from '@inertiajs/react';
 
 /**
  * PageMeta component to manage HTML head elements.
@@ -8,12 +9,25 @@ import PropTypes from 'prop-types'; // Import PropTypes for validation
  * @param {string} props.title - The title of the page.
  * @param {string} props.description - The description meta tag for the page.
  */
-const PageMeta = ({ title, description }) => (
+
+
+  const PageMeta = ({ title, description })  => {
+  const { setting } = usePage().props;
+
+  console.log('setting:',setting);
+  const favicon = setting?.general?.app_favicon;
+
+  //console.log('meta settings',usePage().props);
+  return (
   <Helmet>
-    <title>{title}</title>
+    <title>{title} - {setting?.general?.app_name}</title>
     <meta name="description" content={description} />
+    { favicon && (
+      <link rel="icon" href={favicon} type="image/x-icon" />
+    )}
   </Helmet>
-);
+  );
+};
 
 // PropTypes for PageMeta
 PageMeta.propTypes = {

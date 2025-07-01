@@ -1,16 +1,21 @@
 ## Laravel React ACL
 
+Server requirement : 
+- >= PHP 8.2
+- >= Node 16
+- >= MySQL / PostgreSQL
+
 This application is a basic laravel 12, react ACL, which contains : 
 - Login Page
 - User Administration
 - Role Administration with permission
 
 Using these libraries : 
-- Spatie Laravel permissions (https://spatie.be/docs/laravel-permission/v6/introduction)
-- Spatie Laravel activitylog (https://spatie.be/docs/laravel-activitylog/v4/introduction)
-- Spatie Laravel media library (https://spatie.be/docs/laravel-medialibrary/v11/introduction)
-- Spatie Laravel settings (https://github.com/spatie/laravel-settings)
-- Laravel React i18n (https://github.com/EugeneMeles/laravel-react-i18n)
+- For user role permission : Spatie Laravel permissions (https://spatie.be/docs/laravel-permission/v6/introduction)
+- For user activity logs : Spatie Laravel activitylog (https://spatie.be/docs/laravel-activitylog/v4/introduction)
+- For media library, to handle uploaded files across models : Spatie Laravel media library (https://spatie.be/docs/laravel-medialibrary/v11/introduction)
+- For application settings : Spatie Laravel settings (https://github.com/spatie/laravel-settings)
+- For language localization : Laravel React i18n (https://github.com/EugeneMeles/laravel-react-i18n)
 
 To setup : 
 - Clone the source 

@@ -41,8 +41,8 @@ const Select = ({
   };
 
   if (error) {
-		className += ` rounded-lg border border-error-500 focus:border-error-300 focus:ring-error-500/20 dark:text-error-400 dark:border-error-500 dark:focus:border-error-800`;
-	} else {
+    className += ` rounded-lg border border-error-500 focus:border-error-300 focus:ring-error-500/20 dark:text-error-400 dark:border-error-500 dark:focus:border-error-800`;
+  } else {
     className +=` dark:border-gray-700 dark:focus:border-brand-800`;
   }
 
@@ -51,9 +51,13 @@ const Select = ({
     <select
       id={name}
       name={name}
-      className={`h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pr-11 text-sm shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30  ${className} ${selectedValue
-          ? "text-gray-800 dark:text-white/90"
-          : "text-gray-400 dark:text-gray-400"} `}
+      className={`h-11 w-full appearance-none rounded-lg bg-transparent px-4 py-2.5 pr-11 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30
+        ${error
+          ? 'border border-error-500 focus:border-error-300 focus:ring-error-500/20 dark:text-error-400 dark:border-error-500 dark:focus:border-error-800'
+          : 'border border-gray-300 focus:border-brand-300 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-800'}
+        ${className}
+        ${selectedValue ? 'text-gray-800 dark:text-white/90' : 'text-gray-400 dark:text-gray-400'}
+      `}
       value={value}
       onChange={onChange}
     >
@@ -77,17 +81,17 @@ const Select = ({
 
     </select>
     {hint && (
-				<p
-					className={`mt-1.5 text-xs ${error
-							? "text-error-500"
-							: success
-								? "text-success-500"
-								: "text-gray-500"
-						}`}
-				>
-					{hint}
-				</p>
-			)}
+        <p
+          className={`mt-1.5 text-xs ${error
+              ? "text-error-500"
+              : success
+                ? "text-success-500"
+                : "text-gray-500"
+            }`}
+        >
+          {hint}
+        </p>
+      )}
       
       </>
 

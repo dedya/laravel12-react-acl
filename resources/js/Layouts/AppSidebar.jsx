@@ -13,6 +13,7 @@ import {
 	PieChartIcon,
 	PlugInIcon,
 	TableIcon,
+	GearIcon,
 	UserCircleIcon,
 } from '../utils/icons';
 import { useSidebar } from "../utils/context/SidebarContext";
@@ -54,7 +55,7 @@ const othersItems = [
 	},
 ];
 function AppSidebar() {
-	const { general } = usePage().props;
+	const { general,setting } = usePage().props;
   	const { t, tChoice, currentLocale, setLocale, getLocales, isLocale  } = useLaravelReactI18n();
 	const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
 	//const location = useLocation();
@@ -264,6 +265,12 @@ function AppSidebar() {
       path: route('usergroups.index'),
       visible: can('read-user-groups')  ? true : false,
     },
+	{
+      icon: <GearIcon />,
+      name: tChoice('general.settings',2),
+      path: route('settings.main'),
+      visible: can('read-settings')  ? true : false,
+    },
   ];
 
 	const renderMenuItems = (items, menuType) => (
@@ -410,27 +417,29 @@ function AppSidebar() {
 		>
 			{/* start of SIDEBAR HEADER  */}
 			<div className="flex items-center gap-2 pt-8 sidebar-header pb-7">
-				<Link href="/">
+				<Link href="/" className="flex items-center gap-2">
 					{isExpanded || isHovered || isMobileOpen ? (
 						<>
 							<img
-								className="dark:hidden"
-								src="/assets/images/logo/logo.svg"
+								className="dark:hidden w-[48] h-[48]"
+								src={setting.general.app_logo}
 								alt="Logo"
-								width={150}
-								height={40}
+								width={48}
+								height={48}
 							/>
 							<img
-								className="hidden dark:block"
-								src="/assets/images/logo/logo-dark.svg"
+								className="hidden dark:block w-[48] h-[48]"
+								src={setting.general.app_logo}
 								alt="Logo"
-								width={150}
-								height={40}
+								width={48}
+								height={48}
 							/>
+							<span className="font-medium text-gray-500 text-start text-theme-md dark:text-gray-400">{setting.general?.app_name}</span>
 						</>
 					) : (
 						<img
-							src="/assets/images/logo/logo-icon.svg"
+							src={setting.general.app_logo}
+							className="w-[32px] h-[32px]"
 							alt="Logo"
 							width={32}
 							height={32}

@@ -25,6 +25,7 @@ class UserRequest extends FormRequest
     {
         $userId = $this->route('user')?->id;
         $emailRule =Rule::unique('users', 'email')->whereNull('deleted_at');
+        $change_password = $this->boolean('change_password');
 
         $passwordRule = 'required';
 
@@ -32,6 +33,10 @@ class UserRequest extends FormRequest
         if ($userId) {
             $emailRule->ignore($userId, 'id');
             $passwordRule = 'nullable';
+
+            //password is mandatory if 'change password' is checked
+            if($change_password)
+                $passwordRule = 'required';
         }
 
          $rules = [

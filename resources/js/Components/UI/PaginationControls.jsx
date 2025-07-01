@@ -11,27 +11,27 @@ export default function PaginationControls({
 }) {
     
   return (
-    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-4 py-4 bg-white dark:bg-boxdark border-t border-stroke dark:border-strokedark">
+    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 px-4 py-4 bg-white border-t border-stroke dark:border-white/[0.01] dark:bg-white/[0.01]">
 
     {/* Records per page selector */}
     {(() => {        
         return (
           <div className="flex items-center gap-2">
-            <span className="text-sm text-bodydark2 dark:text-bodydark">{t('general.show', { default: 'Show' })}</span>
+            <span className="text-sm text-bodydark2 dark:text-gray-400">{t('general.show', { default: 'Show' })}</span>
             <select
               value={filter.per_page}
               onChange={(e) => onPerPageChange(parseInt(e.target.value))}
-              className="px-3 py-1.5 text-sm border border-stroke dark:border-strokedark rounded-md bg-white dark:bg-boxdark text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="px-3 py-1.5 text-sm border border-stroke dark:border-strokedark rounded-md bg-white dark:bg-boxdark text-black dark:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             >
               {perPageOptions.map((option) => (
                 <option key={option} value={option}>{option}</option>
               ))}
             </select>
-            <span className="text-sm text-bodydark2 dark:text-bodydark">{t('general.entries_per_page', { default: 'entries per page' })}</span>
+            <span className="text-sm text-bodydark2 dark:text-gray-400">{t('general.entries_per_page', { default: 'entries per page' })}</span>
           </div>
         );
     })()}
-    <div className="text-sm text-bodydark2 dark:text-bodydark">
+    <div className="text-sm text-bodydark2 dark:text-gray-400">
       {t('general.showing_records', {
         from: records.from || 0,
         total: records.total || 0,

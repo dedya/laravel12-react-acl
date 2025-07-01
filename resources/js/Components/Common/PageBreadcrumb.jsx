@@ -11,7 +11,7 @@ import { useLaravelReactI18n } from 'laravel-react-i18n';
  * @param {object} props - The props for the PageBreadcrumb component.
  * @param {string} props.pageTitle - The title of the current page, displayed as the main heading and the last breadcrumb item.
  */
-const PageBreadcrumb = ({ pageTitle }) => {
+const PageBreadcrumb = ({ pageTitle,breadcrumbs = [] } ) => {
 	const { t, tChoice, currentLocale, setLocale, getLocales, isLocale } = useLaravelReactI18n();
 
 	return (
@@ -49,6 +49,31 @@ const PageBreadcrumb = ({ pageTitle }) => {
 							</svg>
 						</Link>
 					</li>
+					{breadcrumbs.map((item, index) => (
+						<li key={index}>
+							<Link
+							className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
+							href={route(item.route)} // IMPORTANT: In Inertia's Link, use `href` instead of `to`
+						>{item.label}
+							<svg
+								className="stroke-current"
+								width="17"
+								height="16"
+								viewBox="0 0 17 16"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366"
+									stroke=""
+									strokeWidth="1.2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+								/>
+							</svg>
+						</Link>
+						</li>
+					))}
 					<li className="text-sm text-gray-800 dark:text-white/90">
 						{pageTitle}
 					</li>

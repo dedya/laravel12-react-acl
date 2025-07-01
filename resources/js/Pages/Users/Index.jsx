@@ -225,7 +225,7 @@ export default function Index({ auth }) {
           </div>
 
           {/* Bottom pagination controls */}
-           <PaginationControls
+          <PaginationControls
             records={users}
             filter={filter}
             onPerPageChange={handlePerPageChange}

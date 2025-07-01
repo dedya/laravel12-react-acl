@@ -3,6 +3,9 @@ layer(base);
 
 @import "tailwindcss";
 
+/*
+  this cause error npm build 
+*/
 @custom-variant dark (&:is(.dark *));
 
 @theme {

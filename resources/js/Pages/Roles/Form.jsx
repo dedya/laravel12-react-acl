@@ -147,7 +147,7 @@ export default function PermissionMatrix({ auth, role, all_permissions }) {
                         />
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-400">{general?.permissions}</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-400">{tChoice('general.permissions',2)}</label>
                             <div className="max-w-full overflow-x-auto">
                                 <Table>
                                     <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">

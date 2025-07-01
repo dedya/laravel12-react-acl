@@ -28,6 +28,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'create-user-groups',
             'update-user-groups',
             'delete-user-groups',
+            'read-settings',
+            'update-settings'
         ];
 
         foreach ($permissions as $permission) {

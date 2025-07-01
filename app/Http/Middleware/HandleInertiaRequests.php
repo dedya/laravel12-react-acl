@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Settings\GeneralSettings;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Illuminate\Support\Facades\Session;
@@ -38,6 +39,15 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
+            ],
+            
+            'setting' => [ // Share your settings here
+                //'general' => app(GeneralSettings::class)->toArray(), // Convert to array for easy access
+                'general' => [
+                    'app_name' => app(GeneralSettings::class)->app_name,
+                    'app_logo' => get_logo(),
+                    'app_favicon' => get_favicon(),
+                ]
             ],
         ];
     }

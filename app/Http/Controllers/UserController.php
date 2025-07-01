@@ -94,12 +94,14 @@ class UserController extends BaseController
         $validated = $request->validated();
         $file = $request->file('photo');
         $removePhoto = $request->boolean('remove_photo');
+        $change_password = $request->boolean('change_password');
 
         try {
             //(new UpdateUser($validated, $user, $file, $removePhoto))->handle();
             // Handle password
             if (!empty($validated['password'])) {
-                $validated['password'] = Hash::make($validated['password']);
+                if(($user && $change_password) || !$user)                
+                    $validated['password'] = Hash::make($validated['password']);
             } else {
                 unset($validated['password']);
             }

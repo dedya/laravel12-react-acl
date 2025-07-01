@@ -1,7 +1,7 @@
 // AuthLayout.jsx
 import React from "react"; 
 import GridShape from "../Components/Common/GridShape";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import ThemeTogglerTwo from "../Components/Common/ThemeTogglerTwo";
 //import PropTypes from 'prop-types'; 
 
@@ -13,9 +13,26 @@ import ThemeTogglerTwo from "../Components/Common/ThemeTogglerTwo";
  * @param {React.ReactNode} props.children - The content to be rendered within the main layout area.
  */
 export default function AuthLayout({ children }) {
+  const { setting } = usePage().props;
+
   return (
     <div className="relative p-6 bg-white z-1 dark:bg-gray-900 sm:p-0">
       <div className="relative flex flex-col justify-center w-full h-screen lg:flex-row dark:bg-gray-900 sm:p-0">
+
+        {/* Logo Section */}
+        <div className="flex justify-center items-center pt-8 pb-4 lg:absolute lg:top-8 lg:left-1/2 lg:-translate-x-1/2">
+          <Link href="/" className="flex flex-col items-center">
+            <img
+              width={80} // Adjust width as needed
+              height={80} // Adjust height as needed
+              src={setting.general.app_logo} // Make sure this path is correct
+              className="w-[80px] h-[80px]" // Tailwind classes for responsive height and auto width
+            />
+            <span className="text-gray-500 text-center mt-5 text-theme-xl dark:text-gray-400">{setting.general?.app_name}</span>
+          </Link>
+        </div>
+
+        {/* Main Content Area */}
         {children} 
         
         {/*<div className="items-center hidden w-full h-full lg:w-1/2 bg-brand-950 dark:bg-white/5 lg:grid">

@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'app_name' => 'Application Name',
+    'app_logo' => 'Application Logo',
+    'app_fav' => 'Application Favicon',
     'user_list_title' => 'Users',
     'users_page_title' => 'Users',
     'users' => 'User|Users',
@@ -45,8 +48,11 @@ return [
     'save' => 'Save',
     'submit' => 'Submit',
     'search' => 'Search',
+    'general_settings' => 'General Setting|General Settings',
     'edit_profile' => 'Edit Profile',
     'set_enabled' => ':name is set to enable',
+    'sign_out' => 'Sign Out',
+    'settings' => 'Setting|Settings',
     'set_disabled' => ':name is set to disable',
     'data_is_created' => ':name is created successfully',
     'data_is_updated' => ':name is updated successfully',
@@ -101,4 +107,5 @@ return [
     'entries_per_page' => 'Entries per page',
     'showing_records' => 'Showing :from to :to of :total records',
     'user_photo' => 'Image|Images',
+    'select_an_option'  => 'Select an option'
 ];
