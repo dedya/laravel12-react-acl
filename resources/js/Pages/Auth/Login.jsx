@@ -38,7 +38,7 @@ export default function Login({ status, canResetPassword }) {
         <>
             <PageMeta
                 title={t('general.sign_in')}
-                description="This is React.js SignIn Tables Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+                description={t('general.sign_in')}
             />
             {/*<GuestLayout>
             <Head title="Log in" />
@@ -61,15 +61,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
-                    <div>
-                        <div className="mb-5 sm:mb-8">
-                            <h1 className="mb-2 font-semibold text-center text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-                                {t('general.sign_in')}
-                            </h1>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-                                {t('message.enter_email')}
-                            </p>
-                        </div>
+                    <div>                       
                         <div>                         
                             <form onSubmit={submit}>
                                 <div className="space-y-6">
