@@ -424,15 +424,15 @@ function AppSidebar() {
 								className="dark:hidden w-[24] h-[24]"
 								src={setting.general.app_logo}
 								alt="Logo"
-								width={24}
-								height={24}
+								width={36}
+								height={36}
 							/>
 							<img
 								className="hidden dark:block w-[24] h-[24]"
 								src={setting.general.app_logo}
 								alt="Logo"
-								width={24}
-								height={24}
+								width={36}
+								height={36}
 							/>
 							<span className="font-medium text-gray-500 text-start text-theme-md dark:text-gray-400">{setting.general?.app_name}</span>
 						</>
