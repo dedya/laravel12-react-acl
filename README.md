@@ -21,13 +21,14 @@ To setup :
 - Clone the source 
 - Run 'composer update'
 - Run 'npm install'
+- Copy .env.example to .env
+- Update the .env
+- empty folder ./bootstrap/cache
+- run 'php artisan optimize'
 - run 'php artisan migrate' to apply db changes
 - run 'php artisan db:seed --class=RolesAndPermissionsSeeder' to input role data
 - run 'php artisan db:seed --class=AdminRoleAndPermissionSeeder' to input admin user
 - run 'php artisan db:seed --class=UserSeeder' to 20 sample user if needed (optional)
-- Copy .env.example to .env
-- Update the .env
-- empty folder ./bootstrap/cache
 - run : php artisan storage:link , to publish upload folder
 - run : php artisan optimize, to apply changes in .env
 
